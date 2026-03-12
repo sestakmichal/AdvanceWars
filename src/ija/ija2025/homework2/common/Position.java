@@ -27,4 +27,9 @@ public class Position {
         Position other = (Position) obj;
         return x == other.x && y == other.y;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
 }
