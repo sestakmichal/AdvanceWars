@@ -6,5 +6,7 @@ public class Tank extends Vehicle {
         super(type, unitOwner, x, y);
     }
 
+    @Override
+    public int getMoveRange() { return 6; }
 
 }

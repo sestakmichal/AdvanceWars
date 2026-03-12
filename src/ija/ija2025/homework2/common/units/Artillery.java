@@ -6,5 +6,6 @@ public class Artillery extends Vehicle {
         super(type, unitOwner, x, y);
     }
 
-
+    @Override
+    public int getMoveRange() { return 5; }
 }

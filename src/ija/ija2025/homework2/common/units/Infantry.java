@@ -18,8 +18,10 @@ public class Infantry extends Unit {
             case City -> 1;
             case Factory -> 1;
             case HQ -> 1;
-            default -> 0;
+            default -> 999; // impassable
         };
     }
 
+    @Override
+    public int getMoveRange() { return 3; }
 }

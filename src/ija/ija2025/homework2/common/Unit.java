@@ -13,12 +13,8 @@ public abstract class Unit {
         health = 100;
     }
 
-    @Override
-    public String toString() {
-        return String.format("Unit: %s at position [%d, %d] with %d HP", type, position.getX(), position.getY(), health);
-    }
-
     public Position getPosition() { return position; }
+    public void setPosition(Position newPos) { position = newPos; }
 
     public int getDefenseBonus(TerrainType type) {
         return switch (type) {
@@ -31,6 +27,12 @@ public abstract class Unit {
             default -> 0;
         };
     }
+
+    public abstract int getMoveRange();
     public abstract int getMovementPrice(TerrainType terrain);
 
+    @Override
+    public String toString() {
+        return String.format("Unit: %s at position [%d, %d] with %d HP", type, position.getX(), position.getY(), health);
+    }
 }

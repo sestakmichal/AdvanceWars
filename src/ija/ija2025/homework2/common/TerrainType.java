@@ -7,5 +7,19 @@ public enum TerrainType {
     Water,
     City,
     Factory,
-    HQ
+    HQ;
+
+    public static TerrainType fromChar(char terrain) {
+        return switch (terrain) {
+            case 'p' -> Plain;
+            case 'f' -> Forest;
+            case 'm' -> Mountain;
+            case 'w' -> Water;
+            // implement later?
+            // case 'c' -> City;
+            // case 'f' -> Factory;
+            // case 'h' -> HQ;
+            default -> throw new IllegalStateException("Unexpected value: " + terrain);
+        };
+    }
 }

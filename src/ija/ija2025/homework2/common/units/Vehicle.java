@@ -3,7 +3,7 @@ package ija.ija2025.homework2.common.units;
 import ija.ija2025.homework2.common.TerrainType;
 import ija.ija2025.homework2.common.Unit;
 
-public class Vehicle extends Unit {
+public abstract class Vehicle extends Unit {
 
     public Vehicle(String type, String unitOwner, int x, int y) {
         super(type, unitOwner, x, y);
@@ -17,7 +17,7 @@ public class Vehicle extends Unit {
             case City -> 1;
             case Factory -> 1;
             case HQ -> 1;
-            default -> 0;
+            default -> 999; // impassable
         };
     }
 
