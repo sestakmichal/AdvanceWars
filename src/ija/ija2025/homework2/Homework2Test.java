@@ -66,11 +66,12 @@ public class Homework2Test {
             List<Position> path = game.getReachableTiles(tank.getPosition());
 
             Assertions.assertTrue(path.contains(new Position(1, 1)), "Tank má dojít do lesa");
-            
+
             // Ověříme, že to student nefláká (že opravdu počítá cost > 1)
             // Kdyby byl les za 1 bod, tank by dojel dál. 
             // V této malé mapě to těžko ověříme jinak než v privátním testu,
             // ale tento test musí projít.
+
         }
 
         @Test

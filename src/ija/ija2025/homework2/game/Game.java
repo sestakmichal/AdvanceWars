@@ -12,7 +12,7 @@ public class Game {
 
     private List<Unit> units = new ArrayList<>();
     private HashMap<Position, Unit> unitsMap = new HashMap<>();
-    private GameObserver gameObserver;
+    private List<GameObserver> gameObservers = new ArrayList<>();
 
     public void updateMap(TerrainType[][] newMap) {
         map = newMap;
@@ -110,13 +110,19 @@ public class Game {
             movingUnit.setPosition(endPos);
             unitsMap.put(endPos, movingUnit);
 
-            if (gameObserver != null) gameObserver.update(new GameEvent());
+            updateObservers();
             return true;
         }
         return false;
     }
 
     public void addObserver(GameObserver gameObserver) {
-        this.gameObserver = gameObserver;
+        this.gameObservers.add(gameObserver);
+    }
+
+    public void updateObservers() {
+        for (GameObserver observer: gameObservers) {
+            observer.update(new GameEvent());
+        }
     }
 }
