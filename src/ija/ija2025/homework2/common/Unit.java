@@ -6,10 +6,10 @@ public abstract class Unit {
     private Position position;
     private int health;
 
-    public Unit(String type, String unitOwner, int x, int y) {
+    public Unit(String type, String unitOwner, int row, int col) {
         this.type = type;
         this.unitOwner = unitOwner;
-        position = new Position(x, y);
+        position = new Position(row, col);
         health = 100;
     }
 
@@ -33,6 +33,6 @@ public abstract class Unit {
 
     @Override
     public String toString() {
-        return String.format("Unit: %s at position [%d, %d] with %d HP", type, position.getX(), position.getY(), health);
+        return String.format("Unit: %s at position [%d, %d] with %d HP", type, position.getRow(), position.getCol(), health);
     }
 }

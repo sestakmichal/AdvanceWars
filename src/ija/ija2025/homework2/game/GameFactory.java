@@ -23,6 +23,8 @@ public class GameFactory {
             }
         }
 
+        game.updateMap(convertedMap);
+
         // debug
         System.out.println(Arrays.deepToString(convertedMap));
 

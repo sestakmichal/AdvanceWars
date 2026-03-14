@@ -26,4 +26,14 @@
 
 ---
 
+## 1. Comparator | Šesták
+* **Nástroj:** IntelliJ nápověda
+* **Datum:** 14. 3. 2025
+* **Použití:** Přepsání `(a, b) -> Integer.compare(a[0], b[0])` na `Comparator.comparingInt(a -> a[0])`
+* **Úprava studentem:** Žádná, šlo o vygenerovaný IDE.
+* **Míra generování:** 90 % (pouze kontrola syntaxe).
+
+---
+
+
 *(Sekce kopírujte dle potřeby pro každou významnou část kódu, kde byla použita AI)*
