@@ -2,8 +2,6 @@ package ija.ija2025.homework2.game;
 
 import ija.ija2025.homework2.common.TerrainType;
 
-import java.util.Arrays;
-
 public class GameFactory {
     public static Game createGame(String[] map) {
         Game game = new Game();
@@ -24,9 +22,6 @@ public class GameFactory {
         }
 
         game.updateMap(convertedMap);
-
-        // debug
-        System.out.println(Arrays.deepToString(convertedMap));
 
         return game;
     }

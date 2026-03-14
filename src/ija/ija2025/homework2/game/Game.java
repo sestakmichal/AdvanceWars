@@ -97,10 +97,6 @@ public class Game {
             }
         }
 
-        for (Position p : reachable) {
-            System.out.println("Reachable: " + p.getCol() + ", " + p.getRow() + " -> " + map[p.getRow()][p.getCol()]);
-        }
-
         return reachable;
     }
 
