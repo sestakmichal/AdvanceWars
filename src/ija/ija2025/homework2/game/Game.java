@@ -110,7 +110,7 @@ public class Game {
             movingUnit.setPosition(endPos);
             unitsMap.put(endPos, movingUnit);
 
-            gameObserver.update(new GameEvent());
+            if (gameObserver != null) gameObserver.update(new GameEvent());
             return true;
         }
         return false;
