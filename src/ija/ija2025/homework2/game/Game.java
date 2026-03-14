@@ -12,7 +12,6 @@ public class Game {
 
     private List<Unit> units = new ArrayList<>();
     private HashMap<Position, Unit> unitsMap = new HashMap<>();
-
     private GameObserver gameObserver;
 
     public void updateMap(TerrainType[][] newMap) {
@@ -111,6 +110,7 @@ public class Game {
             movingUnit.setPosition(endPos);
             unitsMap.put(endPos, movingUnit);
 
+            gameObserver.update(new GameEvent());
             return true;
         }
         return false;

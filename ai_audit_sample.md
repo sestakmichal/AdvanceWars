@@ -24,7 +24,16 @@
 
 ---
 
-## 3. Unit Testy
+## 3. Basic principles
+* **Nástroj:** ChatGPT-5 mini.
+* **Datum:** 10. 3. 2025
+* * **Prompt:** "Java best way to define rules for movement in strategy game"
+* **Použití:** Porovnanie základných princípov a spôsobov použiteľných v jave pre .
+* **Míra generování:** 10 %.
+
+---
+
+## 4. Unit Testy
 * **Nástroj:** -
 * **Datum:** 15. 3. 2025
 * **Použití:** Bez použití AI.
