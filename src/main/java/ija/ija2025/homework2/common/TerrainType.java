@@ -22,4 +22,15 @@ public enum TerrainType {
             default -> throw new IllegalStateException("Unexpected value: " + terrain);
         };
     }
+
+    public int defenseBonus() {
+        return switch (this) {
+            case Plain -> 1;
+            case Forest -> 2;
+            case Mountain -> 4;
+            case City, Factory -> 3;
+            case HQ -> 4;
+            case Water -> 0;
+        };
+    }
 }

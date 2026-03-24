@@ -24,4 +24,14 @@ public class Infantry extends Unit {
 
     @Override
     public int getMoveRange() { return 3; }
+
+    @Override
+    public int getDamageValue(String fromType) {
+        return switch (fromType) {
+            case "Artillery" -> 90;
+            case "Infantry" -> 55;
+            case "Tank" -> 75;
+            default -> 0;
+        };
+    }
 }

@@ -15,6 +15,8 @@ public abstract class Unit {
 
     public Position getPosition() { return position; }
     public void setPosition(Position newPos) { position = newPos; }
+    public int getHealth() { return health; }
+    public void setHealth(int newHealth) { health = newHealth; }
 
     public int getDefenseBonus(TerrainType type) {
         return switch (type) {
@@ -28,9 +30,17 @@ public abstract class Unit {
         };
     }
 
+    // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
+    public void takeDamage(Unit fromUnit, TerrainType terrainType) {
+       // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
+        double damage = getDamageValue(fromUnit.type) * (fromUnit.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
+        int damageRound = (int) Math.round(damage);
+    }
+
+
     public abstract int getMoveRange();
     public abstract int getMovementPrice(TerrainType terrain);
-
+    public abstract int getDamageValue(String fromType);
     @Override
     public String toString() {
         return String.format("Unit: %s at position [%d, %d] with %d HP", type, position.getRow(), position.getCol(), health);

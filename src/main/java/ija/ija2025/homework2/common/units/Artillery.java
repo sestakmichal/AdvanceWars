@@ -8,4 +8,14 @@ public class Artillery extends Vehicle {
 
     @Override
     public int getMoveRange() { return 5; }
+
+    @Override
+    public int getDamageValue(String fromType) {
+        return switch (fromType) {
+            case "Artillery" -> 75;
+            case "Infantry" -> 15;
+            case "Tank" -> 70;
+            default -> 0;
+        };
+    }
 }
