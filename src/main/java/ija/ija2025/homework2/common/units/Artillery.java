@@ -1,4 +1,4 @@
-package ija.ija2025.homework2.common.units;
+package main.java.ija.ija2025.homework2.common.units;
 
 public class Artillery extends Vehicle {
 

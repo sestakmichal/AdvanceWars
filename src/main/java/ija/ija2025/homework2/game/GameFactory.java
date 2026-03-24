@@ -1,6 +1,6 @@
-package ija.ija2025.homework2.game;
+package main.java.ija.ija2025.homework2.game;
 
-import ija.ija2025.homework2.common.TerrainType;
+import main.java.ija.ija2025.homework2.common.TerrainType;
 
 public class GameFactory {
     public static Game createGame(String[] map) {

@@ -1,0 +1,12 @@
+2026-03-14 themattjayx: Fixed observers
+2026-03-14 Michal Šesták: gameObserver exception during moveUnit
+2026-03-14 themattjayx: Added observation
+2026-03-14 Michal Šesták: Removed debug prints
+2026-03-14 Michal Šesták: Pathfinding, getReachableTIles. Changed x, y for row, col
+2026-03-12 themattjayx: hashCode added to position
+2026-03-12 themattjayx: Added unitsMap
+2026-03-12 Michal Šesták: Started the implementation of getReachableTiles WIP
+2026-03-11 themattjayx: Some rules additions.
+2026-03-11 Michal Šesták: Skeleton code so there are no unimplemented functions in public test class
+2026-03-11 Michal Šesták: initial commit, preparation of hierarchy
+2026-03-11 Michal Šesták: Initial commit

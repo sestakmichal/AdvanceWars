@@ -26,12 +26,14 @@
 
 ---
 
-## 1. Comparator | Šesták
-* **Nástroj:** IntelliJ nápověda
+## 1. GetReachableTiles, Dijkstra
+* **Nástroj:** ChatGPT-5
 * **Datum:** 14. 3. 2025
-* **Použití:** Přepsání `(a, b) -> Integer.compare(a[0], b[0])` na `Comparator.comparingInt(a -> a[0])`
-* **Úprava studentem:** Žádná, šlo o vygenerovaný IDE.
-* **Míra generování:** 90 % (pouze kontrola syntaxe).
+* **Prompt:**
+  > "Java, can you show me a pseudo code of dijsktra function that has a start position in a 2d array and based on start position and field prices it can reach a max distance of x"
+* **Použití:** Kostra implementace Dijkstrova algoritmu.
+* **Úprava studentem:** Implementace prioritní řady a cyklu prohledávání
+* **Míra generování:** 100% pseudokód.
 
 ---
 

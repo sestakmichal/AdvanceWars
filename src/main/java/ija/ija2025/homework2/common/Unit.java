@@ -1,4 +1,4 @@
-package ija.ija2025.homework2.common;
+package main.java.ija.ija2025.homework2.common;
 
 public abstract class Unit {
     private String type;
