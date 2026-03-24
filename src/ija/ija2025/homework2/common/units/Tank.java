@@ -9,4 +9,14 @@ public class Tank extends Vehicle {
     @Override
     public int getMoveRange() { return 6; }
 
+    @Override
+    public int getDamageValue(String fromType) {
+        return switch (fromType) {
+            case "Artillery" -> 70;
+            case "Infantry" -> 5;
+            case "Tank" -> 55;
+            default -> 0;
+        };
+    }
+
 }
