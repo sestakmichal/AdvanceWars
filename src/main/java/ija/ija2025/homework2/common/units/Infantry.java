@@ -1,7 +1,7 @@
-package main.java.ija.ija2025.homework2.common.units;
+package ija.ija2025.homework2.common.units;
 
-import main.java.ija.ija2025.homework2.common.TerrainType;
-import main.java.ija.ija2025.homework2.common.Unit;
+import ija.ija2025.homework2.common.TerrainType;
+import ija.ija2025.homework2.common.Unit;
 
 public class Infantry extends Unit {
 

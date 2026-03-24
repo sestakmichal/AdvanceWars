@@ -1,8 +1,8 @@
-package main.java.ija.ija2025.homework2.game;
+package ija.ija2025.homework2.game;
 
-import main.java.ija.ija2025.homework2.common.*;
-import main.java.ija.ija2025.homework2.common.units.*;
-import main.java.ija.ija2025.homework2.tool.GameObserver;
+import ija.ija2025.homework2.common.*;
+import ija.ija2025.homework2.common.units.*;
+import ija.ija2025.homework2.tool.GameObserver;
 
 import java.util.*;
 

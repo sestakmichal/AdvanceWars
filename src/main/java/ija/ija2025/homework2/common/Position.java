@@ -1,4 +1,4 @@
-package main.java.ija.ija2025.homework2.common;
+package ija.ija2025.homework2.common;
 
 import java.util.Objects;
 
