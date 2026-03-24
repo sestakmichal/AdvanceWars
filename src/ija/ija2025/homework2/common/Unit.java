@@ -5,6 +5,7 @@ public abstract class Unit {
     private String unitOwner;
     private Position position;
     private int health;
+    boolean destroyed = false;
 
     public Unit(String type, String unitOwner, int row, int col) {
         this.type = type;
@@ -35,6 +36,10 @@ public abstract class Unit {
        // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
         double damage = getDamageValue(fromUnit.type) * (fromUnit.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
         int damageRound = (int) Math.round(damage);
+        health -= damageRound;
+        if (health <= 0) {                  //Unit destroyed
+            destroyed = true;
+        }
     }
 
 
