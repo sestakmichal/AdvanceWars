@@ -37,5 +37,16 @@
 
 ---
 
+## 2. Observation in Game
+* **Nástroj:** ChatGPT-5
+* **Datum:** 9. 4. 2025
+* **Prompt:**
+  > "Java game project, how should game observation be approached, who should observe."
+* **Použití:** Všeobecné informácie o observácii pri hrách.
+* **Úprava studentem:** Aplikovanie na konkrétne príklady
+* **Míra generování:** 20%.
+
+---
+
 
 *(Sekce kopírujte dle potřeby pro každou významnou část kódu, kde byla použita AI)*
