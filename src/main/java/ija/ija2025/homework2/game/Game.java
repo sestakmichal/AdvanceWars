@@ -123,7 +123,7 @@ public class Game implements Observable {
             movingUnit.setPosition(endPos);
             unitsMap.put(endPos, movingUnit);
 
-            notifyObservers();
+            //notifyObservers();
             return true;
         }
         return false;
@@ -133,9 +133,9 @@ public class Game implements Observable {
         this.gameObservers.add(gameObserver);
     }
     public void removeObserver(Observer gameObserver) { this.gameObservers.remove(gameObserver); }
-    public void notifyObservers() {
+    public void notifyObservers(GameEvent event) {
         for (Observer observer: gameObservers) {
-            observer.update(new GameEvent());
+            observer.update(event);
         }
     }
 }
