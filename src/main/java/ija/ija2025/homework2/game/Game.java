@@ -19,6 +19,10 @@ public class Game {
         mapSize = new Position(map.length, map[0].length);
     }
 
+    public TerrainType getTerrainAt(Position pos) {
+        return map[pos.getRow()][pos.getCol()];
+    }
+
     public Unit createUnit(String type, String owner, int row, int col) {
         Unit unit = switch (type) {
             case "Tank" -> new Tank("Tank", owner, row, col);
@@ -28,7 +32,15 @@ public class Game {
         };
         units.add(unit);
         unitsMap.put(new Position(row, col), unit);
+        // notify unit spawn here
         return unit;
+    }
+
+    public void removeUnit(Unit unit) {
+        units.remove(unit);
+        unitsMap.remove(unit.getPosition());
+
+        // notify unit removal here
     }
 
     public Unit getUnitAt(Position pos) {

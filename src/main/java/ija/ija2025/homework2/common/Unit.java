@@ -32,16 +32,20 @@ public abstract class Unit {
     }
 
     // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
-    public void takeDamage(Unit fromUnit, TerrainType terrainType) {
+    public int takeDamage(Unit fromUnit, TerrainType terrainType) {
        // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
         double damage = getDamageValue(fromUnit.type) * (fromUnit.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
         int damageRound = (int) Math.round(damage);
-        health -= damageRound;
-        if (health <= 0) {                  //Unit destroyed
+        int actualDamage = Math.min(health, damageRound); // unit can't go below zero hp
+
+        health -= actualDamage;
+        if (health <= 0) { // Unit destroyed
+            health = 0;
             destroyed = true;
         }
+        return actualDamage;
     }
-
+    public boolean isDestroyed() { return destroyed; }
 
     public abstract int getMoveRange();
     public abstract int getMovementPrice(TerrainType terrain);
