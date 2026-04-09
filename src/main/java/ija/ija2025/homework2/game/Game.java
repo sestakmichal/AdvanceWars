@@ -2,17 +2,18 @@ package ija.ija2025.homework2.game;
 
 import ija.ija2025.homework2.common.*;
 import ija.ija2025.homework2.common.units.*;
-import ija.ija2025.homework2.tool.GameObserver;
+import ija.ija2025.homework2.tool.Observer;
+import ija.ija2025.homework2.tool.Observable;
 
 import java.util.*;
 
-public class Game {
+public class Game implements Observable {
     private Position mapSize;
     private TerrainType[][] map;
 
     private List<Unit> units = new ArrayList<>();
     private HashMap<Position, Unit> unitsMap = new HashMap<>();
-    private List<GameObserver> gameObservers = new ArrayList<>();
+    private List<Observer> gameObservers = new ArrayList<>();
 
     public void updateMap(TerrainType[][] newMap) {
         map = newMap;
@@ -110,18 +111,18 @@ public class Game {
             movingUnit.setPosition(endPos);
             unitsMap.put(endPos, movingUnit);
 
-            updateObservers();
+            notifyObservers();
             return true;
         }
         return false;
     }
 
-    public void addObserver(GameObserver gameObserver) {
+    public void addObserver(Observer gameObserver) {
         this.gameObservers.add(gameObserver);
     }
-
-    public void updateObservers() {
-        for (GameObserver observer: gameObservers) {
+    public void removeObserver(Observer gameObserver) { this.gameObservers.remove(gameObserver); }
+    public void notifyObservers() {
+        for (Observer observer: gameObservers) {
             observer.update(new GameEvent());
         }
     }
