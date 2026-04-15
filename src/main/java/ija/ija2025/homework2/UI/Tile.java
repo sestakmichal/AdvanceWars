@@ -1,5 +1,6 @@
 package ija.ija2025.homework2.UI;
 
+import ija.ija2025.homework2.common.Position;
 import ija.ija2025.homework2.common.TerrainType;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
@@ -7,14 +8,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Tile extends StackPane {
-    private final int row, col;
+    private final Position pos;
     private final Rectangle background = new Rectangle(50, 50);
     private final Rectangle highlight = new Rectangle(46, 46);
     private Node currentUnitNode = null;
 
     public Tile(int row, int col, TerrainType type, int size) {
-        this.row = row;
-        this.col = col;
+        pos = new Position(row, col);
 
         // background color
         background.setWidth(size);
@@ -67,6 +67,5 @@ public class Tile extends StackPane {
     }
 
     public Node getUnitVisual() { return this.currentUnitNode; }
-    public int getRow() { return row; }
-    public int getCol() { return col; }
+    public Position getPos() { return pos; }
 }

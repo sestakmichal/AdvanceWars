@@ -12,16 +12,14 @@ public class Controller {
 
 
     public void onTileClicked(Tile tile) {
-        Position pos = new Position(tile.getRow(), tile.getCol());
-
         if (selectedPosition == null) {
-            if (game.getUnitAt(pos) != null) {
-                selectedPosition = pos;
+            if (game.getUnitAt(tile.getPos()) != null) {
+                selectedPosition = tile.getPos();
             }
             return;
         }
 
-        boolean moved = game.moveUnit(selectedPosition, pos);
+        boolean moved = game.moveUnit(selectedPosition, tile.getPos());
 
         selectedPosition = null;
     }
