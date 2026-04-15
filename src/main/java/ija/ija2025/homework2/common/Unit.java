@@ -18,6 +18,8 @@ public abstract class Unit {
     public void setPosition(Position newPos) { position = newPos; }
     public int getHealth() { return health; }
     public void setHealth(int newHealth) { health = newHealth; }
+    public String getOwner() { return unitOwner; }
+    public String getType() { return type; }
 
     public int getDefenseBonus(TerrainType type) {
         return switch (type) {

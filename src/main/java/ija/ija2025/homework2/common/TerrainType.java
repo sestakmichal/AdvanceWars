@@ -16,7 +16,7 @@ public enum TerrainType {
             case 'm' -> Mountain;
             case 'w' -> Water;
             // implement later?
-            // case 'c' -> City;
+            case 'c' -> City;
             // case 'f' -> Factory;
             // case 'h' -> HQ;
             default -> throw new IllegalStateException("Unexpected value: " + terrain);

@@ -24,6 +24,8 @@ public class Game implements Observable {
         return map[pos.getRow()][pos.getCol()];
     }
 
+    public Position getSize() { return mapSize; }
+
     public Unit createUnit(String type, String owner, int row, int col) {
         Unit unit = switch (type) {
             case "Tank" -> new Tank("Tank", owner, row, col);
@@ -59,8 +61,8 @@ public class Game implements Observable {
 
         // init distance array with max value
         int[][] distanceMap = new int[height][width];
-        for (int r = 0; r < width; r++) {
-            for (int c = 0; c < height; c++) {
+        for (int r = 0; r < height; r++) {
+            for (int c = 0; c < width; c++) {
                 distanceMap[r][c] = Integer.MAX_VALUE;
             }
         }
