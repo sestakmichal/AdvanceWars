@@ -1,4 +1,4 @@
-package ija.ija2025.homework2.game;
+package ija.ija2025.homework2.game.Events;
 
 public enum EventType {
     UNIT_SPAWNED,
@@ -8,4 +8,5 @@ public enum EventType {
     INCOME_RECEIVED,
     CITY_CAPTURED,
     PHASE_CHANGED,
+    MAP_CLICKED,
 }

@@ -2,9 +2,12 @@ package ija.ija2025.homework2;
 
 import ija.ija2025.homework2.common.Position;
 import ija.ija2025.homework2.common.Unit;
+import ija.ija2025.homework2.game.Events.Event;
+import ija.ija2025.homework2.game.Events.EventType;
+import ija.ija2025.homework2.game.Events.MapClickEvent;
 import ija.ija2025.homework2.game.Game;
 import ija.ija2025.homework2.game.GameFactory;
-import ija.ija2025.homework2.UI.MapController;
+import ija.ija2025.homework2.tool.MapObserver;
 import ija.ija2025.homework2.UI.Tile;
 import ija.ija2025.homework2.UI.SpriteFactory;
 
@@ -18,7 +21,6 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private Game game;
-    private MapController controller;
     private Tile[][] visualTiles;
     private int TileSize = 60; // pixels
 
@@ -42,7 +44,7 @@ public class Main extends Application {
         Position size = game.getSize();
 
         visualTiles = new Tile[size.getRow()][size.getCol()];
-        this.controller = new MapController(game, visualTiles);
+        game.addObserver(new MapObserver(game, visualTiles));
 
         GridPane grid = new GridPane();
         grid.setStyle("-fx-background-color: #333;");
@@ -53,7 +55,7 @@ public class Main extends Application {
             for (int c = 0; c < size.getCol(); c++) {
                 Tile tile = new Tile(r, c, game.getTerrainAt(new Position(r, c)), TileSize);
 
-                tile.setOnMouseClicked(e -> controller.handleInteraction(tile));
+                tile.setOnMouseClicked(e -> game.notifyObservers(new MapClickEvent(tile)));
 
                 visualTiles[r][c] = tile;
                 grid.add(tile, c, r);

@@ -1,19 +1,32 @@
-package ija.ija2025.homework2.UI;
+package ija.ija2025.homework2.tool;
 
+import ija.ija2025.homework2.UI.Tile;
+import ija.ija2025.homework2.game.Events.Event;
+import ija.ija2025.homework2.game.Events.EventType;
+import ija.ija2025.homework2.game.Events.MapClickEvent;
 import ija.ija2025.homework2.game.Game;
 import ija.ija2025.homework2.common.Position;
 import javafx.scene.Node;
 
 import java.util.List;
 
-public class MapController {
+public class MapObserver implements Observer {
     private final Game game;
     private final Tile[][] visualTiles;
     private Position selectedPos = null;
 
-    public MapController(Game game, Tile[][] visualTiles) {
+    public MapObserver(Game game, Tile[][] visualTiles) {
         this.game = game;
         this.visualTiles = visualTiles;
+    }
+
+    public void update(Event e) {
+        if (e.getType() == EventType.MAP_CLICKED) {
+            MapClickEvent clickEvent = (MapClickEvent) e;
+
+            System.out.println("Map clicked!");
+            handleInteraction(clickEvent.getTile());
+        }
     }
 
     public void handleInteraction(Tile clickedTile) {

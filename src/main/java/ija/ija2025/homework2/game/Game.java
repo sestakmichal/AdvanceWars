@@ -2,6 +2,7 @@ package ija.ija2025.homework2.game;
 
 import ija.ija2025.homework2.common.*;
 import ija.ija2025.homework2.common.units.*;
+import ija.ija2025.homework2.game.Events.Event;
 import ija.ija2025.homework2.tool.Observer;
 import ija.ija2025.homework2.tool.Observable;
 
