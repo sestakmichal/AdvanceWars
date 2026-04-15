@@ -4,6 +4,7 @@ import ija.ija2025.homework2.UI.Tile;
 import ija.ija2025.homework2.game.Events.Event;
 import ija.ija2025.homework2.game.Events.EventType;
 import ija.ija2025.homework2.game.Events.MapClickEvent;
+import ija.ija2025.homework2.game.Events.UnitMovedEvent;
 import ija.ija2025.homework2.game.Game;
 import ija.ija2025.homework2.common.Position;
 import javafx.scene.Node;
@@ -21,7 +22,7 @@ public class MapObserver implements Observer {
     }
 
     public void update(Event e) {
-        if (e.getType() == EventType.MAP_CLICKED) {
+        if (e instanceof UnitMovedEvent) {
             MapClickEvent clickEvent = (MapClickEvent) e;
 
             System.out.println("Map clicked!");

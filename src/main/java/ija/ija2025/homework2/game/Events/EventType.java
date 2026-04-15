@@ -1,5 +1,6 @@
 package ija.ija2025.homework2.game.Events;
 
+@Deprecated
 public enum EventType {
     UNIT_SPAWNED,
     UNIT_MOVED,

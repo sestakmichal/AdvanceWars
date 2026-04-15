@@ -21,12 +21,10 @@ public class MoveCommand implements Command {
     @Override
     public void execute() {
         game.moveUnit(from, to);
-        //game.notifyObservers(new Event(EventType.UNIT_MOVED));
     }
 
     @Override
     public void undo() {
         game.moveUnit(to, from);
-        //game.notifyObservers(new Event(EventType.UNIT_MOVED));
     }
 }

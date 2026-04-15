@@ -3,8 +3,6 @@ package ija.ija2025.homework2;
 import ija.ija2025.homework2.common.Position;
 import ija.ija2025.homework2.common.Unit;
 import ija.ija2025.homework2.game.Events.Event;
-import ija.ija2025.homework2.game.Events.EventType;
-import ija.ija2025.homework2.game.Events.MapClickEvent;
 import ija.ija2025.homework2.game.Game;
 import ija.ija2025.homework2.game.GameFactory;
 import ija.ija2025.homework2.tool.MapObserver;
@@ -55,7 +53,7 @@ public class Main extends Application {
             for (int c = 0; c < size.getCol(); c++) {
                 Tile tile = new Tile(r, c, game.getTerrainAt(new Position(r, c)), TileSize);
 
-                tile.setOnMouseClicked(e -> game.notifyObservers(new MapClickEvent(tile)));
+                tile.setOnMouseClicked(e -> game.handleTileClick(tile));
 
                 visualTiles[r][c] = tile;
                 grid.add(tile, c, r);

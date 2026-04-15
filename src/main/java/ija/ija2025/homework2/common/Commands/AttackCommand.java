@@ -3,7 +3,6 @@ package ija.ija2025.homework2.common.Commands;
 import ija.ija2025.homework2.common.TerrainType;
 import ija.ija2025.homework2.common.Unit;
 import ija.ija2025.homework2.game.Events.Event;
-import ija.ija2025.homework2.game.Events.EventType;
 import ija.ija2025.homework2.game.Game;
 
 public class AttackCommand implements Command {

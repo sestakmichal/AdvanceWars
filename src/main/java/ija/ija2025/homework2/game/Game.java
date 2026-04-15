@@ -1,8 +1,10 @@
 package ija.ija2025.homework2.game;
 
+import ija.ija2025.homework2.UI.Tile;
 import ija.ija2025.homework2.common.*;
 import ija.ija2025.homework2.common.units.*;
 import ija.ija2025.homework2.game.Events.Event;
+import ija.ija2025.homework2.game.Events.UnitMovedEvent;
 import ija.ija2025.homework2.tool.Observer;
 import ija.ija2025.homework2.tool.Observable;
 
@@ -126,17 +128,21 @@ public class Game implements Observable {
             movingUnit.setPosition(endPos);
             unitsMap.put(endPos, movingUnit);
 
-            //notifyObservers();
+            notifyObservers(new UnitMovedEvent(movingUnit, startPos, endPos));
             return true;
         }
         return false;
+    }
+
+    public void handleTileClick(Tile tile) {
+
     }
 
     public void addObserver(Observer gameObserver) {
         this.gameObservers.add(gameObserver);
     }
     public void removeObserver(Observer gameObserver) { this.gameObservers.remove(gameObserver); }
-    public void notifyObservers(Event event) {
+    private void notifyObservers(Event event) {
         for (Observer observer: gameObservers) {
             observer.update(event);
         }
