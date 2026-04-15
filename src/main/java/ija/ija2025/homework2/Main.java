@@ -42,7 +42,7 @@ public class Main extends Application {
         Position size = game.getSize();
 
         visualTiles = new Tile[size.getRow()][size.getCol()];
-        game.addObserver(new MapObserver(game, visualTiles));
+        game.addObserver(new MapObserver(visualTiles));
 
         GridPane grid = new GridPane();
         grid.setStyle("-fx-background-color: #333;");

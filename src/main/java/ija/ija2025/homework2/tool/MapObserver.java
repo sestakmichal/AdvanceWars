@@ -2,75 +2,31 @@ package ija.ija2025.homework2.tool;
 
 import ija.ija2025.homework2.UI.Tile;
 import ija.ija2025.homework2.game.Events.Event;
-import ija.ija2025.homework2.game.Events.EventType;
-import ija.ija2025.homework2.game.Events.MapClickEvent;
 import ija.ija2025.homework2.game.Events.UnitMovedEvent;
-import ija.ija2025.homework2.game.Game;
 import ija.ija2025.homework2.common.Position;
 import javafx.scene.Node;
-
 import java.util.List;
 
 public class MapObserver implements Observer {
-    private final Game game;
     private final Tile[][] visualTiles;
-    private Position selectedPos = null;
 
-    public MapObserver(Game game, Tile[][] visualTiles) {
-        this.game = game;
+    public MapObserver(Tile[][] visualTiles) {
         this.visualTiles = visualTiles;
     }
-
     public void update(Event e) {
-        if (e instanceof UnitMovedEvent) {
-            MapClickEvent clickEvent = (MapClickEvent) e;
 
-            System.out.println("Map clicked!");
-            handleInteraction(clickEvent.getTile());
-        }
-    }
+        if (e instanceof UnitMovedEvent event) {
 
-    public void handleInteraction(Tile clickedTile) {
-        Position currentPos = new Position(clickedTile.getRow(), clickedTile.getCol());
+            Position from = event.from();
+            Position to = event.to();
 
-        // select a unit
-        if (selectedPos == null) {
-            if (game.getUnitAt(currentPos) != null) {
-                selectedPos = currentPos;
+            Tile source = visualTiles[from.getRow()][from.getCol()];
+            Tile target = visualTiles[to.getRow()][to.getCol()];
 
-                List<Position> reachable = game.getReachableTiles(currentPos);
+            Node sprite = source.getUnitVisual();
 
-                // highlight tiles
-                clickedTile.setHighlight(true);
-                for (Position p : reachable) {
-                    visualTiles[p.getRow()][p.getCol()].setHighlight(true);
-                }
-            }
-        }
-        // move the unit
-        else {
-            if (clickedTile.isHighlighted()) {
-                // move in backend
-                game.moveUnit(selectedPos, currentPos);
-
-                // sync UI
-                Tile sourceTile = visualTiles[selectedPos.getRow()][selectedPos.getCol()];
-                Node sprite = sourceTile.getUnitVisual();
-
-                sourceTile.removeUnitVisual();
-                clickedTile.setUnitVisual(sprite);
-            }
-
-            clearAllHighlights();
-            selectedPos = null;
-        }
-    }
-
-    private void clearAllHighlights() {
-        for (Tile[] row : visualTiles) {
-            for (Tile t : row) {
-                t.setHighlight(false);
-            }
+            source.removeUnitVisual();
+            target.setUnitVisual(sprite);
         }
     }
 }

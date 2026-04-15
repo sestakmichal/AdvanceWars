@@ -11,7 +11,6 @@ public class Controller {
    }
 
 
-
     public void onTileClicked(Tile tile) {
         Position pos = new Position(tile.getRow(), tile.getCol());
 
