@@ -2,6 +2,8 @@ package ija.ija2025.homework2.common.Commands;
 
 import ija.ija2025.homework2.common.TerrainType;
 import ija.ija2025.homework2.common.Unit;
+import ija.ija2025.homework2.game.Event;
+import ija.ija2025.homework2.game.EventType;
 import ija.ija2025.homework2.game.Game;
 
 public class AttackCommand implements Command {
@@ -26,9 +28,11 @@ public class AttackCommand implements Command {
         if (target.isDestroyed()) {
             this.wasDestroyed = true;
             game.removeUnit(target);
+            game.notifyObservers(new Event(EventType.UNIT_DESTROYED));
         }
         else {
             // notify Unit attacked
+            game.notifyObservers(new Event(EventType.UNIT_ATTACKED));
         }
     }
 

@@ -2,14 +2,14 @@ package ija.ija2025.homework2.common;
 
 public abstract class Unit {
     private String type;
-    private String unitOwner;
+    private String owner;
     private Position position;
     private int health;
     boolean destroyed = false;
 
-    public Unit(String type, String unitOwner, int row, int col) {
+    public Unit(String type, String owner, int row, int col) {
         this.type = type;
-        this.unitOwner = unitOwner;
+        this.owner = owner;
         position = new Position(row, col);
         health = 100;
     }
@@ -18,7 +18,7 @@ public abstract class Unit {
     public void setPosition(Position newPos) { position = newPos; }
     public int getHealth() { return health; }
     public void setHealth(int newHealth) { health = newHealth; }
-    public String getOwner() { return unitOwner; }
+    public String getOwner() { return owner; }
     public String getType() { return type; }
 
     public int getDefenseBonus(TerrainType type) {

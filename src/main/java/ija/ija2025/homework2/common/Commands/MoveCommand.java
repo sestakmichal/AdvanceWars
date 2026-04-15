@@ -2,6 +2,8 @@ package ija.ija2025.homework2.common.Commands;
 
 import ija.ija2025.homework2.common.Position;
 import ija.ija2025.homework2.common.Unit;
+import ija.ija2025.homework2.game.Event;
+import ija.ija2025.homework2.game.EventType;
 import ija.ija2025.homework2.game.Game;
 
 public class MoveCommand implements Command {
@@ -19,12 +21,12 @@ public class MoveCommand implements Command {
     @Override
     public void execute() {
         game.moveUnit(from, to);
-        //game.updateObservers(new GameEvent(from, to, unit));
+        game.notifyObservers(new Event(EventType.UNIT_MOVED));
     }
 
     @Override
     public void undo() {
         game.moveUnit(to, from);
-        //game.notifyObservers(new GameEvent(to, from, unit));
+        game.notifyObservers(new Event(EventType.UNIT_MOVED));
     }
 }

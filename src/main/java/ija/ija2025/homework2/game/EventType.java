@@ -1,0 +1,11 @@
+package ija.ija2025.homework2.game;
+
+public enum EventType {
+    UNIT_SPAWNED,
+    UNIT_MOVED,
+    UNIT_ATTACKED,
+    UNIT_DESTROYED,
+    INCOME_RECEIVED,
+    CITY_CAPTURED,
+    PHASE_CHANGED,
+}

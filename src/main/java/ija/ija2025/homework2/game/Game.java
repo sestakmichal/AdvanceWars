@@ -135,7 +135,7 @@ public class Game implements Observable {
         this.gameObservers.add(gameObserver);
     }
     public void removeObserver(Observer gameObserver) { this.gameObservers.remove(gameObserver); }
-    public void notifyObservers(GameEvent event) {
+    public void notifyObservers(Event event) {
         for (Observer observer: gameObservers) {
             observer.update(event);
         }
