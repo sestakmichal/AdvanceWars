@@ -4,7 +4,9 @@ import ija.ija2025.homework2.UI.Tile;
 import ija.ija2025.homework2.common.*;
 import ija.ija2025.homework2.common.units.*;
 import ija.ija2025.homework2.game.Events.Event;
+import ija.ija2025.homework2.game.Events.HighlightTilesEvent;
 import ija.ija2025.homework2.game.Events.UnitMovedEvent;
+import ija.ija2025.homework2.game.Events.UnitSpawnedEvent;
 import ija.ija2025.homework2.tool.Observer;
 import ija.ija2025.homework2.tool.Observable;
 
@@ -38,7 +40,8 @@ public class Game implements Observable {
         };
         units.add(unit);
         unitsMap.put(new Position(row, col), unit);
-        // notify unit spawn here
+
+        notifyObservers(new UnitSpawnedEvent(unit));
         return unit;
     }
 
@@ -115,6 +118,19 @@ public class Game implements Observable {
         }
 
         return reachable;
+    }
+
+    private List<Position> lastHighlightedArea;
+    public void highlightUnitReach(Position pos) {
+        lastHighlightedArea = getReachableTiles(pos);
+        notifyObservers(new HighlightTilesEvent(lastHighlightedArea, true));
+    }
+
+    public void clearHilights() {
+        if (lastHighlightedArea != null && !lastHighlightedArea.isEmpty()) {
+            notifyObservers(new HighlightTilesEvent(lastHighlightedArea, false));
+            lastHighlightedArea.clear();
+        }
     }
 
     public boolean moveUnit(Position startPos, Position endPos) {

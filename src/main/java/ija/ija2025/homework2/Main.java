@@ -2,6 +2,7 @@ package ija.ija2025.homework2;
 
 import ija.ija2025.homework2.common.Position;
 import ija.ija2025.homework2.common.Unit;
+import ija.ija2025.homework2.game.Controller;
 import ija.ija2025.homework2.game.Events.Event;
 import ija.ija2025.homework2.game.Game;
 import ija.ija2025.homework2.game.GameFactory;
@@ -19,8 +20,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private Game game;
-    private Tile[][] visualTiles;
-    private int TileSize = 60; // pixels
+    private int TileSize = 60;
 
     private final String[] mapDefinition = {
             "P P P F F F F P P P P P",
@@ -39,11 +39,11 @@ public class Main extends Application {
     public void start(Stage stage) {
 
         game = GameFactory.createGame(mapDefinition);
+        Controller gameController = new Controller(game);
+
+        // UI tile generation
         Position size = game.getSize();
-
-        visualTiles = new Tile[size.getRow()][size.getCol()];
-        game.addObserver(new MapObserver(visualTiles));
-
+        Tile[][] uiTiles = new Tile[size.getRow()][size.getCol()];
         GridPane grid = new GridPane();
         grid.setStyle("-fx-background-color: #333;");
         grid.setHgap(1);
@@ -51,29 +51,25 @@ public class Main extends Application {
 
         for (int r = 0; r < size.getRow(); r++) {
             for (int c = 0; c < size.getCol(); c++) {
-                Tile tile = new Tile(r, c, game.getTerrainAt(new Position(r, c)), TileSize);
+                Tile tile = new Tile(r, c, game.getTerrainAt(new Position(r, c)), TileSize); // !TODO debate
 
-                tile.setOnMouseClicked(e -> game.handleTileClick(tile));
+                tile.setOnMouseClicked(e -> gameController.onTileClicked(tile));
 
-                visualTiles[r][c] = tile;
+                uiTiles[r][c] = tile;
                 grid.add(tile, c, r);
             }
         }
 
-        // add mock units
-        Unit u = game.createUnit("Tank", "Player1", 0, 0);
-        visualTiles[0][0].setUnitVisual(SpriteFactory.generateSprite(u.getType(), u.getOwner()));
-        u = game.createUnit("Infantry", "Player1", 0, 1);
-        visualTiles[0][1].setUnitVisual(SpriteFactory.generateSprite(u.getType(), u.getOwner()));
-        u = game.createUnit("Artillery", "Player1", 0, 2);
-        visualTiles[0][2].setUnitVisual(SpriteFactory.generateSprite(u.getType(), u.getOwner()));
+        MapObserver mo = new MapObserver(uiTiles);
+        game.addObserver(mo);
 
-        u = game.createUnit("Tank", "Player2", 1, 9);
-        visualTiles[1][9].setUnitVisual(SpriteFactory.generateSprite(u.getType(), u.getOwner()));
-        u = game.createUnit("Infantry", "Player2", 1, 10);
-        visualTiles[1][10].setUnitVisual(SpriteFactory.generateSprite(u.getType(), u.getOwner()));
-        u = game.createUnit("Artillery", "Player2", 1, 11);
-        visualTiles[1][11].setUnitVisual(SpriteFactory.generateSprite(u.getType(), u.getOwner()));
+        // add mock units
+        gameController.SpawnUnit("Tank", "Player1", new Position(0, 0));
+        gameController.SpawnUnit("Infantry", "Player1", new Position(0, 1));
+        gameController.SpawnUnit("Artillery", "Player1", new Position(0, 2));
+        gameController.SpawnUnit("Tank", "Player2", new Position(1, 9));
+        gameController.SpawnUnit("Infantry", "Player2", new Position(1, 10));
+        gameController.SpawnUnit("Artillery", "Player2", new Position(1, 11));
 
         ScrollPane root = new ScrollPane(grid);
         Scene scene = new Scene(root, 850, 650);
