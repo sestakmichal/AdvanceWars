@@ -70,7 +70,7 @@ public class MapObserver implements Observer {
 
             Tile tile = tiles[pos.getRow()][pos.getCol()];
 
-            tile.setUnitVisual(SpriteFactory.generateSprite(unit.getType(), unit.getOwner()));
+            tile.setUnitVisual(SpriteFactory.generateSprite(unit));
         }
     }
 }
