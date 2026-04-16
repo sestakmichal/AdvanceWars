@@ -4,7 +4,6 @@ import ija.ija2025.homework2.UI.Tile;
 import ija.ija2025.homework2.common.*;
 import ija.ija2025.homework2.common.units.*;
 import ija.ija2025.homework2.game.Events.Event;
-import ija.ija2025.homework2.game.Events.HighlightTilesEvent;
 import ija.ija2025.homework2.game.Events.UnitMovedEvent;
 import ija.ija2025.homework2.game.Events.UnitSpawnedEvent;
 import ija.ija2025.homework2.tool.Observer;
@@ -30,6 +29,7 @@ public class Game implements Observable {
     }
 
     public Position getSize() { return mapSize; }
+    public TerrainType[][] getMap() {return map;}
 
     public Unit createUnit(String type, String owner, int row, int col) {
         Unit unit = switch (type) {
@@ -38,10 +38,10 @@ public class Game implements Observable {
             case "Infantry" -> new Infantry("Infantry", owner, row, col);
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
+        Position pos = new Position(row, col);
         units.add(unit);
-        unitsMap.put(new Position(row, col), unit);
-
-        notifyObservers(new UnitSpawnedEvent(unit));
+        unitsMap.put(pos, unit);
+        notifyObservers(new UnitSpawnedEvent(unit, pos));
         return unit;
     }
 
@@ -56,7 +56,7 @@ public class Game implements Observable {
         return unitsMap.get(pos);
     }
 
-    // flood of all reachable tiles
+
     public List<Position> getReachableTiles(Position position) {
         if (map == null) return null;
         int height = mapSize.getRow();
@@ -120,19 +120,6 @@ public class Game implements Observable {
         return reachable;
     }
 
-    private List<Position> lastHighlightedArea;
-    public void highlightUnitReach(Position pos) {
-        lastHighlightedArea = getReachableTiles(pos);
-        notifyObservers(new HighlightTilesEvent(lastHighlightedArea, true));
-    }
-
-    public void clearHilights() {
-        if (lastHighlightedArea != null && !lastHighlightedArea.isEmpty()) {
-            notifyObservers(new HighlightTilesEvent(lastHighlightedArea, false));
-            lastHighlightedArea.clear();
-        }
-    }
-
     public boolean moveUnit(Position startPos, Position endPos) {
         List<Position> reachable = getReachableTiles(startPos);
 
@@ -150,6 +137,7 @@ public class Game implements Observable {
         return false;
     }
 
+    //TODO
     public void handleTileClick(Tile tile) {
 
 

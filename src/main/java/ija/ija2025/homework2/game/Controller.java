@@ -1,10 +1,11 @@
 package ija.ija2025.homework2.game;
+import ija.ija2025.homework2.UI.SpriteFactory;
 import ija.ija2025.homework2.UI.Tile;
 import ija.ija2025.homework2.common.Position;
 import ija.ija2025.homework2.common.Unit;
 
 public class Controller {
-    private final Game game;
+    Game game;
     Position selectedPosition;
 
    public Controller(Game game) {
@@ -12,25 +13,26 @@ public class Controller {
    }
 
 
-    public void onTileClicked(Tile tile) {
+    public void onTileClicked(Position position) {
         if (selectedPosition == null) {
-            if (game.getUnitAt(tile.getPos()) != null) {
-                selectedPosition = tile.getPos();
-                game.highlightUnitReach(selectedPosition);
+            if (game.getUnitAt(position) != null) {
+                selectedPosition = position;
             }
             return;
         }
 
-        boolean moved = game.moveUnit(selectedPosition, tile.getPos());
+        boolean moved = game.moveUnit(selectedPosition, position);
 
-        game.clearHilights();
         selectedPosition = null;
     }
 
-    public void SpawnUnit(String unitType, String owner, Position where) {
-        game.createUnit(unitType, owner, where.getRow(), where.getCol());
-        // handle money?
-    }
+    public void initializeMockUnits(Game game) {
+        game.createUnit("Tank", "Player1", 0, 0);
+        game.createUnit("Infantry", "Player1", 0, 1);
+        game.createUnit("Artillery", "Player1", 0, 2);
 
-    public Game getGame() { return game; }
+        game.createUnit("Tank", "Player2", 1, 9);
+        game.createUnit("Infantry", "Player2", 1, 10);
+        game.createUnit("Artillery", "Player2", 1, 11);
+    }
 }
