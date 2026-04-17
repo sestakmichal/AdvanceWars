@@ -13,16 +13,12 @@ public class MoveCommand implements Command {
         this.game = game;
         this.from = from;
         this.to = to;
-        this.unit = game.getUnitAt(from);
+        this.unit = game.getUnitAt(from); //unused now
     }
 
     @Override
-    public void execute() {
-        game.moveUnit(from, to);
-    }
+    public void execute() {game.moveUnit(from, to);}
 
     @Override
-    public void undo() {
-        game.moveUnit(to, from);
-    }
+    public void undo() {game.moveUnit(to, from);}
 }

@@ -56,7 +56,7 @@ public class Tile extends StackPane {
     }
 
     public void setHighlightReach() {
-        highlight.setStroke(Color.BLUE);
+        highlight.setStroke(Color.YELLOW);
         highlight.setVisible(true);
     }
 

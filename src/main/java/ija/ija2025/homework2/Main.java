@@ -26,7 +26,7 @@ public class Main extends Application {
 
         game.addObserver(mapView);
 
-        mapView.initialize(controller, game.getMap());
+        mapView.initializeMap(controller, game.getMap());
         controller.initializeMockUnits(game);
 
         ScrollPane root = new ScrollPane(mapView.getNode());

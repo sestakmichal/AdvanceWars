@@ -48,7 +48,7 @@
 
 ---
 
-## 2. Observation in Game
+## 3. Recovery phase
 * **Nástroj:** Gemini 3
 * **Datum:** 16. 4. 2025
 * **Prompt:**
@@ -56,6 +56,15 @@
 * **Použití:** Vytvorenie funkcie pre recovery fázu.
 * **Úprava studentem:** Potrebné úpravy pri konkrétnej aplikácii
 * **Míra generování:** 80%.
+
+## 4. Commands and manager
+* **Nástroj:** Gemini 3
+* **Datum:** 16. 4. 2025
+* **Prompt:**
+  > "Java Advance Wars game, how to store commands and separate the functionality from the game calls..."
+* **Použití:** Vytvorenie funkcie pre recovery fázu.
+* **Úprava studentem:** Potrebné úpravy pri konkrétnej aplikácii
+* **Míra generování:** 70%.
 
 
 

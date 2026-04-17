@@ -1,41 +1,53 @@
 package ija.ija2025.homework2.tool;
+import ija.ija2025.homework2.common.Commands.MoveCommand;
 import ija.ija2025.homework2.common.Position;
 import ija.ija2025.homework2.common.Unit;
 import ija.ija2025.homework2.game.Game;
 import ija.ija2025.homework2.game.GamePhase;
 
+import java.io.Console;
+
 public class Controller {
     Game game;
-
+    CommandManager commandManager =  new CommandManager();
     GamePhase currentPhase = GamePhase.ACTION;
-    Unit currentUnit = null;
+
+    Unit selectedUnit = null;
     Position selectedPosition = null;
 
    public Controller(Game game) {
        this.game = game;
    }
 
-
     public void handleTileClick(Position position) {
         if (currentPhase != GamePhase.ACTION) {return;}
-        if (currentUnit != null) {return;}
-
-        Unit clickedUnit = game.getUnitAt(position);
 
         if (selectedPosition == null) {
             if (game.canControlUnitAt(position)) {
                 selectedPosition = position;
                 game.showReachablePositions(position);
+                game.selectPosition(position);
             }
-        } else {
-            if (game.moveUnit(selectedPosition, position)) {
-                currentUnit = game.getUnitAt(position);
-            }
+            return;
+        }
+
+        if (game.canMoveUnit(selectedPosition, position)) {
+            commandManager.execute(new MoveCommand(game, selectedPosition, position));
+            game.selectPosition(position);
+            selectedUnit = game.getUnitAt(position);
+            return;
+        }
+
+        if (selectedUnit == null) {
             deselect();
         }
     }
 
 
+    public void handleActionClicked(Position position) {
+
+
+    } ///maybe divide into specific actions, disable action ability here
 
 
     public void handleTurnChange() {
@@ -43,10 +55,10 @@ public class Controller {
     }
 
 
-   private void deselect() {
+    private void deselect() {
        selectedPosition = null;
-       game.showReachablePositions(null);
-   }
+       game.hidePositions();//maybe make separate method for deselecting
+    }
 
     public void initializeMockUnits(Game game) {
         game.spawnUnit("Tank", "Player1", 0, 0);

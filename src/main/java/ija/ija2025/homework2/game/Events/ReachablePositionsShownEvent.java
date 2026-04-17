@@ -3,4 +3,4 @@ import ija.ija2025.homework2.common.Position;
 
 import java.util.List;
 
-public record ReachablePositionsEvent(List<Position> positions) implements Event {}
+public record ReachablePositionsShownEvent(List<Position> positions) implements Event {}

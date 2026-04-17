@@ -2,8 +2,7 @@ package ija.ija2025.homework2.game;
 import ija.ija2025.homework2.common.*;
 import ija.ija2025.homework2.common.units.*;
 import ija.ija2025.homework2.game.Events.*;
-import ija.ija2025.homework2.game.Services.PathFindingService;
-import ija.ija2025.homework2.game.Services.RecoveryService;
+import ija.ija2025.homework2.game.Services.*;
 import ija.ija2025.homework2.tool.Observer;
 import ija.ija2025.homework2.tool.Observable;
 
@@ -31,17 +30,12 @@ public class Game implements Observable {
     public TerrainType[][] getMap() {return map;}
 
     public String getCurrentPlayer() {return currentPlayer;}
-
-    public TerrainType getTerrainAt(Position pos) {
-        return map[pos.getRow()][pos.getCol()];
-    }
+    public TerrainType getTerrainAt(Position pos) {return map[pos.getRow()][pos.getCol()];}
     public List<Unit> getUnits() {return units;}
     public Unit getUnitAt(Position pos) {return unitsMap.get(pos);}
     public String getTileOwner(Position pos) {return buildingOwners.getOrDefault(pos, "Neutral");}
     public int getPlayerMoney(String player) {return playerMoney.getOrDefault(player, 0);}
-
     public void setPlayerMoney(String player, int amount) {playerMoney.put(player, amount);}
-
     public Map<Position, String> getBuildingOwners() {return buildingOwners;}
 
     public void updateMap(TerrainType[][] newMap) {
@@ -69,10 +63,17 @@ public class Game implements Observable {
         /// Notify unit removal here
     }
 
-    public boolean moveUnit(Position startPos, Position endPos) {
-
+    public boolean canMoveUnit(Position startPos, Position endPos) {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return false;
+        List<Position> reachable = PathFindingService.getReachablePositions(map, movingUnit, startPos);
+        return reachable.contains(endPos);
+    }
+
+    public void moveUnit(Position startPos, Position endPos) {
+
+        Unit movingUnit = getUnitAt(startPos);
+        if (movingUnit == null) return;
 
         List<Position> reachable = PathFindingService.getReachablePositions(map, movingUnit, startPos);
 
@@ -82,32 +83,14 @@ public class Game implements Observable {
             unitsMap.put(endPos, movingUnit);
 
             notifyObservers(new UnitMovedEvent(movingUnit, startPos, endPos));
-            return true;
         }
-        return false;
-    }
-
-
-    public void showReachablePositions(Position pos) {
-        List<Position> reachable = PathFindingService.getReachablePositions(map, getUnitAt(pos), pos);
-        notifyObservers(new ReachablePositionsEvent(reachable));
-    }
-
-    public boolean canControlUnitAt(Position pos) {
-        Unit unit = getUnitAt(pos);
-        return unit != null && unit.isOwnedBy(currentPlayer) && unit.isActive();
-    }
-
-    public boolean isOwnedBuilding(Position pos) {
-        TerrainType type = getTerrainAt(pos);
-        return type.isBuilding() && getTileOwner(pos).equals(currentPlayer);
     }
 
     public void nextTurn() {
         currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
         for (Unit unit : units) {
             if (unit.isOwnedBy(currentPlayer)) {
-                unit.setActive(true);
+                unit.restoreAction();
             }
         }
         applyRecoveryPhase();
@@ -121,6 +104,32 @@ public class Game implements Observable {
         /// Notify  apply health
         /// NOTIFY Phase change
     }
+
+
+
+    public void showReachablePositions(Position pos) {
+        List<Position> reachable = PathFindingService.getReachablePositions(map, getUnitAt(pos), pos);
+        notifyObservers(new ReachablePositionsShownEvent(reachable));
+    }
+
+    public void selectPosition(Position pos) {
+        notifyObservers(new PositionSelectedEvent(pos));
+    }
+
+    public void hidePositions() {
+        notifyObservers(new PositionsHiddenEvent());
+    }
+
+    public boolean canControlUnitAt(Position pos) {
+        Unit unit = getUnitAt(pos);
+        return unit != null && unit.isOwnedBy(currentPlayer) && unit.canAct();
+    }
+
+    public boolean isOwnedBuilding(Position pos) {
+        TerrainType type = getTerrainAt(pos);
+        return type.isBuilding() && getTileOwner(pos).equals(currentPlayer);
+    }
+
 
 
 

@@ -27,11 +27,9 @@ public class AttackCommand implements Command {
         if (target.isDestroyed()) {
             this.wasDestroyed = true;
             game.removeUnit(target);
-            // game.notifyObservers(new Event(EventType.UNIT_DESTROYED);
         }
         else {
-            // notify Unit attacked
-            // game.notifyObservers(new Event(EventType.UNIT_ATTACKED);
+
         }
     }
 
@@ -39,6 +37,5 @@ public class AttackCommand implements Command {
     public void undo() {
         // heal target
         // respawn unit if it was destroyed
-        // notify
     }
 }

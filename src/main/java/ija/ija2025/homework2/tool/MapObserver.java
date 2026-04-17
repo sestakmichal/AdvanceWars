@@ -24,11 +24,11 @@ public class MapObserver implements Observer {
         grid.setVgap(1);
     }
 
-    private Tile getTile(Position pos) {
-        return tiles[pos.getRow()][pos.getCol()];
+    public GridPane getNode() {
+        return grid;
     }
 
-    public void initialize(Controller controller, TerrainType[][] map) {
+    public void initializeMap(Controller controller, TerrainType[][] map) {
         Position size = new Position(map.length, map[0].length);
 
         for (int r = 0; r < size.getRow(); r++) {
@@ -36,9 +36,8 @@ public class MapObserver implements Observer {
 
                 Tile tile = new Tile(r, c, map[r][c], 60);
 
-                int finalR = r;
-                int finalC = c;
-                tile.setOnMouseClicked(e -> tileClick(tile, controller));
+                int finalR = r, finalC = c;
+                tile.setOnMouseClicked(e -> controller.handleTileClick(tile.getPos()));
 
                 tiles[r][c] = tile;
                 grid.add(tile, c, r);
@@ -46,16 +45,6 @@ public class MapObserver implements Observer {
         }
     }
 
-    private void tileClick(Tile tile, Controller controller) {
-        if (selectedTile != null) {
-            selectedTile.removeHighlight();
-        }
-
-        tile.setHighlight();
-        selectedTile = tile;
-
-        controller.handleTileClick(tile.getPos());
-    }
 
     private void clearAllHighlights() {
         for (Tile[] row : tiles) {
@@ -65,34 +54,43 @@ public class MapObserver implements Observer {
         }
     }
 
-    public GridPane getNode() {
-        return grid;
+    private Tile getTile(Position pos) {
+        return tiles[pos.getRow()][pos.getCol()];
     }
+
 
     @Override
     public void update(Event event) {
         if (event instanceof UnitMovedEvent(Unit unit, Position from, Position to)) {
-            Tile fromTile = getTile(from);
-            Tile toTile = getTile(to);
+            clearAllHighlights();
 
+            Tile fromTile = getTile(from), toTile = getTile(to);
             Node sprite = fromTile.getUnitVisual();
 
-            fromTile.removeUnitVisual();
+            getTile(from).removeUnitVisual();
             toTile.setUnitVisual(sprite);
 
-            clearAllHighlights();
+            toTile.setHighlight();
+            /// should display options after moving
         }
 
         if (event instanceof UnitSpawnedEvent(Unit unit, Position pos)) {
-            Tile tile = getTile(pos);
-            tile.setUnitVisual(SpriteFactory.generateSprite(unit));
+            getTile(pos).setUnitVisual(SpriteFactory.generateSprite(unit));
         }
 
-        if (event instanceof ReachablePositionsEvent(List<Position> positions)) {
+        if (event instanceof PositionSelectedEvent(Position pos)) {
+            getTile(pos).setHighlight();
+        }
+
+        if (event instanceof ReachablePositionsShownEvent(List<Position> positions)) {
             clearAllHighlights();
             for (Position position : positions) {
                 getTile(position).setHighlightReach();
             }
+        }
+
+        if (event instanceof PositionsHiddenEvent) {
+            clearAllHighlights();
         }
     }
 }

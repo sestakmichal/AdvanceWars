@@ -4,7 +4,7 @@ public abstract class Unit {
     private String owner;
     private Position position;
     private int health;
-    boolean active = true;
+    boolean hasActed = false;
     boolean destroyed = false;
 
     public Unit(String owner, int row, int col) {
@@ -17,8 +17,10 @@ public abstract class Unit {
     public Position getPosition() { return position; }
     public void setPosition(Position newPos) { position = newPos; }
     public int getHealth() { return health; }
-    public boolean isActive() { return active; }
-    public void setActive(boolean newActive) { active = newActive; }
+    public boolean canAct() { return !hasActed; }
+    public void consumeAction() { hasActed = true; }
+    public void restoreAction() { hasActed = false; }
+    public boolean isDestroyed() { return destroyed; }
 
     public int getDefenseBonus(TerrainType type) {
         return switch (type) {
@@ -34,13 +36,12 @@ public abstract class Unit {
 
     // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
     public int takeDamage(Unit fromUnit, TerrainType terrainType) {
-       // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
         double damage = getDamageValue(fromUnit) * (fromUnit.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
         int damageRound = (int) Math.round(damage);
-        int actualDamage = Math.min(health, damageRound); // unit can't go below zero hp
+        int actualDamage = Math.min(health, damageRound);
 
         health -= actualDamage;
-        if (health <= 0) { // Unit destroyed
+        if (health <= 0) {
             health = 0;
             destroyed = true;
         }
@@ -51,11 +52,8 @@ public abstract class Unit {
         health = Math.min(100, health + recoverHealth);
     }
 
-    public boolean isOwnedBy(String player) {
-        return this.owner.equals(player);
-    }
+    public boolean isOwnedBy(String player) {return this.owner.equals(player);}
 
-    public boolean isDestroyed() { return destroyed; }
 
     public abstract int getMoveRange();
     public abstract int getMovementPrice(TerrainType terrain);

@@ -12,7 +12,6 @@ import java.util.Map;
 
 public class RecoveryService {
 
-
     public static void applyMoneyRecovery(Game game) {
         String player = game.getCurrentPlayer();
         int income = calculateIncome(game, player);
@@ -52,6 +51,12 @@ public class RecoveryService {
         return income;
     }
 
+
+    private static int calculateRepairCost(Unit unit, int hpGained) {
+        int steps = (int) Math.ceil(hpGained / 10.0);
+        return (unit.getPrice() / 10) * steps;
+    }
+
     private static List<Unit> getRepairCandidates(Game game, String player) {
         List<Unit> candidates = new ArrayList<>();
         for (Unit unit : game.getUnits()) {
@@ -63,10 +68,5 @@ public class RecoveryService {
         }
         candidates.sort(Comparator.comparingInt(Unit::getHealth));
         return candidates;
-    }
-
-    private static int calculateRepairCost(Unit unit, int hpGained) {
-        int steps = (int) Math.ceil(hpGained / 10.0);
-        return (unit.getPrice() / 10) * steps;
     }
 }
