@@ -16,21 +16,21 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private Game game;
-    GameController gameController;
+    Controller controller;
 
     @Override
     public void start(Stage stage) {
 
         game = GameFactory.createGame(GameMap.BIG.getLayout());
-        gameController = new GameController(game);
+        controller = new Controller(game);
         Position size = game.getSize();
 
         MapObserver mapView = new MapObserver(size);
 
         game.addObserver(mapView);
 
-        mapView.initializeMap(gameController, game.getMap());
-        gameController.initializeMockUnits(game);
+        mapView.initializeMap(controller, game.getMap());
+        controller.initializeMockUnits(game);
 
         ScrollPane root = new ScrollPane(mapView.getNode());
         Scene scene = new Scene(root, 850, 650);

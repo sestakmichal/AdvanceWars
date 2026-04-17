@@ -6,16 +6,15 @@ import ija.ija2025.homework2.model.Game.Game;
 import ija.ija2025.homework2.model.Game.TurnPhase;
 import ija.ija2025.homework2.model.Game.TurnState;
 
-public class GameController {
+public class Controller {
     Game game;
     CommandManager commandManager =  new CommandManager();
     TurnPhase currentPhase = TurnPhase.ACTION;
     TurnState currentState = TurnState.IDLE;
 
-    Unit selectedUnit = null;
     Position selectedPosition = null;
 
-    public GameController(Game game) {
+    public Controller(Game game) {
        this.game = game;
     }
 
@@ -24,30 +23,30 @@ public class GameController {
     public void handleTileClick(Position position) {
         if (currentPhase != TurnPhase.ACTION) {return;}
 
-        switch (currentState) {
-            case IDLE -> {
-                if (game.canUnitAct(position)) {
+
+        if (selectedPosition == null) {
+            if (game.canUnitAct(position)) {
                 selectedPosition = position;
                 currentState = TurnState.UNIT_SELECTED;
 
                 game.selectPosition(position);
                 /// game.showActionMenu
-            }}
+            }
+            return;
+        } else {
+            if (game.canUnitMove(selectedPosition) && game.canUnitReach(selectedPosition, position)) {
+                if (game.canUnitReach(selectedPosition, position)) {
+                    commandManager.execute(new MoveCommand(game, selectedPosition, position));
 
-            case UNIT_SELECTED -> {
-                if (game.canUnitMove(selectedPosition)) {
-                    if (game.canUnitReach(selectedPosition, position)) {
-                        commandManager.execute(new MoveCommand(game, selectedPosition, position));
-
-                        selectedPosition = position;
-                        game.selectPosition(position);
-                        /// game.showActionMenu
-                        return;
-                    }
-                    deselect();
+                    selectedPosition = position;
+                    game.selectPosition(position);
+                    /// game.showActionMenu
+                    return;
                 }
             }
         }
+
+        deselect();
     }
 
 

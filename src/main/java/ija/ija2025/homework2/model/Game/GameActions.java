@@ -1,6 +1,7 @@
 package ija.ija2025.homework2.model.Game;
 
 public enum GameActions {
+    MOVE("Move"),
     ATTACK("Attack"),
     CAPTURE("Capture"),
     WAIT("Wait");
@@ -12,7 +13,5 @@ public enum GameActions {
     }
 
     @Override
-    public String toString() {
-        return displayName;
-    }
+    public String toString() {return displayName;}
 }

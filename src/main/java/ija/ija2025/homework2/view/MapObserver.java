@@ -1,6 +1,6 @@
 package ija.ija2025.homework2.view;
 
-import ija.ija2025.homework2.controller.GameController;
+import ija.ija2025.homework2.controller.Controller;
 import ija.ija2025.homework2.model.Events.Event;
 import ija.ija2025.homework2.model.Observation.Observer;
 import ija.ija2025.homework2.model.Events.*;
@@ -31,7 +31,7 @@ public class MapObserver implements Observer {
         return grid;
     }
 
-    public void initializeMap(GameController gameController, TerrainType[][] map) {
+    public void initializeMap(Controller controller, TerrainType[][] map) {
         Position size = new Position(map.length, map[0].length);
 
         for (int r = 0; r < size.getRow(); r++) {
@@ -40,7 +40,7 @@ public class MapObserver implements Observer {
                 Tile tile = new Tile(r, c, map[r][c], 60);
 
                 int finalR = r, finalC = c;
-                tile.setOnMouseClicked(e -> gameController.handleTileClick(tile.getPos()));
+                tile.setOnMouseClicked(e -> controller.handleTileClick(tile.getPos()));
 
                 tiles[r][c] = tile;
                 grid.add(tile, c, r);
