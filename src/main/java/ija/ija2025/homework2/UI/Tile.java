@@ -50,8 +50,18 @@ public class Tile extends StackPane {
         }
     }
 
-    public void setHighlight(boolean active) {
-        highlight.setVisible(active);
+    public void setHighlight() {
+        highlight.setStroke(Color.ORANGE);
+        highlight.setVisible(true);
+    }
+
+    public void setHighlightReach() {
+        highlight.setStroke(Color.BLUE);
+        highlight.setVisible(true);
+    }
+
+    public void removeHighlight() {
+        highlight.setVisible(false);
     }
 
     public boolean isHighlighted() { return highlight.isVisible(); }

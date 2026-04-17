@@ -5,8 +5,8 @@ import ija.ija2025.homework2.common.Unit;
 
 public abstract class Vehicle extends Unit {
 
-    public Vehicle(String type, String unitOwner, int row, int col) {
-        super(type, unitOwner, row, col);
+    public Vehicle(String unitOwner, int row, int col) {
+        super(unitOwner, row, col);
     }
 
     @Override
@@ -20,5 +20,4 @@ public abstract class Vehicle extends Unit {
             default -> 999; // impassable
         };
     }
-
 }

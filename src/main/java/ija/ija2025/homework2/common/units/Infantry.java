@@ -5,8 +5,8 @@ import ija.ija2025.homework2.common.Unit;
 
 public class Infantry extends Unit {
 
-    public Infantry(String type, String unitOwner, int x, int y) {
-        super(type, unitOwner, x, y);
+    public Infantry(String unitOwner, int x, int y) {
+        super(unitOwner, x, y);
     }
 
     @Override
@@ -26,12 +26,22 @@ public class Infantry extends Unit {
     public int getMoveRange() { return 3; }
 
     @Override
-    public int getDamageValue(String fromType) {
-        return switch (fromType) {
-            case "Artillery" -> 90;
-            case "Infantry" -> 55;
-            case "Tank" -> 75;
-            default -> 0;
+    public int getDamageValue(Unit fromUnit) {
+        return switch (fromUnit) {
+            case Artillery a -> 90;
+            case Infantry i -> 55;
+            case Tank t -> 75;
+            case null, default -> 0;
         };
+    }
+
+    @Override
+    public int getPrice() {
+        return 1000;
+    }
+
+    @Override
+    public String getType() {
+        return this.getClass().getSimpleName();
     }
 }

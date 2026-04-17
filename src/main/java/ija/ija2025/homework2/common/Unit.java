@@ -1,25 +1,24 @@
 package ija.ija2025.homework2.common;
 
 public abstract class Unit {
-    private String type;
     private String owner;
     private Position position;
     private int health;
+    boolean active = true;
     boolean destroyed = false;
 
-    public Unit(String type, String owner, int row, int col) {
-        this.type = type;
+    public Unit(String owner, int row, int col) {
         this.owner = owner;
         position = new Position(row, col);
         health = 100;
     }
 
+    public String getOwner() { return owner; }
     public Position getPosition() { return position; }
     public void setPosition(Position newPos) { position = newPos; }
     public int getHealth() { return health; }
-    public void setHealth(int newHealth) { health = newHealth; }
-    public String getOwner() { return owner; }
-    public String getType() { return type; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean newActive) { active = newActive; }
 
     public int getDefenseBonus(TerrainType type) {
         return switch (type) {
@@ -36,7 +35,7 @@ public abstract class Unit {
     // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
     public int takeDamage(Unit fromUnit, TerrainType terrainType) {
        // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
-        double damage = getDamageValue(fromUnit.type) * (fromUnit.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
+        double damage = getDamageValue(fromUnit) * (fromUnit.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
         int damageRound = (int) Math.round(damage);
         int actualDamage = Math.min(health, damageRound); // unit can't go below zero hp
 
@@ -47,13 +46,26 @@ public abstract class Unit {
         }
         return actualDamage;
     }
+
+    public void receiveRecovery(int recoverHealth) {
+        health = Math.min(100, health + recoverHealth);
+    }
+
+    public boolean isOwnedBy(String player) {
+        return this.owner.equals(player);
+    }
+
     public boolean isDestroyed() { return destroyed; }
 
     public abstract int getMoveRange();
     public abstract int getMovementPrice(TerrainType terrain);
-    public abstract int getDamageValue(String fromType);
+    public abstract int getDamageValue(Unit fromUnit);
+    public abstract int getPrice();
+    public abstract String getType();
+
     @Override
-    public String toString() {
-        return String.format("Unit: %s at position [%d, %d] with %d HP", type, position.getRow(), position.getCol(), health);
+    public String toString() { /// add type
+        return String.format("Unit: %s at position [%d, %d] with %d HP",
+                getClass().getSimpleName(), position.getRow(), position.getCol(), health);
     }
 }

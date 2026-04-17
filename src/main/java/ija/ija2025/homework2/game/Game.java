@@ -1,41 +1,59 @@
 package ija.ija2025.homework2.game;
-
-import ija.ija2025.homework2.UI.Tile;
 import ija.ija2025.homework2.common.*;
 import ija.ija2025.homework2.common.units.*;
-import ija.ija2025.homework2.game.Events.Event;
-import ija.ija2025.homework2.game.Events.UnitMovedEvent;
-import ija.ija2025.homework2.game.Events.UnitSpawnedEvent;
+import ija.ija2025.homework2.game.Events.*;
+import ija.ija2025.homework2.game.Services.PathFindingService;
+import ija.ija2025.homework2.game.Services.RecoveryService;
 import ija.ija2025.homework2.tool.Observer;
 import ija.ija2025.homework2.tool.Observable;
 
 import java.util.*;
 
 public class Game implements Observable {
+    private List<Observer> gameObservers = new ArrayList<>();
+
     private Position mapSize;
     private TerrainType[][] map;
-
     private List<Unit> units = new ArrayList<>();
     private HashMap<Position, Unit> unitsMap = new HashMap<>();
-    private List<Observer> gameObservers = new ArrayList<>();
+
+    private String currentPlayer = "Player1";
+    private Map<String, Integer> playerMoney = new HashMap<>();
+    private Map<Position, String> buildingOwners = new HashMap<>();
+
+
+    public Game() {
+        playerMoney.put("Player1", 0);
+        playerMoney.put("Player2", 0);
+    }
+
+    public Position getSize() { return mapSize; }
+    public TerrainType[][] getMap() {return map;}
+
+    public String getCurrentPlayer() {return currentPlayer;}
+
+    public TerrainType getTerrainAt(Position pos) {
+        return map[pos.getRow()][pos.getCol()];
+    }
+    public List<Unit> getUnits() {return units;}
+    public Unit getUnitAt(Position pos) {return unitsMap.get(pos);}
+    public String getTileOwner(Position pos) {return buildingOwners.getOrDefault(pos, "Neutral");}
+    public int getPlayerMoney(String player) {return playerMoney.getOrDefault(player, 0);}
+
+    public void setPlayerMoney(String player, int amount) {playerMoney.put(player, amount);}
+
+    public Map<Position, String> getBuildingOwners() {return buildingOwners;}
 
     public void updateMap(TerrainType[][] newMap) {
         map = newMap;
         mapSize = new Position(map.length, map[0].length);
     }
 
-    public TerrainType getTerrainAt(Position pos) {
-        return map[pos.getRow()][pos.getCol()];
-    }
-
-    public Position getSize() { return mapSize; }
-    public TerrainType[][] getMap() {return map;}
-
-    public Unit createUnit(String type, String owner, int row, int col) {
+    public Unit spawnUnit(String type, String owner, int row, int col) {
         Unit unit = switch (type) {
-            case "Tank" -> new Tank("Tank", owner, row, col);
-            case "Artillery" -> new Artillery("Artillery", owner, row, col);
-            case "Infantry" -> new Infantry("Infantry", owner, row, col);
+            case "Tank" -> new Tank(owner, row, col);
+            case "Artillery" -> new Artillery(owner, row, col);
+            case "Infantry" -> new Infantry(owner, row, col);
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
         Position pos = new Position(row, col);
@@ -48,86 +66,18 @@ public class Game implements Observable {
     public void removeUnit(Unit unit) {
         units.remove(unit);
         unitsMap.remove(unit.getPosition());
-
-        // notify unit removal here
-    }
-
-    public Unit getUnitAt(Position pos) {
-        return unitsMap.get(pos);
-    }
-
-
-    public List<Position> getReachableTiles(Position position) {
-        if (map == null) return null;
-        int height = mapSize.getRow();
-        int width = mapSize.getCol();
-
-        Unit unit = getUnitAt(position);
-        if (unit == null) return null;
-
-        // init distance array with max value
-        int[][] distanceMap = new int[height][width];
-        for (int r = 0; r < height; r++) {
-            for (int c = 0; c < width; c++) {
-                distanceMap[r][c] = Integer.MAX_VALUE;
-            }
-        }
-        // set starting position to 0
-        distanceMap[position.getRow()][position.getCol()] = 0;
-
-        // compare costs, sort from highest to lowest
-        PriorityQueue<int[]> pq = new PriorityQueue<>(
-            Comparator.comparingInt(a -> a[0])
-        );
-        // add initial position
-        pq.add(new int[]{0, position.getRow(), position.getCol()});
-
-        List<Position> reachable = new ArrayList<>();
-        int maxUnitRange = unit.getMoveRange();
-
-        while (!pq.isEmpty()) {
-            int[] current = pq.poll(); // same like pq.pop() get lowest value node
-
-            int cost = current[0];
-            int row = current[1];
-            int col = current[2];
-
-            if (cost > maxUnitRange) continue;
-            reachable.add(new Position(row, col));
-
-            for (int[] dir : new int[][]{
-                    {1,  0}, // right
-                    {-1, 0}, // left
-                    {0,  1}, // down
-                    {0, -1}  // up
-            }) {
-                int newRow = row + dir[0];
-                int newCol = col + dir[1];
-
-                // in bounds check
-                if (newRow < 0 || newCol < 0 || newRow >= height || newCol >= width) continue;
-
-                int newCost = cost + unit.getMovementPrice(map[newRow][newCol]);
-
-                // is reachable?
-                if (newCost <= maxUnitRange && newCost < distanceMap[newRow][newCol]) {
-                    distanceMap[newRow][newCol] = newCost; // save cost
-                    pq.add(new int[]{newCost, newRow, newCol}); // add node to queue
-                }
-            }
-        }
-
-        return reachable;
+        /// Notify unit removal here
     }
 
     public boolean moveUnit(Position startPos, Position endPos) {
-        List<Position> reachable = getReachableTiles(startPos);
+
+        Unit movingUnit = getUnitAt(startPos);
+        if (movingUnit == null) return false;
+
+        List<Position> reachable = PathFindingService.getReachablePositions(map, movingUnit, startPos);
 
         if (reachable.contains(endPos)) {
-            Unit movingUnit = getUnitAt(startPos);
-            if (movingUnit == null) return false;
-
-            unitsMap.remove(startPos);
+            unitsMap.remove(movingUnit.getPosition());
             movingUnit.setPosition(endPos);
             unitsMap.put(endPos, movingUnit);
 
@@ -137,11 +87,42 @@ public class Game implements Observable {
         return false;
     }
 
-    //TODO
-    public void handleTileClick(Tile tile) {
 
-
+    public void showReachablePositions(Position pos) {
+        List<Position> reachable = PathFindingService.getReachablePositions(map, getUnitAt(pos), pos);
+        notifyObservers(new ReachablePositionsEvent(reachable));
     }
+
+    public boolean canControlUnitAt(Position pos) {
+        Unit unit = getUnitAt(pos);
+        return unit != null && unit.isOwnedBy(currentPlayer) && unit.isActive();
+    }
+
+    public boolean isOwnedBuilding(Position pos) {
+        TerrainType type = getTerrainAt(pos);
+        return type.isBuilding() && getTileOwner(pos).equals(currentPlayer);
+    }
+
+    public void nextTurn() {
+        currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
+        for (Unit unit : units) {
+            if (unit.isOwnedBy(currentPlayer)) {
+                unit.setActive(true);
+            }
+        }
+        applyRecoveryPhase();
+    }
+
+
+    private void applyRecoveryPhase() {
+        RecoveryService.applyMoneyRecovery(this);
+        /// Notify money applied
+        RecoveryService.applyHealthRecovery(this);
+        /// Notify  apply health
+        /// NOTIFY Phase change
+    }
+
+
 
     public void addObserver(Observer gameObserver) {
         this.gameObservers.add(gameObserver);

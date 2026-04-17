@@ -42,11 +42,21 @@
 * **Datum:** 9. 4. 2025
 * **Prompt:**
   > "Java game project, how should game observation be approached, who should observe."
-* **Použití:** Všeobecné informácie o observácii pri hrách.
+* **Použití:** Všeobecné informácie o oszervácii pri hrách.
 * **Úprava studentem:** Aplikovanie na konkrétne príklady
 * **Míra generování:** 20%.
 
 ---
+
+## 2. Observation in Game
+* **Nástroj:** Gemini 3
+* **Datum:** 16. 4. 2025
+* **Prompt:**
+  > "Java Advance Wars style game, how to make recovery phase by specific healing instructions..."
+* **Použití:** Vytvorenie funkcie pre recovery fázu.
+* **Úprava studentem:** Potrebné úpravy pri konkrétnej aplikácii
+* **Míra generování:** 80%.
+
 
 
 *(Sekce kopírujte dle potřeby pro každou významnou část kódu, kde byla použita AI)*

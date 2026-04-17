@@ -1,10 +1,10 @@
 package ija.ija2025.homework2.game;
 
 public enum GameMap {
-    Forest_Map(new String[] { "P P F", "F F F" }),
-    Mountain_Map(new String[] { "M M P", "P M M" }),
+    FOREST(new String[] { "P P F", "F F F" }),
+    MOUNTAIN(new String[] { "M M P", "P M M" }),
 
-    Big_Map(new String[] {
+    BIG(new String[] {
             "P P P F F F F P P P P P",
             "P P F F F F F F P P P P",
             "P F F F M M F F F P P P",

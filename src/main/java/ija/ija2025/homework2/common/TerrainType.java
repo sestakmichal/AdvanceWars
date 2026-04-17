@@ -34,4 +34,10 @@ public enum TerrainType {
         };
     }
 
+    public boolean isBuilding() {
+        return switch (this) {
+            case City, Factory, HQ -> true;
+            default -> false;
+        };
+    }
 }

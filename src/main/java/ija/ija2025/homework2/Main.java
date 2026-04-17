@@ -18,7 +18,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
 
-        game = GameFactory.createGame(GameMap.Big_Map.getLayout());
+        game = GameFactory.createGame(GameMap.BIG.getLayout());
         controller = new Controller(game);
         Position size = game.getSize();
 
