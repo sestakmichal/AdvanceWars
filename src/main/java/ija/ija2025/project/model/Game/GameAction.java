@@ -1,6 +1,6 @@
 package ija.ija2025.project.model.Game;
 
-public enum GameActions {
+public enum GameAction {
     MOVE("Move"),
     ATTACK("Attack"),
     CAPTURE("Capture"),
@@ -8,10 +8,11 @@ public enum GameActions {
 
     private final String displayName;
 
-    GameActions(String displayName) {
+    GameAction(String displayName) {
         this.displayName = displayName;
     }
 
     @Override
     public String toString() {return displayName;}
+
 }

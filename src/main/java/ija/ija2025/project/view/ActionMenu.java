@@ -1,6 +1,7 @@
 package ija.ija2025.project.view;
 
 import ija.ija2025.project.controller.Controller;
+import ija.ija2025.project.model.Game.GameAction;
 import ija.ija2025.project.model.Map.Position;
 
 import javafx.geometry.Insets;
@@ -19,28 +20,15 @@ public class ActionMenu extends VBox {
                 "-fx-background-radius: 5; " +
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 10, 0, 0, 0);");
 
-
-        Button moveBtn = new Button("Move");
-        Button attackBtn = new Button("Attack");
-        Button skipBtn = new Button("Skip");
-
-
-        moveBtn.setOnAction(e -> {
-            System.out.println("MOVE!");
-            controller.handleActionClicked();
-            onClose.run();
-        });
-
-        attackBtn.setOnAction(e -> {
-            System.out.println("Attack!");
-            onClose.run();
-        });
-
-        skipBtn.setOnAction(e -> {
-            System.out.println("Skip!");
-            onClose.run();
-        });
-
-        this.getChildren().addAll(moveBtn, attackBtn, skipBtn);
+        for (GameAction action : GameAction.values()) {
+            Button button = new Button(action.toString());
+            button.setMaxWidth(Double.MAX_VALUE);
+            button.setOnAction(e -> {
+                controller.handleActionClicked(action);
+                onClose.run();
+            });
+            getChildren().add(button);
+        }
     }
+
 }

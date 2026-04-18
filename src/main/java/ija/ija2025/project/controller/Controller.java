@@ -1,10 +1,7 @@
 package ija.ija2025.project.controller;
 import ija.ija2025.project.model.Commands.MoveCommand;
-import ija.ija2025.project.model.Game.TurnAction;
+import ija.ija2025.project.model.Game.*;
 import ija.ija2025.project.model.Map.Position;
-import ija.ija2025.project.model.Game.Game;
-import ija.ija2025.project.model.Game.TurnPhase;
-import ija.ija2025.project.model.Game.TurnState;
 
 public class Controller {
     Game game;
@@ -49,7 +46,7 @@ public class Controller {
     }
 
     /// needs to be connected to the unit's action buttons
-    public void handleActionClicked() { // Position position
+    public void handleActionClicked(GameAction action) { // Position position
         if (game.canUnitMove(selectedPosition)) {
             currentAction = TurnAction.MOVE;
             game.showMovablePositions(selectedPosition);
