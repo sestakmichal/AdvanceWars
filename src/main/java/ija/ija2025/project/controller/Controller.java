@@ -1,5 +1,6 @@
 package ija.ija2025.project.controller;
 import ija.ija2025.project.model.Commands.MoveCommand;
+import ija.ija2025.project.model.Game.TurnAction;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Game.TurnPhase;
@@ -10,6 +11,7 @@ public class Controller {
     CommandManager commandManager =  new CommandManager();
     TurnPhase currentPhase = TurnPhase.ACTION;
     TurnState currentState = TurnState.IDLE;
+    TurnAction currentAction = null;
 
     Position selectedPosition = null;
 
@@ -22,7 +24,7 @@ public class Controller {
     public void handleTileClick(Position position) {
         if (currentPhase != TurnPhase.ACTION) {return;}
 
-
+        // select unit
         if (selectedPosition == null) {
             if (game.canUnitAct(position)) {
                 selectedPosition = position;
@@ -31,25 +33,27 @@ public class Controller {
                 game.selectPosition(position);
             }
             return;
-        } else {
-            if (game.canUnitMove(selectedPosition) && game.canUnitReach(selectedPosition, position)) {
-                if (game.canUnitReach(selectedPosition, position)) {
-                    commandManager.execute(new MoveCommand(game, selectedPosition, position));
+        }
+        else {
+            if (currentAction == TurnAction.MOVE && game.canUnitReach(selectedPosition, position)) {
+                commandManager.execute(new MoveCommand(game, selectedPosition, position));
 
-                    selectedPosition = position;
-                    game.selectPosition(position);
-                    return;
-                }
+                selectedPosition = position;
+                game.selectPosition(position);
+                currentAction = null;
+                return;
             }
         }
 
         deselect();
     }
 
-
     /// needs to be connected to the unit's action buttons
-    public void handleActionClicked(Position position) {
-
+    public void handleActionClicked() { // Position position
+        if (game.canUnitMove(selectedPosition)) {
+            currentAction = TurnAction.MOVE;
+            game.showReachablePositions(selectedPosition);
+        }
 
     } ///maybe divide into specific actions, disable action ability here
 

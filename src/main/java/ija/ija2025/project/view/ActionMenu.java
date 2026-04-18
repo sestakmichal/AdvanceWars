@@ -26,19 +26,17 @@ public class ActionMenu extends VBox {
 
 
         moveBtn.setOnAction(e -> {
-            // controller.handleActionClicked(pos, "MOVE");
             System.out.println("MOVE!");
+            controller.handleActionClicked();
             onClose.run();
         });
 
         attackBtn.setOnAction(e -> {
-            // controller.handleActionClicked(pos, "MOVE");
             System.out.println("Attack!");
             onClose.run();
         });
 
         skipBtn.setOnAction(e -> {
-            // controller.handleActionClicked(pos, "WAIT");
             System.out.println("Skip!");
             onClose.run();
         });
