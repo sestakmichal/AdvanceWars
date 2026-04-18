@@ -9,17 +9,19 @@ import ija.ija2025.project.model.Map.TerrainType;
 import ija.ija2025.project.model.Units.Unit;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 
 import java.util.List;
 
 public class MapObserver implements Observer {
-
     private final GridPane grid;
     private final Tile[][] tiles;
     private Tile selectedTile = null;
 
     public MapObserver(Position size) {
         this.grid = new GridPane();
+
         this.tiles = new Tile[size.getRow()][size.getCol()];
 
         grid.setStyle("-fx-background-color: #333;");
@@ -27,7 +29,7 @@ public class MapObserver implements Observer {
         grid.setVgap(1);
     }
 
-    public GridPane getNode() {
+    public GridPane getGrid() {
         return grid;
     }
 
@@ -48,8 +50,6 @@ public class MapObserver implements Observer {
         }
     }
 
-
-
     private void clearAllHighlights() {
         for (Tile[] row : tiles) {
             for (Tile tile : row) {
@@ -61,7 +61,6 @@ public class MapObserver implements Observer {
     private Tile getTile(Position pos) {
         return tiles[pos.getRow()][pos.getCol()];
     }
-
 
     @Override
     public void update(Event event) {

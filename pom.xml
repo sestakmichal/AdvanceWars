@@ -48,7 +48,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>ija.ija2025.homework2.Main</mainClass>
+                            <mainClass>ija.ija2025.project.Main</mainClass>
                         </configuration>
                     </execution>
                 </executions>

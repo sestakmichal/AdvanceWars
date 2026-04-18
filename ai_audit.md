@@ -66,6 +66,15 @@
 * **Úprava studentem:** Potrebné úpravy pri konkrétnej aplikácii
 * **Míra generování:** 70%.
 
+## 5. Action menu design
+* **Nástroj:** Gemini 3
+* **Datum:** 18. 4. 2025
+* **Prompt:**
+  > "Create a basic javafx action menu that should have move, attack and skip buttons should have functionality to be turned on and off"
+* **Použití:** Container s css na základní akce.
+* **Úprava studentem:** Přidaná funkcionalita čudlíků a interaktivity
+* **Míra generování:** 75%.
+
 
 
 *(Sekce kopírujte dle potřeby pro každou významnou část kódu, kde byla použita AI)*

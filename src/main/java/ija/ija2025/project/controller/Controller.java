@@ -29,7 +29,6 @@ public class Controller {
                 currentState = TurnState.UNIT_SELECTED;
 
                 game.selectPosition(position);
-                /// game.showActionMenu
             }
             return;
         } else {
@@ -39,7 +38,6 @@ public class Controller {
 
                     selectedPosition = position;
                     game.selectPosition(position);
-                    /// game.showActionMenu
                     return;
                 }
             }

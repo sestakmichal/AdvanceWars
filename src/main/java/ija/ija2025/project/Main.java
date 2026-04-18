@@ -7,9 +7,11 @@ import ija.ija2025.project.model.Game.GameFactory;
 import ija.ija2025.project.controller.*;
 
 import ija.ija2025.project.view.MapObserver;
+import ija.ija2025.project.view.UIObserver;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 
@@ -26,13 +28,20 @@ public class Main extends Application {
         Position size = game.getSize();
 
         MapObserver mapView = new MapObserver(size);
+        UIObserver UiView = new UIObserver(controller);
 
         game.addObserver(mapView);
+        game.addObserver(UiView);
 
         mapView.initializeMap(controller, game.getMap());
         controller.initializeMockUnits(game);
 
-        ScrollPane root = new ScrollPane(mapView.getNode());
+        ScrollPane root = new ScrollPane(
+            new StackPane(
+                mapView.getGrid(),
+                UiView.getPane()
+            )
+        );
         Scene scene = new Scene(root, 850, 650);
 
         stage.setTitle("IJA 2025");
