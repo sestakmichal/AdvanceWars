@@ -75,9 +75,9 @@ public class Game implements Observable {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return;
 
-        List<Position> reachable = PathFindingService.getReachablePositions(map, movingUnit, startPos);
+        List<Position> movable = getMovablePositions(startPos);
 
-        if (reachable.contains(endPos)) {
+        if (movable.contains(endPos)) {
             unitsMap.remove(movingUnit.getPosition());
             movingUnit.setPosition(endPos);
             unitsMap.put(endPos, movingUnit);
@@ -89,7 +89,7 @@ public class Game implements Observable {
     public boolean canUnitReach(Position startPos, Position endPos) {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return false;
-        List<Position> reachable = PathFindingService.getReachablePositions(map, movingUnit, startPos);
+        List<Position> reachable = getMovablePositions(startPos);
         return reachable.contains(endPos);
     }
 
@@ -134,9 +134,9 @@ public class Game implements Observable {
 
 
     /// POSITION displays
-    public void showReachablePositions(Position pos) {
-        List<Position> reachable = PathFindingService.getReachablePositions(map, getUnitAt(pos), pos);
-        notifyObservers(new ReachablePositionsShownEvent(reachable));
+    public void showMovablePositions(Position pos) {
+        List<Position> reachable = getMovablePositions(pos);
+        notifyObservers(new MovablePositionsShownEvent(reachable));
     }
 
     public void selectPosition(Position pos) {
@@ -147,6 +147,24 @@ public class Game implements Observable {
         notifyObservers(new PositionsHiddenEvent());
     }
 
+
+    public List<Position> getMovablePositions(Position startPos) {
+        Unit unit = getUnitAt(startPos);
+        if (unit == null) return new ArrayList<>();
+
+        List<Position> reachablePositions = PathFindingService.getReachablePositions(map, unit, startPos);
+        List<Position> result = new ArrayList<>();
+
+        for (Position pos : reachablePositions) {
+            Unit occupant = getUnitAt(pos);
+
+            if (occupant == null || pos.equals(startPos)) {
+                result.add(pos);
+            }
+        }
+
+        return result;
+    }
 
     public void addObserver(Observer gameObserver) {
         this.gameObservers.add(gameObserver);

@@ -18,7 +18,7 @@ public class UIObserver implements Observer {
         this.uiLayer = new Pane();;
         this.controller = controller;
 
-        // click passtrough, so the grid can be selected
+        // click passthrough, so the grid can be selected
         this.uiLayer.setPickOnBounds(false);
     }
 

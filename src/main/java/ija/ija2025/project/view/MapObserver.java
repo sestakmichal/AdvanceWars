@@ -9,8 +9,6 @@ import ija.ija2025.project.model.Map.TerrainType;
 import ija.ija2025.project.model.Units.Unit;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 
 import java.util.List;
 
@@ -85,7 +83,7 @@ public class MapObserver implements Observer {
             getTile(pos).setHighlight();
         }
 
-        if (event instanceof ReachablePositionsShownEvent(List<Position> positions)) {
+        if (event instanceof MovablePositionsShownEvent(List<Position> positions)) {
             clearAllHighlights();
             for (Position position : positions) {
                 getTile(position).setHighlightReach();

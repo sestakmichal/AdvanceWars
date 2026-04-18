@@ -52,7 +52,7 @@ public class Controller {
     public void handleActionClicked() { // Position position
         if (game.canUnitMove(selectedPosition)) {
             currentAction = TurnAction.MOVE;
-            game.showReachablePositions(selectedPosition);
+            game.showMovablePositions(selectedPosition);
         }
 
     } ///maybe divide into specific actions, disable action ability here
