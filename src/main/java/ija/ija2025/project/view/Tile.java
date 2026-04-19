@@ -35,11 +35,11 @@ public class Tile extends StackPane {
     }
 
     public void setUnitVisual(Node visualNode) {
-        removeUnitVisual(); // Always clear the existing one first
+        removeUnitVisual();
 
         if (visualNode != null) {
             this.currentUnitNode = visualNode;
-            this.getChildren().add(visualNode); // Add to the StackPane
+            this.getChildren().add(visualNode);
         }
     }
 
@@ -51,12 +51,12 @@ public class Tile extends StackPane {
     }
 
     public void setHighlight() {
-        highlight.setStroke(Color.ORANGE);
+        highlight.setStroke(Theme.Basic.SELECTION);
         highlight.setVisible(true);
     }
 
-    public void setHighlightReach() {
-        highlight.setStroke(Color.YELLOW);
+    public void setHighlightMovement() {
+        highlight.setStroke(Theme.Basic.MOVEMENT);
         highlight.setVisible(true);
     }
 
@@ -68,10 +68,10 @@ public class Tile extends StackPane {
 
     private Color getTerrainColor(TerrainType type) {
         return switch (type) {
-            case Plain -> Color.PALEGREEN;
+            case Plain -> Color.LAWNGREEN;
             case Forest -> Color.FORESTGREEN;
             case Mountain -> Color.SADDLEBROWN;
-            case Water -> Color.DODGERBLUE;
+            case Water -> Color.AQUA;
             case City, Factory, HQ -> Color.DARKGRAY;
         };
     }

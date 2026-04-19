@@ -20,7 +20,6 @@ public class Game implements Observable {
 
     private Position mapSize;
     private TerrainType[][] map;
-    private List<Unit> units = new ArrayList<>();
     private HashMap<Position, Unit> unitsMap = new HashMap<>();
 
     private String currentPlayer = "Player1";
@@ -38,7 +37,8 @@ public class Game implements Observable {
 
     public String getCurrentPlayer() {return currentPlayer;}
     public TerrainType getTerrainAt(Position pos) {return map[pos.getRow()][pos.getCol()];}
-    public List<Unit> getUnits() {return units;}
+    public Collection<Unit> getUnits() {return unitsMap.values();}
+
     public Unit getUnitAt(Position pos) {return unitsMap.get(pos);}
     public String getTileOwner(Position pos) {return buildingOwners.getOrDefault(pos, "Neutral");}
     public int getPlayerMoney(String player) {return playerMoney.getOrDefault(player, 0);}
@@ -58,35 +58,40 @@ public class Game implements Observable {
             default -> throw new IllegalStateException("Unexpected value: " + type);
         };
         Position pos = new Position(row, col);
-        units.add(unit);
         unitsMap.put(pos, unit);
         notifyObservers(new UnitSpawnedEvent(unit, pos));
         return unit;
     }
 
     public void removeUnit(Unit unit) {
-        units.remove(unit);
         unitsMap.remove(unit.getPosition());
         /// Notify unit removal here
     }
 
 
     public void moveUnit(Position startPos, Position endPos) {
-        Unit movingUnit = getUnitAt(startPos);
-        if (movingUnit == null) return;
+        Unit unit = getUnitAt(startPos);
+        if (unit == null) return;
 
         List<Position> movable = getMovablePositions(startPos);
 
         if (movable.contains(endPos)) {
-            unitsMap.remove(movingUnit.getPosition());
-            movingUnit.setPosition(endPos);
-            unitsMap.put(endPos, movingUnit);
-            movingUnit.setMoved();
-            notifyObservers(new UnitMovedEvent(movingUnit, startPos, endPos));
+            unitsMap.remove(unit.getPosition());
+            unit.setPosition(endPos);
+            unitsMap.put(endPos, unit);
+            unit.setMoved();
+            notifyObservers(new UnitMovedEvent(unit, startPos, endPos));
         }
     }
 
-    public boolean canUnitReach(Position startPos, Position endPos) {
+    public void waitUnit(Position pos) {
+        Unit unit = getUnitAt(pos);
+        if (unit == null) return;
+        hidePositions();
+        unit.setActed();
+    }
+
+    public boolean canUnitMoveTo(Position startPos, Position endPos) {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return false;
         List<Position> reachable = getMovablePositions(startPos);
@@ -95,7 +100,7 @@ public class Game implements Observable {
 
     public void nextTurn() {
         currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
-        for (Unit unit : units) {
+        for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
                 unit.restoreState();
             }
@@ -139,12 +144,17 @@ public class Game implements Observable {
         notifyObservers(new MovablePositionsShownEvent(reachable));
     }
 
-    public void selectPosition(Position pos) {
-        notifyObservers(new PositionSelectedEvent(pos));
+    public void selectUnitPosition(Position pos) {
+
+        notifyObservers(new UnitPositionSelectedEvent(pos, getUnitAt(pos)));
     }
 
     public void hidePositions() {
         notifyObservers(new PositionsHiddenEvent());
+    }
+
+    public void hideMenu() {
+        notifyObservers(new MenuHiddenEvent());
     }
 
 

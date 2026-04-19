@@ -4,11 +4,12 @@ import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Events.Event;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Events.*;
-import ija.ija2025.project.model.Map.Position;
-import ija.ija2025.project.model.Map.TerrainType;
+import ija.ija2025.project.model.Map.*;
 import ija.ija2025.project.model.Units.Unit;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class MapObserver implements Observer {
 
         this.tiles = new Tile[size.getRow()][size.getCol()];
 
-        grid.setStyle("-fx-background-color: #333;");
+        grid.setBackground(new Background(new BackgroundFill(Theme.Basic.BACKGROUND, CornerRadii.EMPTY, Insets.EMPTY)));
         grid.setHgap(1);
         grid.setVgap(1);
     }
@@ -63,7 +64,6 @@ public class MapObserver implements Observer {
     @Override
     public void update(Event event) {
         if (event instanceof UnitMovedEvent(Unit unit, Position from, Position to)) {
-            clearAllHighlights();
 
             Tile fromTile = getTile(from), toTile = getTile(to);
             Node sprite = fromTile.getUnitVisual();
@@ -79,14 +79,13 @@ public class MapObserver implements Observer {
             getTile(pos).setUnitVisual(SpriteFactory.generateSprite(unit));
         }
 
-        if (event instanceof PositionSelectedEvent(Position pos)) {
+        if (event instanceof UnitPositionSelectedEvent(Position pos, Unit unit)) {
             getTile(pos).setHighlight();
         }
 
         if (event instanceof MovablePositionsShownEvent(List<Position> positions)) {
-            clearAllHighlights();
             for (Position position : positions) {
-                getTile(position).setHighlightReach();
+                getTile(position).setHighlightMovement();
             }
         }
 

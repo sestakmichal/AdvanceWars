@@ -28,20 +28,15 @@ public class Main extends Application {
         Position size = game.getSize();
 
         MapObserver mapView = new MapObserver(size);
-        UIObserver UiView = new UIObserver(controller);
+        UIObserver UIView = new UIObserver(controller);
 
         game.addObserver(mapView);
-        game.addObserver(UiView);
+        game.addObserver(UIView);
 
         mapView.initializeMap(controller, game.getMap());
         controller.initializeMockUnits(game);
 
-        ScrollPane root = new ScrollPane(
-            new StackPane(
-                mapView.getGrid(),
-                UiView.getPane()
-            )
-        );
+        ScrollPane root = new ScrollPane(new StackPane(mapView.getGrid(), UIView.getPane()));
         Scene scene = new Scene(root, 850, 650);
 
         stage.setTitle("IJA 2025");

@@ -8,9 +8,8 @@ public class Controller {
     CommandManager commandManager =  new CommandManager();
     TurnPhase currentPhase = TurnPhase.ACTION;
     TurnState currentState = TurnState.IDLE;
-    TurnAction currentAction = null;
 
-    Position selectedPosition = null;
+    Position selectedPos = null;
 
     public Controller(Game game) {
        this.game = game;
@@ -22,34 +21,56 @@ public class Controller {
         if (currentPhase != TurnPhase.ACTION) {return;}
 
         // select unit
-        if (selectedPosition == null) {
+
+        if (currentState == TurnState.IDLE) {
             if (game.canUnitAct(position)) {
-                selectedPosition = position;
-                currentState = TurnState.UNIT_SELECTED;
-
-                game.selectPosition(position);
-            }
-            return;
-        }
-        else {
-            if (currentAction == TurnAction.MOVE && game.canUnitReach(selectedPosition, position)) {
-                commandManager.execute(new MoveCommand(game, selectedPosition, position));
-
-                selectedPosition = position;
-                game.selectPosition(position);
-                currentAction = null;
+                game.hidePositions();
+                selectedPos = position;
+                if (game.canUnitMove(position)) {
+                    game.showMovablePositions(position);
+                }
+                if (game.canUnitAct(position)) {
+                    ///game.showAttackablePositions(position);
+                }
+                game.selectUnitPosition(position);
                 return;
             }
+            deselect();
         }
 
-        deselect();
+        if (currentState == TurnState.MOVING) {
+            if (game.canUnitMove(selectedPos) && game.canUnitMoveTo(selectedPos, position)) {
+                game.hidePositions();
+                commandManager.execute(new MoveCommand(game, selectedPos, position));
+                selectedPos = position;
+                game.selectUnitPosition(position);
+                currentState = TurnState.IDLE;
+                return;
+            }
+            deselect();
+        }
+
     }
 
     /// needs to be connected to the unit's action buttons
     public void handleActionClicked(GameAction action) { // Position position
-        if (game.canUnitMove(selectedPosition)) {
-            currentAction = TurnAction.MOVE;
-            game.showMovablePositions(selectedPosition);
+        switch (action) {
+            case MOVE -> {
+                currentState = TurnState.MOVING;
+                game.hideMenu();
+            }
+            case ATTACK -> {
+                currentState = TurnState.ATTACKING;
+                game.hideMenu();
+            }
+            case CAPTURE -> {
+                currentState = TurnState.CAPTURING;
+
+            }
+            case WAIT -> {
+                currentState = TurnState.IDLE;
+                game.waitUnit(selectedPos);
+            }
         }
 
     } ///maybe divide into specific actions, disable action ability here
@@ -61,10 +82,11 @@ public class Controller {
 
 
     private void deselect() {
-       selectedPosition = null;
-       currentState = TurnState.IDLE;
-       game.hidePositions();//maybe make separate method for deselecting
+        currentState = TurnState.IDLE;
+        selectedPos = null;
+        game.hidePositions();
     }
+
 
     public void initializeMockUnits(Game game) {
         game.spawnUnit("Tank", "Player1", 0, 0);

@@ -3,5 +3,7 @@ package ija.ija2025.project.model.Game;
 public enum TurnState {
     IDLE,
     UNIT_SELECTED,
-    UNIT_MOVED,
+    MOVING,
+    ATTACKING,
+    CAPTURING
 }
