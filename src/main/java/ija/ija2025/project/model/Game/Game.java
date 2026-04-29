@@ -84,6 +84,29 @@ public class Game implements Observable {
         }
     }
 
+    public void attackUnit(Unit attacker, Unit target) {
+        if (attacker == null || target == null) return;
+
+        System.out.println("Tried atttack");
+        Position attackerPos = attacker.getPosition();
+        Position targetPos = target.getPosition();
+        List<Position> attackable = getAttackablePositions(attackerPos);
+        System.out.print(attackable.getFirst());
+        if (attackable.contains(targetPos)) {
+            TerrainType targetTerrain = getTerrainAt(targetPos);
+            int damage = target.getFinalDamage(attacker, targetTerrain);
+            target.takeDamage(attacker,targetTerrain);
+            System.out.println("Successfully atttacked");
+            attacker.setActed();
+            notifyObservers(new UnitAttackedEvent(attacker, target, damage));
+
+            if (target.isDestroyed()) {
+                removeUnit(target);
+                notifyObservers(new UnitDestroyedEvent(target));
+            }
+        }
+    }
+
     public void waitUnit(Position pos) {
         Unit unit = getUnitAt(pos);
         if (unit == null) return;
@@ -96,6 +119,13 @@ public class Game implements Observable {
         if (movingUnit == null) return false;
         List<Position> reachable = getMovablePositions(startPos);
         return reachable.contains(endPos);
+    }
+
+    public boolean canUnitAttackAt(Position attackerPos, Position targetPos) {
+        Unit attackingUnit = getUnitAt(attackerPos);
+        if (attackingUnit == null) return false;
+        List<Position> attackable = getAttackablePositions(attackerPos);
+        return attackable.contains(targetPos);
     }
 
     public void nextTurn() {
@@ -144,8 +174,13 @@ public class Game implements Observable {
         notifyObservers(new MovablePositionsShownEvent(reachable));
     }
 
-    public void selectUnitPosition(Position pos) {
+    /// POSITION displays
+    public void showAttackablePositions(Position pos) {
+        List<Position> attackable = getAttackablePositions(pos);
+        notifyObservers(new AttackablePositionsShownEvent(attackable));
+    }
 
+    public void showUnitPosition(Position pos) {
         notifyObservers(new UnitPositionSelectedEvent(pos, getUnitAt(pos)));
     }
 
@@ -169,6 +204,24 @@ public class Game implements Observable {
             Unit occupant = getUnitAt(pos);
 
             if (occupant == null || pos.equals(startPos)) {
+                result.add(pos);
+            }
+        }
+
+        return result;
+    }
+
+    public List<Position> getAttackablePositions(Position startPos) {
+        Unit unit = getUnitAt(startPos);
+        if (unit == null) return new ArrayList<>();
+
+        List<Position> attackablePositions = PathFindingService.getAttackablePositions(map, unit, startPos);
+        List<Position> result = new ArrayList<>();
+
+        for (Position pos : attackablePositions) {
+            Unit occupant = getUnitAt(pos);
+
+            if (occupant != null && !occupant.isOwnedBy(currentPlayer)) {
                 result.add(pos);
             }
         }

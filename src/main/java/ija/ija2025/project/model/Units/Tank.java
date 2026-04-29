@@ -1,5 +1,7 @@
 package ija.ija2025.project.model.Units;
 
+import java.util.Set;
+
 public class Tank extends Vehicle {
 
     public Tank(String unitOwner, int row, int col) {
@@ -23,6 +25,9 @@ public class Tank extends Vehicle {
     public int getPrice() {
         return 7000;
     }
+
+    @Override
+    public Set<Integer> getAttackRange() { return Set.of(1); }
 
     @Override
     public String getType() {

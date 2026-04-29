@@ -1,4 +1,4 @@
-package ija.ija2025.project.view;
+package ija.ija2025.project.view.Observers;
 
 import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Events.Event;
@@ -6,10 +6,12 @@ import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Events.*;
 import ija.ija2025.project.model.Map.*;
 import ija.ija2025.project.model.Units.Unit;
+import ija.ija2025.project.view.SpriteFactory;
+import ija.ija2025.project.view.Theme;
+import ija.ija2025.project.view.Tile;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -85,7 +87,13 @@ public class MapObserver implements Observer {
 
         if (event instanceof MovablePositionsShownEvent(List<Position> positions)) {
             for (Position position : positions) {
-                getTile(position).setHighlightMovement();
+                getTile(position).setMovementHighlight();
+            }
+        }
+
+        if (event instanceof AttackablePositionsShownEvent(List<Position> positions)) {
+            for (Position position : positions) {
+                getTile(position).setAttackHighlight();
             }
         }
 

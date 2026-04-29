@@ -2,6 +2,8 @@ package ija.ija2025.project.model.Units;
 
 import ija.ija2025.project.model.Map.TerrainType;
 
+import java.util.Set;
+
 public class Infantry extends Unit {
 
     public Infantry(String unitOwner, int x, int y) {
@@ -21,8 +23,12 @@ public class Infantry extends Unit {
         };
     }
 
+
     @Override
     public int getMoveRange() { return 3; }
+
+    @Override
+    public Set<Integer> getAttackRange() { return Set.of(1); }
 
     @Override
     public int getDamageValue(Unit fromUnit) {

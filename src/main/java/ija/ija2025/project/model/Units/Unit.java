@@ -3,6 +3,8 @@ package ija.ija2025.project.model.Units;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Map.TerrainType;
 
+import java.util.Set;
+
 public abstract class Unit {
     private String owner;
     private Position position;
@@ -43,18 +45,22 @@ public abstract class Unit {
         };
     }
 
-    // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
-    public int takeDamage(Unit fromUnit, TerrainType terrainType) {
-        double damage = getDamageValue(fromUnit) * (fromUnit.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
+
+    public int getFinalDamage(Unit attacker, TerrainType terrainType) {
+        double damage = getDamageValue(attacker) * (attacker.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
         int damageRound = (int) Math.round(damage);
         int actualDamage = Math.min(health, damageRound);
+        return actualDamage;
+    }
+    // int damage = basic_attack * hp_attacker/100 * (1-terrain_bonus * 0.1)
+    public void takeDamage(Unit attacker, TerrainType terrainType) {
+        int damage = getFinalDamage(attacker, terrainType);
 
-        health -= actualDamage;
+        health -= damage;
         if (health <= 0) {
             health = 0;
             destroyed = true;
         }
-        return actualDamage;
     }
 
     public void receiveRecovery(int recoverHealth) {
@@ -63,9 +69,9 @@ public abstract class Unit {
 
     public boolean isOwnedBy(String player) {return owner.equals(player);}
 
-
     public abstract int getMoveRange();
     public abstract int getMovementPrice(TerrainType terrain);
+    public abstract Set<Integer> getAttackRange();
     public abstract int getDamageValue(Unit fromUnit);
     public abstract int getPrice();
     public abstract String getType();

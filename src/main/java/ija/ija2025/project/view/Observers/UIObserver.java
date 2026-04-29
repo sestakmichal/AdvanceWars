@@ -1,10 +1,11 @@
-package ija.ija2025.project.view;
+package ija.ija2025.project.view.Observers;
 
 import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Events.*;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Units.Unit;
+import ija.ija2025.project.view.ActionMenu;
 import javafx.scene.layout.Pane;
 
 public class UIObserver implements Observer {

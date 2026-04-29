@@ -1,5 +1,7 @@
 package ija.ija2025.project.model.Units;
 
+import java.util.Set;
+
 public class Artillery extends Vehicle {
 
     public Artillery(String unitOwner, int row, int col) {
@@ -8,6 +10,9 @@ public class Artillery extends Vehicle {
 
     @Override
     public int getMoveRange() { return 5; }
+
+    @Override
+    public Set<Integer> getAttackRange() { return Set.of(2, 3); }
 
     @Override
     public int getDamageValue(Unit fromUnit) {

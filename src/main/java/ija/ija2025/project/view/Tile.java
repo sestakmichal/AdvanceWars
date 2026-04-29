@@ -55,8 +55,13 @@ public class Tile extends StackPane {
         highlight.setVisible(true);
     }
 
-    public void setHighlightMovement() {
-        highlight.setStroke(Theme.Basic.MOVEMENT);
+    public void setMovementHighlight() {
+        highlight.setStroke(Theme.Actions.MOVE);
+        highlight.setVisible(true);
+    }
+
+    public void setAttackHighlight() {
+        highlight.setStroke(Theme.Actions.ATTACK);
         highlight.setVisible(true);
     }
 
