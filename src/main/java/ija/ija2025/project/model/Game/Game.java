@@ -3,14 +3,9 @@ import ija.ija2025.project.model.Buildings.Building;
 import ija.ija2025.project.model.Events.Event;
 
 import ija.ija2025.project.model.Events.*;
-import ija.ija2025.project.model.Map.Position;
-import ija.ija2025.project.model.Map.TerrainType;
-import ija.ija2025.project.model.Units.Artillery;
-import ija.ija2025.project.model.Units.Infantry;
-import ija.ija2025.project.model.Units.Tank;
-import ija.ija2025.project.model.Units.Unit;
-import ija.ija2025.project.model.Game.Services.PathFindingService;
-import ija.ija2025.project.model.Game.Services.RecoveryService;
+import ija.ija2025.project.model.Units.*;
+import ija.ija2025.project.model.Map.*;
+import ija.ija2025.project.model.Game.Services.*;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Observation.Observable;
 
@@ -116,7 +111,7 @@ public class Game implements Observable {
         Position attackerPos = attacker.getPosition();
         Position targetPos = target.getPosition();
         List<Position> attackable = getAttackablePositions(attackerPos);
-        System.out.print(attackable.getFirst());
+
         if (attackable.contains(targetPos)) {
             TerrainType targetTerrain = getTerrainAt(targetPos);
             int damage = target.getFinalDamage(attacker, targetTerrain);

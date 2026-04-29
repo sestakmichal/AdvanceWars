@@ -1,7 +1,6 @@
 package ija.ija2025.project.model.Game;
 
 import ija.ija2025.project.model.Buildings.Building;
-import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Map.TerrainType;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,76 +17,11 @@ public class GameFactory {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(new File(filePath));
 
-            // GAME STATE
-            if (root.has("currentPlayer")) {
-                game.setCurrentPlayer(root.get("currentPlayer").asText());
-            }
+            loadGameState(game, root);
+            loadMap(game, root.get("map"));
+            loadBuildings(game, root.get("buildings"));
+            loadUnits(game, root.get("units"));
 
-            if (root.has("playerMoney")) {
-                root.get("playerMoney").fields().forEachRemaining(e ->
-                    game.setPlayerMoney(e.getKey(), e.getValue().asInt())
-                );
-            }
-
-            // MAP (terrain only)
-            JsonNode mapNode = root.get("map");
-
-            int rows = mapNode.size();
-            int cols = mapNode.get(0).size();
-
-            TerrainType[][] terrainMap = new TerrainType[rows][cols];
-
-            for (int r = 0; r < rows; r++) {
-                for (int c = 0; c < cols; c++) {
-                    String tile = mapNode.get(r).get(c).asText();
-                    terrainMap[r][c] = TerrainType.fromString(tile);
-                }
-            }
-
-            game.updateMap(terrainMap);
-
-            // BUILDINGS
-            if (root.has("buildings")) {
-                for (JsonNode b : root.get("buildings")) {
-
-                    int row = b.get("row").asInt();
-                    int col = b.get("col").asInt();
-
-                    String type = b.get("type").asText();
-
-                    // owner is Neutral if owner = null
-                    String owner = "Neutral";
-                    if (b.has("owner") && !b.get("owner").isNull()) {
-                        String rawOwner = b.get("owner").asText();
-                        if (!rawOwner.isBlank() && !rawOwner.equalsIgnoreCase("neutral")) {
-                            owner = rawOwner;
-                        }
-                    }
-
-                    Building building = game.spawnBuilding(type, owner, row, col);
-
-                    if (b.has("hp")) {
-                        building.setHealth(b.get("hp").asInt());
-                    }
-                }
-            }
-
-            // UNITS
-            if (root.has("units")) {
-                for (JsonNode u : root.get("units")) {
-
-                    String type = u.get("type").asText();
-                    String owner = u.get("owner").asText();
-                    int row = u.get("row").asInt();
-                    int col = u.get("col").asInt();
-
-                    Unit unit = game.spawnUnit(type, owner, row, col);
-
-                    if (u.has("hp")) {
-                        unit.setHealth(u.get("hp").asInt());
-                    }
-                }
-            }
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to load game JSON", e);
@@ -95,4 +29,82 @@ public class GameFactory {
 
         return game;
     }
+
+    private static void loadGameState(Game game, JsonNode root) {
+        if (root.has("currentPlayer")) {
+            game.setCurrentPlayer(root.get("currentPlayer").asText());
+        }
+
+        if (root.has("playerMoney")) {
+            root.get("playerMoney").fields().forEachRemaining(e ->
+                    game.setPlayerMoney(e.getKey(), e.getValue().asInt())
+            );
+        }
+    }
+
+    private static void loadMap(Game game, JsonNode mapNode) {
+        int rows = mapNode.size();
+        int cols = mapNode.get(0).size();
+
+        TerrainType[][] terrainMap = new TerrainType[rows][cols];
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                terrainMap[r][c] =
+                        TerrainType.fromString(mapNode.get(r).get(c).asText());
+            }
+        }
+
+        game.updateMap(terrainMap);
+    }
+
+    private static void loadBuildings(Game game, JsonNode buildings) {
+        if (buildings == null) return;
+
+        for (JsonNode b : buildings) {
+
+            int row = b.get("row").asInt();
+            int col = b.get("col").asInt();
+            String type = b.get("type").asText();
+
+            String owner = resolveOwner(b);
+
+            Building building = game.spawnBuilding(type, owner, row, col);
+
+            if (b.has("hp")) {
+                building.setHealth(b.get("hp").asInt());
+            }
+        }
+    }
+
+    private static void loadUnits(Game game, JsonNode units) {
+        if (units == null) return;
+
+        for (JsonNode u : units) {
+
+            Unit unit = game.spawnUnit(
+                    u.get("type").asText(),
+                    u.get("owner").asText(),
+                    u.get("row").asInt(),
+                    u.get("col").asInt()
+            );
+
+            if (u.has("hp")) {
+                unit.setHealth(u.get("hp").asInt());
+            }
+        }
+    }
+
+    private static String resolveOwner(JsonNode b) {
+        String owner = "Neutral";
+
+        if (b.has("owner") && !b.get("owner").isNull()) {
+            String raw = b.get("owner").asText();
+            if (!raw.isBlank() && !raw.equalsIgnoreCase("neutral")) {
+                owner = raw;
+            }
+        }
+        return owner;
+    }
+
 }
