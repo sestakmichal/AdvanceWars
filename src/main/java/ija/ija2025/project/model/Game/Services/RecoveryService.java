@@ -53,7 +53,6 @@ public class RecoveryService {
 
     }
 
-
     private static int calculateRepairCost(Unit unit, int hpGained) {
         int steps = (int) Math.ceil(hpGained / 10.0);
         return (unit.getPrice() / 10) * steps;

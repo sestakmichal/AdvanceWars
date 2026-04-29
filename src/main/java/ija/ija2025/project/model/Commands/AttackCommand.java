@@ -17,20 +17,7 @@ public class AttackCommand implements Command {
     }
 
     @Override
-    public void execute() {
-        // defender terrain type for bonus defence
-        TerrainType terrain = game.getTerrainAt(target.getPosition());
-
-        this.damageDealt = target.takeDamage(attacker, terrain);
-
-        if (target.isDestroyed()) {
-            this.wasDestroyed = true;
-            game.removeUnit(target);
-        }
-        else {
-
-        }
-    }
+    public void execute() {game.attackUnit(attacker, target);}
 
     @Override
     public void undo() {

@@ -1,18 +1,16 @@
 package ija.ija2025.project;
 
-import ija.ija2025.project.model.Map.Position;
+import ija.ija2025.project.model.Map.GameMap;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Game.GameFactory;
 import ija.ija2025.project.controller.*;
 
-import ija.ija2025.project.view.MapObserver;
-import ija.ija2025.project.view.UIObserver;
+import ija.ija2025.project.view.Observers.MapObserver;
+import ija.ija2025.project.view.Observers.UIObserver;
+import ija.ija2025.project.view.SceneFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
 
 public class Main extends Application {
 
@@ -24,9 +22,8 @@ public class Main extends Application {
 
         game = GameFactory.createGameFromJson("data/Maps/map1.json");
         controller = new Controller(game);
-        Position size = game.getSize();
 
-        MapObserver mapView = new MapObserver(size);
+        MapObserver mapView = new MapObserver(game.getSize());
         UIObserver UIView = new UIObserver(controller);
 
         game.addObserver(mapView);
@@ -35,8 +32,7 @@ public class Main extends Application {
         mapView.initializeMap(controller, game.getMap());
         game.notifyInitialState();
 
-        ScrollPane root = new ScrollPane(new StackPane(mapView.getGrid(), UIView.getPane()));
-        Scene scene = new Scene(root, 850, 650);
+        Scene scene = SceneFactory.initializeScene(stage, mapView.getGrid(), UIView.getPane());
 
         stage.setTitle("IJA 2025");
         stage.setScene(scene);

@@ -7,7 +7,6 @@ public class Theme {
     public static final class Basic {
         public static Color BACKGROUND = Color.DARKSLATEGRAY;
         public static Color SELECTION = Color.DARKORANGE;
-        public static Color MOVEMENT = Color.GOLD;
     }
 
     public static final class Actions {

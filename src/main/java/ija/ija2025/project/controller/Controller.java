@@ -1,24 +1,27 @@
 package ija.ija2025.project.controller;
-import ija.ija2025.project.model.Commands.MoveCommand;
+import ija.ija2025.project.model.Commands.*;
 import ija.ija2025.project.model.Game.*;
 import ija.ija2025.project.model.Map.Position;
+import ija.ija2025.project.model.Units.Unit;
 
 public class Controller {
     Game game;
-    CommandManager commandManager =  new CommandManager();
+    CommandManager commandManager = new CommandManager();
     TurnPhase currentPhase = TurnPhase.ACTION;
     TurnState currentState = TurnState.IDLE;
 
     Position selectedPos = null;
 
     public Controller(Game game) {
-       this.game = game;
+        this.game = game;
     }
 
     /// When Unit clicked, first display menu with move/attack/capture/wait options
     ///
     public void handleTileClick(Position position) {
-        if (currentPhase != TurnPhase.ACTION) {return;}
+        if (currentPhase != TurnPhase.ACTION) {
+            return;
+        }
 
         // select unit
 
@@ -26,13 +29,7 @@ public class Controller {
             if (game.canUnitAct(position)) {
                 game.hidePositions();
                 selectedPos = position;
-                if (game.canUnitMove(position)) {
-                    game.showMovablePositions(position);
-                }
-                if (game.canUnitAct(position)) {
-                    ///game.showAttackablePositions(position);
-                }
-                game.selectUnitPosition(position);
+                selectDoablePositions(selectedPos);
                 return;
             }
             deselect();
@@ -43,7 +40,21 @@ public class Controller {
                 game.hidePositions();
                 commandManager.execute(new MoveCommand(game, selectedPos, position));
                 selectedPos = position;
-                game.selectUnitPosition(position);
+                selectDoablePositions(selectedPos);
+                currentState = TurnState.IDLE;
+                return;
+            }
+            deselect();
+        }
+
+        if (currentState == TurnState.ATTACKING) {
+            if (game.canUnitAct(selectedPos) && game.canUnitAttackAt(selectedPos, position)) {
+                game.hidePositions();
+                Unit attacker = game.getUnitAt(selectedPos);
+                Unit target = game.getUnitAt(position);
+
+                commandManager.execute(new AttackCommand(game, attacker, target));
+                selectDoablePositions(selectedPos);
                 currentState = TurnState.IDLE;
                 return;
             }
@@ -65,7 +76,6 @@ public class Controller {
             }
             case CAPTURE -> {
                 currentState = TurnState.CAPTURING;
-
             }
             case WAIT -> {
                 currentState = TurnState.IDLE;
@@ -73,18 +83,29 @@ public class Controller {
             }
         }
 
-    } ///maybe divide into specific actions, disable action ability here
+    }
+
+    /// maybe divide into specific actions, disable action ability here
 
 
     public void handleTurnChange() {
         game.nextTurn();
     }
 
-
     private void deselect() {
         currentState = TurnState.IDLE;
         selectedPos = null;
         game.hidePositions();
+    }
+
+    private void selectDoablePositions(Position pos) {
+        if (game.canUnitMove(pos)) {
+            game.showMovablePositions(pos);
+        }
+        if (game.canUnitAct(pos)) {
+            game.showAttackablePositions(pos);
+            game.showUnitPosition(pos);
+        }
     }
 
 
@@ -101,6 +122,12 @@ public class Controller {
         game.spawnUnit("Infantry", "Player2", 1, 0); // Tank Attack test
         game.spawnUnit("Infantry", "Player2", 1, 1); // Infantry Attack test
         game.spawnUnit("Infantry", "Player2", 2, 2); // Artillery Attack test
+        game.spawnUnit("Infantry", "Player2", 3, 2); // Artillery Attack test
+
+        game.spawnUnit("Infantry", "Player2", 1, 0); // Tank Attack test
+        game.spawnUnit("Infantry", "Player2", 1, 1); // Infantry Attack test
+        game.spawnUnit("Infantry", "Player2", 2, 2); // Artillery Attack test
+        game.spawnUnit("Infantry", "Player2", 2, 1); // Artillery Attack test
         game.spawnUnit("Infantry", "Player2", 3, 2); // Artillery Attack test
     }
 }

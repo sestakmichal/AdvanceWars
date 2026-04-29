@@ -4,10 +4,7 @@ import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Map.TerrainType;
 import ija.ija2025.project.model.Units.Unit;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class PathFindingService {
 
@@ -62,4 +59,60 @@ public class PathFindingService {
 
         return reachable;
     }
+
+    public static List<Position> getAttackablePositions(TerrainType[][] map, Unit unit, Position startPos) {
+        if (map == null || unit == null || startPos == null) {return new ArrayList<>();}
+        int height = map.length;
+        int width = map[0].length;
+
+        int[][] distanceMap = new int[height][width];
+        for (int r = 0; r < height; r++) {
+            Arrays.fill(distanceMap[r], Integer.MAX_VALUE);
+        }
+        distanceMap[startPos.getRow()][startPos.getCol()] = 0;
+
+
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{0, startPos.getRow(), startPos.getCol()});
+
+        List<Position> attackable = new ArrayList<>();
+        Set<Integer> unitRange = unit.getAttackRange();
+
+        int maxRange = unitRange.stream().max(Integer::compareTo).orElse(0);
+
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll(); // same like pq.pop() get lowest value node
+            int cost = current[0];
+            int row = current[1];
+            int col = current[2];
+
+            if (unitRange.contains(cost)) {
+                attackable.add(new Position(row, col));
+            }
+
+            if (cost >= maxRange ) continue;
+
+            for (int[] dir : new int[][]{
+                    {1,  0}, // right
+                    {-1, 0}, // left
+                    {0,  1}, // down
+                    {0, -1}  // up
+            }) {
+                int newRow = row + dir[0];
+                int newCol = col + dir[1];
+
+                if (newRow < 0 || newCol < 0 || newRow >= height || newCol >= width) continue;
+
+                int newCost = cost + 1;
+
+                if (newCost <= distanceMap[newRow][newCol]) {
+                    distanceMap[newRow][newCol] = newCost;
+                    queue.add(new int[]{newCost, newRow, newCol});
+                }
+            }
+        }
+
+        return attackable;
+    }
+
 }
