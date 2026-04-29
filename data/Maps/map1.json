@@ -1,0 +1,47 @@
+{
+  "currentPlayer": "Player1",
+
+  "playerMoney": {
+    "Player1": 1000,
+    "Player2": 1000
+  },
+
+  "map": [
+    ["P","P","P","F","F","F","F","P","P","P","P","P"],
+    ["P","P","F","F","F","F","F","F","P","P","P","P"],
+    ["P","HQ","F","FCT","M","C","F","F","F","P","P","P"],
+    ["P","F","F","M","M","M","M","F","F","F","P","P"],
+    ["W","W","W","W","W","W","W","W","P","P","P","P"],
+    ["P","P","P","P","P","P","W","W","W","P","P","P"],
+    ["P","P","P","C","P","P","P","W","W","W","P","P"],
+    ["P","P","P","P","P","P","P","P","W","W","W","P"],
+    ["M","M","P","P","FCT","P","P","HQ","P","W","W","W"],
+    ["M","M","M","P","P","P","P","P","P","P","W","W"]
+  ],
+
+  "buildings": [
+    { "type": "HQ", "row": 1, "col": 2, "owner": "Player1", "hp": 100 },
+    { "type": "FCT", "row": 3, "col": 2, "owner": "Neutral", "hp": 100 },
+    { "type": "C", "row": 5, "col": 2, "owner": "Neutral", "hp": 100 },
+    { "type": "C", "row": 3, "col": 6, "owner": "Neutral", "hp": 100 },
+    { "type": "FCT", "row": 4, "col": 8, "owner": "Neutral", "hp": 100 },
+    { "type": "HQ", "row": 7, "col": 8, "owner": "Player2", "hp": 100 }
+  ],
+
+  "units": [
+    { "type": "Tank", "owner": "Player1", "row": 0, "col": 0, "hp": 100 },
+    { "type": "Infantry", "owner": "Player1", "row": 0, "col": 1, "hp": 100 },
+    { "type": "Artillery", "owner": "Player1", "row": 0, "col": 2, "hp": 100 },
+
+    { "type": "Infantry", "owner": "Player1", "row": 6, "col": 3, "hp": 100 },
+
+    { "type": "Tank", "owner": "Player2", "row": 1, "col": 9, "hp": 100 },
+    { "type": "Infantry", "owner": "Player2", "row": 1, "col": 10, "hp": 100 },
+    { "type": "Artillery", "owner": "Player2", "row": 1, "col": 11, "hp": 100 },
+
+    { "type": "Infantry", "owner": "Player2", "row": 1, "col": 0, "hp": 100 },
+    { "type": "Infantry", "owner": "Player2", "row": 1, "col": 1, "hp": 100 },
+    { "type": "Infantry", "owner": "Player2", "row": 2, "col": 2, "hp": 100 },
+    { "type": "Infantry", "owner": "Player2", "row": 3, "col": 2, "hp": 100 }
+  ]
+}

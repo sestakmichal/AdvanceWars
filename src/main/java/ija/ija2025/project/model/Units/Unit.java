@@ -22,6 +22,7 @@ public abstract class Unit {
     public Position getPosition() { return position; }
     public void setPosition(Position newPos) { position = newPos; }
     public int getHealth() { return health; }
+    public void setHealth(int hpAmount) { this.health = Math.max(0, Math.min(100, hpAmount)); } // cap in range <0, 100>
     public boolean isDestroyed() { return destroyed; }
 
     public boolean canMove() { return actionState == UnitActionState.READY; }

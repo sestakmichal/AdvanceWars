@@ -1,6 +1,5 @@
 package ija.ija2025.project;
 
-import ija.ija2025.project.model.Map.GameMap;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Game.GameFactory;
@@ -23,7 +22,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
 
-        game = GameFactory.createGame(GameMap.BIG.getLayout());
+        game = GameFactory.createGameFromJson("data/Maps/map1.json");
         controller = new Controller(game);
         Position size = game.getSize();
 
@@ -34,7 +33,7 @@ public class Main extends Application {
         game.addObserver(UIView);
 
         mapView.initializeMap(controller, game.getMap());
-        controller.initializeMockUnits(game);
+        game.notifyInitialState();
 
         ScrollPane root = new ScrollPane(new StackPane(mapView.getGrid(), UIView.getPane()));
         Scene scene = new Scene(root, 850, 650);

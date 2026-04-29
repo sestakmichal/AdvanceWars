@@ -1,4 +1,5 @@
 package ija.ija2025.project.model.Game;
+import ija.ija2025.project.model.Buildings.Building;
 import ija.ija2025.project.model.Events.Event;
 
 import ija.ija2025.project.model.Events.*;
@@ -24,7 +25,8 @@ public class Game implements Observable {
 
     private String currentPlayer = "Player1";
     private Map<String, Integer> playerMoney = new HashMap<>();
-    private Map<Position, String> buildingOwners = new HashMap<>();
+
+    private Map<Position, Building> buildings = new HashMap<>();
 
 
     public Game() {
@@ -36,18 +38,41 @@ public class Game implements Observable {
     public TerrainType[][] getMap() {return map;}
 
     public String getCurrentPlayer() {return currentPlayer;}
+    public void setCurrentPlayer(String currentPlayer) { this.currentPlayer = currentPlayer; }
     public TerrainType getTerrainAt(Position pos) {return map[pos.getRow()][pos.getCol()];}
     public Collection<Unit> getUnits() {return unitsMap.values();}
 
     public Unit getUnitAt(Position pos) {return unitsMap.get(pos);}
-    public String getTileOwner(Position pos) {return buildingOwners.getOrDefault(pos, "Neutral");}
+    public String getTileOwner(Position pos) {return buildings.get(pos).getOwner();}
     public int getPlayerMoney(String player) {return playerMoney.getOrDefault(player, 0);}
     public void setPlayerMoney(String player, int amount) {playerMoney.put(player, amount);}
-    public Map<Position, String> getBuildingOwners() {return buildingOwners;}
+
+    public Map<Position, Building> getBuildings() { return buildings; }
 
     public void updateMap(TerrainType[][] newMap) {
         map = newMap;
         mapSize = new Position(map.length, map[0].length);
+    }
+
+    public void notifyInitialState() {
+        for (Unit u : unitsMap.values()) {
+            notifyObservers(new UnitSpawnedEvent(u, u.getPosition()));
+        }
+    }
+
+    public Building spawnBuilding(String type, String owner, int row, int col) {
+
+        Building building = switch (type) {
+            case "HQ" -> new Building("HQ", owner, row, col);
+            case "C" -> new Building("C", owner, row, col);
+            case "FCT" -> new Building("FCT", owner, row, col);
+            default -> throw new IllegalStateException("Unexpected building type: " + type);
+        };
+
+        Position pos = new Position(row, col);
+        buildings.put(pos, building);
+        // notify building spawned? can it happen even?
+        return building;
     }
 
     public Unit spawnUnit(String type, String owner, int row, int col) {

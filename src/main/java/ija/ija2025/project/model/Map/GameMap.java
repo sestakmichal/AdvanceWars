@@ -1,5 +1,6 @@
 package ija.ija2025.project.model.Map;
 
+@Deprecated
 public enum GameMap {
     FOREST(new String[] { "P P F", "F F F" }),
     MOUNTAIN(new String[] { "M M P", "P M M" }),
