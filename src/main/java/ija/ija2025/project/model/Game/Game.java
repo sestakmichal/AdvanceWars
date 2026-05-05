@@ -138,6 +138,7 @@ public class Game implements Observable {
         int captureDamage = (int) Math.floor(unit.getHealth()*0.1);
         if (building == null) return;
 
+        unit.setActed();
         building.takeCaptureDamage(captureDamage, currentPlayer);
         notifyObservers(new BuildingAttackedEvent(unit, captureDamage));
 
@@ -150,8 +151,8 @@ public class Game implements Observable {
     public void waitUnit(Position pos) {
         Unit unit = getUnitAt(pos);
         if (unit == null) return;
-        hidePositions();
         unit.setActed();
+        hidePositions();
     }
 
 
