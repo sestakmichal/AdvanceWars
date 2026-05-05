@@ -81,7 +81,7 @@ public class MapObserver implements Observer {
             getTile(pos).setUnitVisual(SpriteFactory.generateSprite(unit));
         }
 
-        if (event instanceof UnitPositionSelectedEvent(Position pos, Unit unit)) {
+        if (event instanceof UnitPositionShownEvent(Position pos, Unit unit)) {
             getTile(pos).setHighlight();
         }
 

@@ -89,6 +89,7 @@ public class Controller {
             }
             case CAPTURE -> {
                 currentState = TurnState.CAPTURING;
+                game.hideMenu();
             }
             case WAIT -> {
                 currentState = TurnState.IDLE;
