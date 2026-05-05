@@ -121,27 +121,4 @@ public class Controller {
             game.showUnitPosition(pos);
         }
     }
-
-
-    public void initializeMockUnits(Game game) {
-        game.spawnUnit("Tank", "Player1", 0, 0);
-        game.spawnUnit("Infantry", "Player1", 0, 1);
-        game.spawnUnit("Artillery", "Player1", 0, 2);
-        game.spawnUnit("Infantry", "Player1", 6, 3); // city capture
-
-        game.spawnUnit("Tank", "Player2", 1, 9);
-        game.spawnUnit("Infantry", "Player2", 1, 10);
-        game.spawnUnit("Artillery", "Player2", 1, 11);
-
-        game.spawnUnit("Infantry", "Player2", 1, 0); // Tank Attack test
-        game.spawnUnit("Infantry", "Player2", 1, 1); // Infantry Attack test
-        game.spawnUnit("Infantry", "Player2", 2, 2); // Artillery Attack test
-        game.spawnUnit("Infantry", "Player2", 3, 2); // Artillery Attack test
-
-        game.spawnUnit("Infantry", "Player2", 1, 0); // Tank Attack test
-        game.spawnUnit("Infantry", "Player2", 1, 1); // Infantry Attack test
-        game.spawnUnit("Infantry", "Player2", 2, 2); // Artillery Attack test
-        game.spawnUnit("Infantry", "Player2", 2, 1); // Artillery Attack test
-        game.spawnUnit("Infantry", "Player2", 3, 2); // Artillery Attack test
-    }
 }

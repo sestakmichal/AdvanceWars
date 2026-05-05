@@ -81,14 +81,10 @@ public class MapObserver implements Observer {
             getTile(pos).setUnitVisual(SpriteFactory.generateSprite(unit));
         }
 
-        if (event instanceof UnitAttackedEvent) {
-            Unit target = ((UnitAttackedEvent) event).target();
+        if (event instanceof UnitAttackedEvent(Unit attacker, Unit target, int damage)) {
             Position targetPos = target.getPosition();
-            Tile t = getTile(targetPos);
 
-            SpriteFactory.updateUnitHealth(t.getUnitVisual(), target.getHealth());
-
-            System.out.println("target Hp: " + target.getHealth());
+            SpriteFactory.updateUnitHealth(getTile(targetPos).getUnitVisual(), target.getHealth());
         }
 
         if (event instanceof UnitDestroyedEvent(Unit target)) {

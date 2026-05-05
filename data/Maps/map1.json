@@ -20,12 +20,12 @@
   ],
 
   "buildings": [
-    { "type": "HQ", "row": 1, "col": 2, "owner": "Player1", "hp": 100 },
-    { "type": "FCT", "row": 3, "col": 2, "owner": "Neutral", "hp": 100 },
-    { "type": "C", "row": 5, "col": 2, "owner": "Neutral", "hp": 100 },
-    { "type": "C", "row": 3, "col": 6, "owner": "Neutral", "hp": 100 },
-    { "type": "FCT", "row": 4, "col": 8, "owner": "Neutral", "hp": 100 },
-    { "type": "HQ", "row": 7, "col": 8, "owner": "Player2", "hp": 100 }
+    { "type": "HQ", "row": 2, "col": 1, "owner": "Player1", "hp": 100 },
+    { "type": "FCT", "row": 2, "col": 3, "owner": "Neutral", "hp": 100 },
+    { "type": "C", "row": 2, "col": 5, "owner": "Neutral", "hp": 100 },
+    { "type": "C", "row": 6, "col": 3, "owner": "Neutral", "hp": 100 },
+    { "type": "FCT", "row": 8, "col": 4, "owner": "Neutral", "hp": 100 },
+    { "type": "HQ", "row": 8, "col": 7, "owner": "Player2", "hp": 100 }
   ],
 
   "units": [
