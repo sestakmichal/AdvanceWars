@@ -21,7 +21,7 @@ public class Game implements Observable {
     private String currentPlayer = "Player1";
     private Map<String, Integer> playerMoney = new HashMap<>();
 
-    private Map<Position, Building> buildings = new HashMap<>();
+    private Map<Position, Building> buildingsMap = new HashMap<>();
 
 
     public Game() {
@@ -38,11 +38,12 @@ public class Game implements Observable {
     public Collection<Unit> getUnits() {return unitsMap.values();}
 
     public Unit getUnitAt(Position pos) {return unitsMap.get(pos);}
-    public String getTileOwner(Position pos) {return buildings.get(pos).getOwner();}
+    public Building getBuildingAt(Position pos) {return buildingsMap.get(pos);}
+    public String getTileOwner(Position pos) {return buildingsMap.get(pos).getOwner();}
     public int getPlayerMoney(String player) {return playerMoney.getOrDefault(player, 0);}
     public void setPlayerMoney(String player, int amount) {playerMoney.put(player, amount);}
 
-    public Map<Position, Building> getBuildings() { return buildings; }
+    public Map<Position, Building> getBuildingsMap() { return buildingsMap; }
 
     public void updateMap(TerrainType[][] newMap) {
         map = newMap;
@@ -65,7 +66,7 @@ public class Game implements Observable {
         };
 
         Position pos = new Position(row, col);
-        buildings.put(pos, building);
+        buildingsMap.put(pos, building);
         // notify building spawned? can it happen even?
         return building;
     }
@@ -88,7 +89,7 @@ public class Game implements Observable {
         /// Notify unit removal here
     }
 
-
+    /// UNIT ACTIONS
     public void moveUnit(Position startPos, Position endPos) {
         Unit unit = getUnitAt(startPos);
         if (unit == null) return;
@@ -127,6 +128,25 @@ public class Game implements Observable {
         }
     }
 
+    public void captureBuilding(Unit unit) {
+        if (unit == null) return;
+        System.out.println("Tried capture");
+
+        Position unitPos = unit.getPosition();
+        Building building = getBuildingAt(unitPos);
+
+        int captureDamage = (int) Math.floor(unit.getHealth()*0.1);
+        if (building == null) return;
+
+        building.takeCaptureDamage(captureDamage, currentPlayer);
+        notifyObservers(new BuildingAttackedEvent(unit, captureDamage));
+
+        if (building.getOwner().equals(currentPlayer)) {
+            notifyObservers(new BuildingCapturedEvent(unit));
+        }
+
+    }
+
     public void waitUnit(Position pos) {
         Unit unit = getUnitAt(pos);
         if (unit == null) return;
@@ -134,6 +154,8 @@ public class Game implements Observable {
         unit.setActed();
     }
 
+
+    ///  UNIT POSSIBILITIES
     public boolean canUnitMoveTo(Position startPos, Position endPos) {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return false;
@@ -146,6 +168,16 @@ public class Game implements Observable {
         if (attackingUnit == null) return false;
         List<Position> attackable = getAttackablePositions(attackerPos);
         return attackable.contains(targetPos);
+    }
+
+    public boolean canUnitCaptureAt(Position pos) {
+        Unit capturingUnit = getUnitAt(pos);
+        if (capturingUnit == null) return false;
+
+        Building building = getBuildingAt(pos);
+        if (building == null) return false;
+
+        return !building.getOwner().equals(currentPlayer);
     }
 
     public void nextTurn() {
@@ -204,13 +236,9 @@ public class Game implements Observable {
         notifyObservers(new UnitPositionSelectedEvent(pos, getUnitAt(pos)));
     }
 
-    public void hidePositions() {
-        notifyObservers(new PositionsHiddenEvent());
-    }
+    public void hidePositions() {notifyObservers(new PositionsHiddenEvent());}
 
-    public void hideMenu() {
-        notifyObservers(new MenuHiddenEvent());
-    }
+    public void hideMenu() { notifyObservers(new MenuHiddenEvent()); }
 
 
     public List<Position> getMovablePositions(Position startPos) {

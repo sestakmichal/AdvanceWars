@@ -1,15 +1,12 @@
 package ija.ija2025.project.model.Game.Services;
 
 import ija.ija2025.project.model.Buildings.Building;
-import ija.ija2025.project.model.Map.Position;
-import ija.ija2025.project.model.Map.TerrainType;
 import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.model.Game.Game;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public class RecoveryService {
 
@@ -42,8 +39,7 @@ public class RecoveryService {
     private static int calculateIncome(Game game, String player) {
         int income = 0;
 
-        for (Building building : game.getBuildings().values()) {
-
+        for (Building building : game.getBuildingsMap().values()) {
             if (building.isOwnedBy(player)) {
                 income += building.getIncome();
             }

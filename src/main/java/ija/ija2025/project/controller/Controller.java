@@ -61,6 +61,19 @@ public class Controller {
             deselect();
         }
 
+        if (currentState == TurnState.CAPTURING) {
+            if (game.canUnitAct(selectedPos) && game.canUnitCaptureAt(selectedPos)) {
+                game.hidePositions();
+
+                Unit capturer = game.getUnitAt(selectedPos);
+                commandManager.execute(new CaptureCommand(game, capturer));
+                selectDoablePositions(selectedPos);
+                currentState = TurnState.IDLE;
+                return;
+            }
+            deselect();
+        }
+
     }
 
     /// needs to be connected to the unit's action buttons
