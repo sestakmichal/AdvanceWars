@@ -10,7 +10,6 @@ import ija.ija2025.project.view.SpriteFactory;
 import ija.ija2025.project.view.Theme;
 import ija.ija2025.project.view.Tile;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
 
@@ -96,9 +95,9 @@ public class MapObserver implements Observer {
             getTile(target.getPosition()).removeUnitVisual();
         }
 
-        if (event instanceof UnitPositionSelectedEvent(Position pos, Unit unit)) {
-            getTile(pos).setHighlight();
-        }
+            if (event instanceof UnitPositionShownEvent(Position pos, Unit unit)) {
+                getTile(pos).setHighlight();
+            }
 
         if (event instanceof MovablePositionsShownEvent(List<Position> positions)) {
             for (Position position : positions) {

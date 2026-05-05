@@ -33,4 +33,7 @@ public class Artillery extends Vehicle {
     public String getType() {
         return this.getClass().getSimpleName();
     }
+
+    @Override
+    public void setMoved() {this.setActed();}
 }

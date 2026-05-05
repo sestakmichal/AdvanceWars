@@ -51,7 +51,7 @@ public class UIObserver implements Observer {
 
     @Override
     public void update(Event event) {
-        if (event instanceof UnitPositionSelectedEvent(Position position, Unit unit)) {
+        if (event instanceof UnitPositionShownEvent(Position position, Unit unit)) {
             showMenu(position, unit);
         }
         if (event instanceof PositionsHiddenEvent) {

@@ -227,20 +227,19 @@ public class Game implements Observable {
         notifyObservers(new MovablePositionsShownEvent(reachable));
     }
 
-    /// POSITION displays
     public void showAttackablePositions(Position pos) {
         List<Position> attackable = getAttackablePositions(pos);
         notifyObservers(new AttackablePositionsShownEvent(attackable));
     }
 
+
     public void showUnitPosition(Position pos) {
-        notifyObservers(new UnitPositionSelectedEvent(pos, getUnitAt(pos)));
+        notifyObservers(new UnitPositionShownEvent(pos, getUnitAt(pos)));
     }
 
     public void hidePositions() {notifyObservers(new PositionsHiddenEvent());}
 
     public void hideMenu() { notifyObservers(new MenuHiddenEvent()); }
-
 
     public List<Position> getMovablePositions(Position startPos) {
         Unit unit = getUnitAt(startPos);
