@@ -129,6 +129,7 @@ public class Game implements Observable {
     }
 
     public void captureBuilding(Unit unit) {
+        System.out.println("not capture");
         if (unit == null) return;
         System.out.println("Tried capture");
 
@@ -138,10 +139,11 @@ public class Game implements Observable {
         int captureDamage = (int) Math.floor(unit.getHealth()*0.1);
         if (building == null) return;
 
-        unit.setActed();
         building.takeCaptureDamage(captureDamage, currentPlayer);
-        notifyObservers(new BuildingAttackedEvent(unit, captureDamage));
+        unit.setActed();
 
+        notifyObservers(new BuildingAttackedEvent(unit, captureDamage));
+        System.out.println("Successfully capturing");
         if (building.getOwner().equals(currentPlayer)) {
             notifyObservers(new BuildingCapturedEvent(unit));
         }

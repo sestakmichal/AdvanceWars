@@ -22,7 +22,7 @@ public class SpriteFactory {
 
         Node healthArc = createHealthArc(u.getHealth());
 
-        Circle borderRing = new Circle(23.5);
+        Circle borderRing = new Circle(22);
         borderRing.setFill(Color.WHITE);
         borderRing.setOpacity(0.9);
 
@@ -37,7 +37,7 @@ public class SpriteFactory {
     private static Node createCircleMock(Unit u) {
         Color ownerColor = u.getOwner().equalsIgnoreCase("Player1") ? Color.RED : Color.BLUE;
 
-        Circle base = new Circle(18);
+        Circle base = new Circle(16);
         base.setFill(ownerColor);
         base.setStroke(Color.TRANSPARENT); // Color.WHITE
         base.setStrokeWidth(1.5);
@@ -67,11 +67,13 @@ public class SpriteFactory {
     }
 
     private static Node createHealthArc(int currentHp) {
-        Circle centerObject = new Circle(22);
+        Circle centerObject = new Circle(20); // anchor at 0,0 - fixes Group bounds
+        centerObject.setCenterX(0);
+        centerObject.setCenterY(0);
         centerObject.setFill(Color.TRANSPARENT);
         centerObject.setStroke(Color.TRANSPARENT);
 
-        Arc healthArc = new Arc(0, 0, 22, 22, 90, 0);
+        Arc healthArc = new Arc(0, 0, 20, 20, 90, 0);
         healthArc.setType(ArcType.ROUND);
         healthArc.setId(HEALTH_ARC_ID);
 
@@ -87,7 +89,7 @@ public class SpriteFactory {
         if (hp > 60) {
             hpColor = Color.GREEN;
         } else if (hp > 25) {
-            hpColor = Color.YELLOW;
+            hpColor = Color.GOLD;
         } else {
             hpColor = Color.RED;
         }
