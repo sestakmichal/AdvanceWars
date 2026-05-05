@@ -232,7 +232,6 @@ public class Game implements Observable {
         notifyObservers(new AttackablePositionsShownEvent(attackable));
     }
 
-
     public void showUnitPosition(Position pos) {
         notifyObservers(new UnitPositionShownEvent(pos, getUnitAt(pos)));
     }

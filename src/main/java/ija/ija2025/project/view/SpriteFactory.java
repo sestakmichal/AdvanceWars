@@ -22,7 +22,7 @@ public class SpriteFactory {
 
         Node healthArc = createHealthArc(u.getHealth());
 
-        Circle borderRing = new Circle(23);
+        Circle borderRing = new Circle(23.5);
         borderRing.setFill(Color.WHITE);
         borderRing.setOpacity(0.9);
 
@@ -39,7 +39,7 @@ public class SpriteFactory {
 
         Circle base = new Circle(18);
         base.setFill(ownerColor);
-        base.setStroke(Color.WHITE);
+        base.setStroke(Color.TRANSPARENT); // Color.WHITE
         base.setStrokeWidth(1.5);
 
         String initial = (u.getType() != null && !u.getType().isEmpty()) ? u.getType().substring(0, 1).toUpperCase() : "?";
@@ -92,8 +92,8 @@ public class SpriteFactory {
             hpColor = Color.RED;
         }
 
-        arc.setFill(hpColor.deriveColor(0, 1, 1, 0.8)); // 60% opacity
-        arc.setStroke(hpColor.darker());
+        arc.setFill(hpColor.deriveColor(0, 1, 1, 0.8));
+        //arc.setStroke(hpColor.darker());
     }
 
     public static void updateUnitHealth(Node unitNode, int hp) {
