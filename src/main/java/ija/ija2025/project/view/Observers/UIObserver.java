@@ -120,14 +120,15 @@ public class UIObserver implements Observer {
             hideMenu();
         }
 
-        if (event instanceof MoneyEarnedEvent(String player, int amount)) {
+        if (event instanceof MoneyChangedEvent(String player, int money)) {
             if (player.equals("Player1")) {
-                p1MoneyLabel.setText("P1 Money: " + amount);
+                p1MoneyLabel.setText("P1 Money: " + money);
             }
             else if (player.equals("Player2")) {
-                p2MoneyLabel.setText("P2 Money: " + amount);
+                p2MoneyLabel.setText("P2 Money: " + money);
             }
         }
+
         if (event instanceof TurnChangedEvent(String player)) {
             turnLabel.setText("Turn: " + player);
         }

@@ -31,7 +31,6 @@ public class Controller {
             if (game.isOwnedFactory(position)) {
 
                 /// Action for factory
-
                 return;
             }
             deselect();

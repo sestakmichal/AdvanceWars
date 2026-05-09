@@ -182,6 +182,7 @@ public class Game implements Observable {
     }
 
     public void nextTurn() {
+        notifyObservers(new TurnChangedEvent(currentPlayer));
         currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
@@ -211,6 +212,7 @@ public class Game implements Observable {
 
     public boolean isOwnedFactory(Position pos) {
         Building building = getBuildingAt(pos);
+        if (building == null) return false;
         String owner = building.getOwner();
         return building.getType().equals(TerrainType.Factory) && owner.equals("Player1");
     }
