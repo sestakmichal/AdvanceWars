@@ -124,4 +124,17 @@ public class Controller {
             game.nextTurn();
         }
     }
+
+    public void handleSpawnRequest(String type, Position pos, int cost) {
+        String currentPlayer = game.getCurrentPlayer();
+        int currentMoney = game.getPlayerMoney(currentPlayer);
+
+        if (currentMoney >= cost) {
+            game.setPlayerMoney(currentPlayer, currentMoney - cost);
+            game.spawnUnit(type, currentPlayer, pos.getRow(), pos.getCol());
+        } else {
+            System.out.println("Not enough money!");
+            // Notify "NotEnoughMoneyEvent"
+        }
+    }
 }

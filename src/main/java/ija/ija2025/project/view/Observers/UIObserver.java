@@ -5,7 +5,7 @@ import ija.ija2025.project.model.Events.*;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Units.Unit;
-import ija.ija2025.project.view.ActionMenu;
+import ija.ija2025.project.view.Menu.ActionMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -17,7 +17,8 @@ import javafx.scene.text.Font;
 public class UIObserver implements Observer {
     private final Pane uiLayer;
     private final Controller controller;
-    private ActionMenu currentMenu = null;
+    private ActionMenu currentActionMenu = null;
+    private FactoryMenu currentFactoryMenu = null;
 
     // status bar components
     private HBox statusBar;
@@ -42,24 +43,43 @@ public class UIObserver implements Observer {
     private void showMenu(Position pos, Unit unit) {
         hideMenu();
 
-        currentMenu = new ActionMenu(controller, this::hideMenu);
-        currentMenu.updateButtons(unit);
+        currentActionMenu = new ActionMenu(controller, this::hideMenu);
+        currentActionMenu.updateButtons(unit);
 
         double x = pos.getCol() * 60;
         double y = pos.getRow() * 60;
 
         // offset the menu
-        currentMenu.setLayoutX(x + 50);
-        currentMenu.setLayoutY(y + 10);
+        currentActionMenu.setLayoutX(x + 50);
+        currentActionMenu.setLayoutY(y + 10);
 
-        uiLayer.getChildren().add(currentMenu);
-        currentMenu.toFront();
+        uiLayer.getChildren().add(currentActionMenu);
+        currentActionMenu.toFront();
+    }
+
+    private void showFactoryMenu(Position pos) {
+        hideMenu();
+
+        // FactoryMenu would be a new class you create (VBox or Pane)
+        currentFactoryMenu = new FactoryMenu(controller, pos, this::hideMenu);
+
+        double x = pos.getCol() * 60;
+        double y = pos.getRow() * 60;
+
+        currentFactoryMenu.setLayoutX(x + 65);
+        currentFactoryMenu.setLayoutY(y);
+
+        uiLayer.getChildren().add(currentFactoryMenu);
     }
 
     private void hideMenu() {
-        if (currentMenu != null) {
-            uiLayer.getChildren().remove(currentMenu);
-            currentMenu = null;
+        if (currentActionMenu != null) {
+            uiLayer.getChildren().remove(currentActionMenu);
+            currentActionMenu = null;
+        }
+        if (currentFactoryMenu != null) {
+            uiLayer.getChildren().remove(currentFactoryMenu);
+            currentFactoryMenu = null;
         }
     }
 
@@ -108,7 +128,7 @@ public class UIObserver implements Observer {
             }
         }
         if (event instanceof TurnChangedEvent(String player)) {
-            turnLabel.setText("P2 Money: " + player);
+            turnLabel.setText("Turn: " + player);
         }
     }
 }
