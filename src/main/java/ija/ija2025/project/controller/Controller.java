@@ -19,17 +19,14 @@ public class Controller {
     /// When Unit clicked, first display menu with move/attack/capture/wait options
     ///
     public void handleTileClick(Position position) {
-        if (currentPhase != TurnPhase.ACTION) {
-            return;
-        }
-
+        if (currentPhase != TurnPhase.ACTION) { return; }
         // select unit
 
         if (currentState == TurnState.IDLE) {
             if (game.canUnitAct(position)) {
-                game.hidePositions();
+
                 selectedPos = position;
-                selectDoablePositions(selectedPos);
+                finalizeAction();
                 return;
             }
             deselect();
@@ -37,11 +34,10 @@ public class Controller {
 
         if (currentState == TurnState.MOVING) {
             if (game.canUnitMove(selectedPos) && game.canUnitMoveTo(selectedPos, position)) {
-                game.hidePositions();
                 commandManager.execute(new MoveCommand(game, selectedPos, position));
+
                 selectedPos = position;
-                selectDoablePositions(selectedPos);
-                currentState = TurnState.IDLE;
+                finalizeAction();
                 return;
             }
             deselect();
@@ -49,13 +45,11 @@ public class Controller {
 
         if (currentState == TurnState.ATTACKING) {
             if (game.canUnitAct(selectedPos) && game.canUnitAttackAt(selectedPos, position)) {
-                game.hidePositions();
                 Unit attacker = game.getUnitAt(selectedPos);
                 Unit target = game.getUnitAt(position);
-
                 commandManager.execute(new AttackCommand(game, attacker, target));
-                selectDoablePositions(selectedPos);
-                currentState = TurnState.IDLE;
+
+                finalizeAction();
                 return;
             }
             deselect();
@@ -63,12 +57,10 @@ public class Controller {
 
         if (currentState == TurnState.CAPTURING) {
             if (game.canUnitAct(selectedPos) && game.canUnitCaptureAt(selectedPos)) {
-                game.hidePositions();
-
                 Unit capturer = game.getUnitAt(selectedPos);
                 commandManager.execute(new CaptureCommand(game, capturer));
-                selectDoablePositions(selectedPos);
-                currentState = TurnState.IDLE;
+
+                finalizeAction();
                 return;
             }
             deselect();
@@ -93,7 +85,9 @@ public class Controller {
             }
             case WAIT -> {
                 currentState = TurnState.IDLE;
-                game.waitUnit(selectedPos);
+                commandManager.execute(new WaitCommand(game, game.getUnitAt(selectedPos)));
+                game.hideMenu();
+                finalizeAction();
             }
         }
 
@@ -101,24 +95,33 @@ public class Controller {
 
     /// maybe divide into specific actions, disable action ability here
 
-
-    public void handleTurnChange() {
-        game.nextTurn();
-    }
-
     private void deselect() {
         currentState = TurnState.IDLE;
         selectedPos = null;
         game.hidePositions();
     }
 
-    private void selectDoablePositions(Position pos) {
+
+    private void finalizeAction() {
+        currentState = TurnState.IDLE;
+        showPositions(selectedPos);
+        checkTurn();
+    }
+
+    private void showPositions(Position pos) {
+        game.hidePositions();
         if (game.canUnitMove(pos)) {
             game.showMovablePositions(pos);
         }
         if (game.canUnitAct(pos)) {
             game.showAttackablePositions(pos);
             game.showUnitPosition(pos);
+        }
+    }
+
+    private void checkTurn() {
+        if (!game.unitsAreAvailableForCurrentPlayer()) {
+            game.nextTurn();
         }
     }
 }
