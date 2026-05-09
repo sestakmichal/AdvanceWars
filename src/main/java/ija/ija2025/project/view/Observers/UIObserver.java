@@ -6,6 +6,7 @@ import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.view.Menu.ActionMenu;
+import ija.ija2025.project.view.Menu.FactoryMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
