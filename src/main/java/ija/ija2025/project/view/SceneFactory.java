@@ -7,12 +7,14 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
 public class SceneFactory {
-    public static Scene initializeScene(Stage stage, Node mapGrid, Node uiPane) {
+    public static Scene initializeScene(Stage stage, Node mapGrid, Node uiPane, Node statusBar) {
         StackPane contentStack = new StackPane(mapGrid, uiPane);
 
         Group zoomGroup = new Group(contentStack);
@@ -20,11 +22,16 @@ public class SceneFactory {
         StackPane centeredWrapper = new StackPane(zoomGroup);
         StackPane.setAlignment(zoomGroup, Pos.CENTER);
 
-        ScrollPane root = new ScrollPane(centeredWrapper);
-        root.setFitToWidth(true);
-        root.setFitToHeight(true);
+        ScrollPane gameScrollPane = new ScrollPane(centeredWrapper);
+        gameScrollPane.setFitToWidth(true);
+        gameScrollPane.setFitToHeight(true);
 
-        Scene scene = new Scene(root, 850, 650);
+        VBox root = new VBox();
+        root.getChildren().addAll(statusBar, gameScrollPane);
+
+        VBox.setVgrow(gameScrollPane, Priority.ALWAYS);
+
+        Scene scene = new Scene(root, 850, 700);
 
         contentStack.scaleXProperty().bind(Bindings.min(
                 scene.widthProperty().divide(850),

@@ -6,12 +6,24 @@ import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.view.ActionMenu;
-import javafx.scene.layout.Pane;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class UIObserver implements Observer {
-    private final Pane uiLayer; // The JavaFX Pane where the menu sits
+    private final Pane uiLayer;
     private final Controller controller;
     private ActionMenu currentMenu = null;
+
+    // status bar components
+    private HBox statusBar;
+    private Label turnLabel;
+    private Label p1MoneyLabel;
+    private Label p2MoneyLabel;
 
     public UIObserver(Controller controller) {
         this.uiLayer = new Pane();
@@ -19,9 +31,13 @@ public class UIObserver implements Observer {
 
         // click passthrough, so the grid can be selected
         this.uiLayer.setPickOnBounds(false);
+
+        initStatusBar();
     }
 
     public Pane getPane() { return uiLayer; }
+
+    public Node getStatusBar() { return this.statusBar; }
 
     private void showMenu(Position pos, Unit unit) {
         hideMenu();
@@ -47,7 +63,29 @@ public class UIObserver implements Observer {
         }
     }
 
+    private void initStatusBar() {
+        statusBar = new HBox(40); // 40px spacing
+        statusBar.setAlignment(Pos.CENTER);
+        statusBar.setBackground(new Background(new BackgroundFill(
+                Color.rgb(0, 0, 0, 0.7),
+                CornerRadii.EMPTY,
+                Insets.EMPTY
+        )));
+        statusBar.setPrefWidth(800);
 
+
+        p1MoneyLabel = new Label("P1 Money: 10000");
+        p1MoneyLabel.setTextFill(Color.GOLD);
+
+        turnLabel = new Label("Turn: Player1");
+        turnLabel.setTextFill(Color.WHITE);
+        turnLabel.setFont(new Font("Arial", 18));
+
+        p2MoneyLabel = new Label("P2 Money: 10000");
+        p2MoneyLabel.setTextFill(Color.GOLD);
+
+        statusBar.getChildren().addAll(p1MoneyLabel, turnLabel, p2MoneyLabel);
+    }
 
     @Override
     public void update(Event event) {
@@ -59,6 +97,18 @@ public class UIObserver implements Observer {
         }
         if (event instanceof MenuHiddenEvent) {
             hideMenu();
+        }
+
+        if (event instanceof MoneyEarnedEvent(String player, int amount)) {
+            if (player.equals("Player1")) {
+                p1MoneyLabel.setText("P1 Money: " + amount);
+            }
+            else if (player.equals("Player2")) {
+                p2MoneyLabel.setText("P2 Money: " + amount);
+            }
+        }
+        if (event instanceof TurnChangedEvent(String player)) {
+            turnLabel.setText("P2 Money: " + player);
         }
     }
 }
