@@ -150,11 +150,9 @@ public class Game implements Observable {
 
     }
 
-    public void waitUnit(Position pos) {
-        Unit unit = getUnitAt(pos);
+    public void waitUnit(Unit unit) {
         if (unit == null) return;
         unit.setActed();
-        hidePositions();
     }
 
 
@@ -221,7 +219,12 @@ public class Game implements Observable {
         return unit != null && unit.isOwnedBy(currentPlayer) && unit.canAct();
     }
 
-
+    public boolean unitsAreAvailableForCurrentPlayer() {
+        for (Unit unit : getUnits()) {
+            if (unit.isOwnedBy(currentPlayer) && unit.canAct()) return true;
+        }
+        return false;
+    }
 
     /// POSITION displays
     public void showMovablePositions(Position pos) {
@@ -278,9 +281,7 @@ public class Game implements Observable {
         return result;
     }
 
-    public void addObserver(Observer gameObserver) {
-        this.gameObservers.add(gameObserver);
-    }
+    public void addObserver(Observer gameObserver) {this.gameObservers.add(gameObserver);}
     public void removeObserver(Observer gameObserver) { this.gameObservers.remove(gameObserver); }
     private void notifyObservers(Event event) {
         for (Observer observer: gameObservers) {

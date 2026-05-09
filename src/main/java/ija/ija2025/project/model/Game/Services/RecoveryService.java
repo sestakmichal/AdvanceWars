@@ -46,7 +46,6 @@ public class RecoveryService {
         }
 
         return income;
-
     }
 
     private static int calculateRepairCost(Unit unit, int hpGained) {

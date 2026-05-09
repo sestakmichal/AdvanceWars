@@ -73,7 +73,7 @@ public class Tile extends StackPane {
 
     private Color getTerrainColor(TerrainType type) {
         return switch (type) {
-            case Plain -> Color.LAWNGREEN;
+            case Plain -> Color.LIGHTGREEN;
             case Forest -> Color.FORESTGREEN;
             case Mountain -> Color.SADDLEBROWN;
             case Water -> Color.AQUA;
