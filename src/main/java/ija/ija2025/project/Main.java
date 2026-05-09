@@ -32,7 +32,7 @@ public class Main extends Application {
         mapView.initializeMap(controller, game.getMap());
         game.notifyInitialState();
 
-        Scene scene = SceneFactory.initializeScene(stage, mapView.getGrid(), UIView.getPane());
+        Scene scene = SceneFactory.initializeScene(stage, mapView.getGrid(), UIView.getPane(), UIView.getStatusBar());
 
         stage.setTitle("IJA 2025");
         stage.setScene(scene);

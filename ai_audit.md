@@ -75,6 +75,15 @@
 * **Úprava studentem:** Přidaná funkcionalita čudlíků a interaktivity
 * **Míra generování:** 75%.
 
+## 6. Circular healthbar
+* **Nástroj:** Gemini 3
+* **Datum:** 9. 5. 2025
+* **Prompt:**
+  > "Curcular healthbar that would be behind a unit and would react on hp change"
+* **Použití:** Vizualizér HP okolo jednotky
+* **Úprava studentem:** Centrování objektu, po ubrání hp se půl kruh rozhodil.
+* **Míra generování:** 80%.
+
 
 
 *(Sekce kopírujte dle potřeby pro každou významnou část kódu, kde byla použita AI)*

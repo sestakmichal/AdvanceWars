@@ -25,8 +25,8 @@ public class Game implements Observable {
 
 
     public Game() {
-        playerMoney.put("Player1", 0);
-        playerMoney.put("Player2", 0);
+        playerMoney.put("Player1", 10000);
+        playerMoney.put("Player2", 10000);
     }
 
     public Position getSize() { return mapSize; }
