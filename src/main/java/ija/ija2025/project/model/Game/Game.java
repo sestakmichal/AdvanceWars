@@ -182,8 +182,9 @@ public class Game implements Observable {
     }
 
     public void nextTurn() {
-        notifyObservers(new TurnChangedEvent(currentPlayer));
         currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
+        notifyObservers(new TurnChangedEvent(currentPlayer));
+
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
                 unit.restoreState();
@@ -204,8 +205,6 @@ public class Game implements Observable {
                 notifyObservers(new HealthRecoveredEvent(unit, unit.getHealth()));
             }
         }
-
-        /// NOTIFY Phase change
     }
 
 
