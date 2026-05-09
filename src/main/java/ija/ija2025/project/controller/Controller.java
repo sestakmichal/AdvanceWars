@@ -24,9 +24,14 @@ public class Controller {
 
         if (currentState == TurnState.IDLE) {
             if (game.canUnitAct(position)) {
-
                 selectedPos = position;
                 finalizeAction();
+                return;
+            }
+            if (game.isOwnedFactory(position)) {
+
+                /// Action for factory
+
                 return;
             }
             deselect();
@@ -85,8 +90,8 @@ public class Controller {
             }
             case WAIT -> {
                 currentState = TurnState.IDLE;
-                commandManager.execute(new WaitCommand(game, game.getUnitAt(selectedPos)));
                 game.hideMenu();
+                commandManager.execute(new WaitCommand(game, game.getUnitAt(selectedPos)));
                 finalizeAction();
             }
         }
@@ -100,7 +105,6 @@ public class Controller {
         selectedPos = null;
         game.hidePositions();
     }
-
 
     private void finalizeAction() {
         currentState = TurnState.IDLE;

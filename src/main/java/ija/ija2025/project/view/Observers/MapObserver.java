@@ -66,7 +66,6 @@ public class MapObserver implements Observer {
     @Override
     public void update(Event event) {
         if (event instanceof UnitMovedEvent(Unit unit, Position from, Position to)) {
-
             Tile fromTile = getTile(from), toTile = getTile(to);
             Node sprite = fromTile.getUnitVisual();
 
@@ -83,7 +82,6 @@ public class MapObserver implements Observer {
 
         if (event instanceof UnitAttackedEvent(Unit attacker, Unit target, int damage)) {
             Position targetPos = target.getPosition();
-
             SpriteFactory.updateUnitHealth(getTile(targetPos).getUnitVisual(), target.getHealth());
         }
 
@@ -109,6 +107,11 @@ public class MapObserver implements Observer {
 
         if (event instanceof PositionsHiddenEvent) {
             clearAllHighlights();
+        }
+
+        if (event instanceof HealthRecoveredEvent(Unit unit, int health)) {
+            Position pos = unit.getPosition();
+            SpriteFactory.updateUnitHealth(getTile(pos).getUnitVisual(), unit.getHealth());
         }
     }
 }

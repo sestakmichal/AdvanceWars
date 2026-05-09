@@ -1,16 +1,17 @@
 package ija.ija2025.project.model.Buildings;
 
 import ija.ija2025.project.model.Map.Position;
+import ija.ija2025.project.model.Map.TerrainType;
 
 public class Building {
-    private String type;
+    private TerrainType type;
     private String owner;
     private Position position;
 
     private int health;
     private final int maxHealth;
 
-    public Building(String type, String owner, int row, int col) {
+    public Building(TerrainType type, String owner, int row, int col) {
         this.type = type;
         this.owner = (owner == null || owner.isBlank()) ? "Neutral" : owner;
 
@@ -20,7 +21,7 @@ public class Building {
         this.health = maxHealth;
     }
 
-    public String getType() { return type; }
+    public TerrainType getType() { return type; }
     public String getOwner() { return owner; }
     public Position getPosition() { return position; }
     public int getHealth() { return health; }
@@ -51,7 +52,7 @@ public class Building {
 
     public int getIncome() {
         return switch (type) {
-            case "C" -> 1000;
+            case City -> 1000;
             default -> 0;
         };
     }

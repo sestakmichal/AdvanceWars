@@ -65,7 +65,7 @@ public class GameFactory {
 
             int row = b.get("row").asInt();
             int col = b.get("col").asInt();
-            String type = b.get("type").asText();
+            TerrainType type = TerrainType.fromString(b.get("type").asText());
 
             String owner = resolveOwner(b);
 

@@ -56,12 +56,12 @@ public class Game implements Observable {
         }
     }
 
-    public Building spawnBuilding(String type, String owner, int row, int col) {
+    public Building spawnBuilding(TerrainType type, String owner, int row, int col) {
 
         Building building = switch (type) {
-            case "HQ" -> new Building("HQ", owner, row, col);
-            case "C" -> new Building("C", owner, row, col);
-            case "FCT" -> new Building("FCT", owner, row, col);
+            case HQ -> new Building(TerrainType.HQ, owner, row, col);
+            case City -> new Building(TerrainType.City, owner, row, col);
+            case Factory -> new Building(TerrainType.Factory, owner, row, col);
             default -> throw new IllegalStateException("Unexpected building type: " + type);
         };
 
@@ -194,13 +194,26 @@ public class Game implements Observable {
 
     private void applyRecoveryPhase() {
         RecoveryService.applyMoneyRecovery(this);
-        /// Notify money applied
+        notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));
+
         RecoveryService.applyHealthRecovery(this);
-        /// Notify  apply health
+
+        for (Unit unit : unitsMap.values()) {
+            if (unit.isOwnedBy(currentPlayer)) {
+                notifyObservers(new HealthRecoveredEvent(unit, unit.getHealth()));
+            }
+        }
+
         /// NOTIFY Phase change
     }
 
 
+
+    public boolean isOwnedFactory(Position pos) {
+        Building building = getBuildingAt(pos);
+        String owner = building.getOwner();
+        return building.getType().equals(TerrainType.Factory) && owner.equals("Player1");
+    }
 
     public boolean isOwnedBuilding(Position pos) {
         TerrainType type = getTerrainAt(pos);
@@ -237,9 +250,7 @@ public class Game implements Observable {
         notifyObservers(new AttackablePositionsShownEvent(attackable));
     }
 
-    public void showUnitPosition(Position pos) {
-        notifyObservers(new UnitPositionShownEvent(pos, getUnitAt(pos)));
-    }
+    public void showUnitPosition(Position pos) { notifyObservers(new UnitPositionShownEvent(pos, getUnitAt(pos))); }
 
     public void hidePositions() {notifyObservers(new PositionsHiddenEvent());}
 
