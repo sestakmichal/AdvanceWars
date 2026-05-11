@@ -53,8 +53,8 @@ public class FactoryMenu extends VBox {
         button.setGraphic(label);
         button.setMaxWidth(Double.MAX_VALUE);
 
+        // Normal state
         if (canAfford) {
-            // Normal state
             button.setBackground(new Background(new BackgroundFill(color, new CornerRadii(6), Insets.EMPTY)));
 
             button.setOnMousePressed(e -> { button.setOpacity(0.7); button.setScaleX(0.95); button.setScaleY(0.95); });
