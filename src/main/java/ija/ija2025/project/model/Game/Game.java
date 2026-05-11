@@ -13,7 +13,6 @@ import java.util.*;
 
 public class Game implements Observable {
     private List<Observer> gameObservers = new ArrayList<>();
-
     private Position mapSize;
     private TerrainType[][] map;
     private HashMap<Position, Unit> unitsMap = new HashMap<>();
@@ -22,12 +21,6 @@ public class Game implements Observable {
     private Map<String, Integer> playerMoney = new HashMap<>();
 
     private Map<Position, Building> buildingsMap = new HashMap<>();
-
-
-    public Game() {
-        playerMoney.put("Player1", 3000);
-        playerMoney.put("Player2", 3000);
-    }
 
     public Position getSize() { return mapSize; }
     public TerrainType[][] getMap() {return map;}
@@ -93,7 +86,7 @@ public class Game implements Observable {
 
     public void removeUnit(Unit unit) {
         unitsMap.remove(unit.getPosition());
-        /// Notify unit removal here
+        notifyObservers(new UnitDestroyedEvent(unit));
     }
 
     /// UNIT ACTIONS
@@ -164,7 +157,7 @@ public class Game implements Observable {
     }
 
 
-    ///  UNIT POSSIBILITIES
+    ///  UNIT ACTIONS
     public boolean canUnitMoveTo(Position startPos, Position endPos) {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return false;
@@ -189,6 +182,7 @@ public class Game implements Observable {
         return !building.getOwner().equals(currentPlayer);
     }
 
+
     public void nextTurn() {
         currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
         notifyObservers(new TurnChangedEvent(currentPlayer));
@@ -201,12 +195,10 @@ public class Game implements Observable {
         applyRecoveryPhase();
     }
 
-
     private void applyRecoveryPhase() {
         RecoveryService.applyMoneyRecovery(this);
-        notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));
-
         RecoveryService.applyHealthRecovery(this);
+        notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));
 
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
@@ -215,13 +207,19 @@ public class Game implements Observable {
         }
     }
 
+    ///  MENU displays
 
+    public void hideMenu() { notifyObservers(new MenuHiddenEvent()); }
+    public void openFactoryMenu(Position pos) { notifyObservers(new FactoryMenuShownEvent(pos)); }
+
+
+    ///  OWNERSHIP
 
     public boolean isOwnedFactory(Position pos) {
         Building building = getBuildingAt(pos);
         if (building == null) return false;
         String owner = building.getOwner();
-        return building.getType().equals(TerrainType.Factory) && owner.equals(getCurrentPlayer());
+        return building.getType().equals(TerrainType.Factory) && owner.equals(currentPlayer);
     }
 
     public boolean isOwnedBuilding(Position pos) {
@@ -248,6 +246,7 @@ public class Game implements Observable {
         return false;
     }
 
+
     /// POSITION displays
     public void showMovablePositions(Position pos) {
         List<Position> reachable = getMovablePositions(pos);
@@ -263,9 +262,6 @@ public class Game implements Observable {
 
     public void hidePositions() {notifyObservers(new PositionsHiddenEvent());}
 
-    public void hideMenu() { notifyObservers(new MenuHiddenEvent()); }
-
-    public void openFactoryMenu(Position pos) { notifyObservers(new ShowFactoryMenuEvent(pos)); }
 
     public List<Position> getMovablePositions(Position startPos) {
         Unit unit = getUnitAt(startPos);
