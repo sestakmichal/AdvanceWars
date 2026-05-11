@@ -261,7 +261,7 @@ public class Game implements Observable {
         Unit unit = getUnitAt(startPos);
         if (unit == null) return new ArrayList<>();
 
-        List<Position> reachablePositions = PathFindingService.getReachablePositions(map, unit, startPos);
+        List<Position> reachablePositions = PathFindingService.getReachablePositions(map, unitsMap, unit, startPos);
         List<Position> result = new ArrayList<>();
 
         for (Position pos : reachablePositions) {

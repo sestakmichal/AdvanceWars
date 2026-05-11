@@ -8,7 +8,12 @@ import java.util.*;
 
 public class PathFindingService {
 
-    public static List<Position> getReachablePositions(TerrainType[][] map, Unit unit, Position startPos) {
+    public static List<Position> getReachablePositions(
+        TerrainType[][] map,
+        HashMap<Position, Unit> allUnits,
+        Unit unit,
+        Position startPos)
+    {
         if (map == null || unit == null || startPos == null) {return new ArrayList<>();}
         int height = map.length;
         int width = map[0].length;
@@ -35,7 +40,11 @@ public class PathFindingService {
             int col = current[2];
 
             if (cost > maxUnitRange) continue;
-            reachable.add(new Position(row, col));
+
+            Unit unitOnTile = allUnits.get(new Position(row, col));
+
+            // do not allow to move on any kind of unit
+            if (unitOnTile == null) reachable.add(new Position(row, col));
 
             for (int[] dir : new int[][]{
                     {1,  0}, // right
@@ -51,8 +60,14 @@ public class PathFindingService {
                 int newCost = cost + unit.getMovementPrice(map[newRow][newCol]);
 
                 if (newCost <= maxUnitRange && newCost < distanceMap[newRow][newCol]) {
-                    distanceMap[newRow][newCol] = newCost;
-                    prQueue.add(new int[]{newCost, newRow, newCol});
+                    Unit blockingUnit = allUnits.get(new Position(newRow, newCol));
+                    boolean isEnemy = blockingUnit != null && !unit.getOwner().equals(blockingUnit.getOwner());
+
+                    // can't move through enemy
+                    if (!isEnemy) {
+                        distanceMap[newRow][newCol] = newCost;
+                        prQueue.add(new int[]{newCost, newRow, newCol});
+                    }
                 }
             }
         }
