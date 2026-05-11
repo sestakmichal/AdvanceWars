@@ -124,16 +124,12 @@ public class Game implements Observable {
     }
 
     public void captureBuilding(Unit unit) {
-        System.out.println("not capture");
-        if (unit == null) return;
-        System.out.println("Tried capture");
+        if (!(unit instanceof Infantry)) return;
 
-        Position unitPos = unit.getPosition();
-        Building building = getBuildingAt(unitPos);
-
-        int captureDamage = (int) Math.floor(unit.getHealth()*0.1);
+        Building building = getBuildingAt(unit.getPosition());
         if (building == null) return;
 
+        int captureDamage = (int) Math.floor(unit.getHealth()*0.1);
         building.takeCaptureDamage(captureDamage, currentPlayer);
         unit.setActed();
 
@@ -142,7 +138,6 @@ public class Game implements Observable {
         if (building.getOwner().equals(currentPlayer)) {
             notifyObservers(new BuildingCapturedEvent(unit));
         }
-
     }
 
     public void waitUnit(Unit unit) {
@@ -151,7 +146,7 @@ public class Game implements Observable {
     }
 
 
-    ///  UNIT ACTIONS
+    /// UNIT ACTIONS
     public boolean canUnitMoveTo(Position startPos, Position endPos) {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return false;
@@ -202,13 +197,11 @@ public class Game implements Observable {
     }
 
     ///  MENU displays
-
     public void hideMenu() { notifyObservers(new MenuHiddenEvent()); }
     public void openFactoryMenu(Position pos) { notifyObservers(new FactoryMenuShownEvent(pos)); }
 
 
     ///  OWNERSHIP
-
     public boolean isOwnedFactory(Position pos) {
         Building building = getBuildingAt(pos);
         if (building == null) return false;
@@ -257,6 +250,7 @@ public class Game implements Observable {
     public void hidePositions() {notifyObservers(new PositionsHiddenEvent());}
 
 
+    ///  POSITIONS retrieval
     public List<Position> getMovablePositions(Position startPos) {
         Unit unit = getUnitAt(startPos);
         if (unit == null) return new ArrayList<>();
@@ -271,7 +265,6 @@ public class Game implements Observable {
                 result.add(pos);
             }
         }
-
         return result;
     }
 
@@ -289,7 +282,6 @@ public class Game implements Observable {
                 result.add(pos);
             }
         }
-
         return result;
     }
 
