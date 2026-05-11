@@ -41,6 +41,8 @@ public class FactoryMenu extends VBox {
     }
 
     private Button createSpawnButton(String name, int price, Color color, Controller controller, Position pos, Runnable onClose) {
+        boolean canAfford = controller.canAffordUnit(price);
+
         // Label with Name and Price
         Label label = new Label(name + " ($" + price + ")");
         label.setFont(Font.font("Arial", FontWeight.BOLD, 14));
@@ -50,16 +52,29 @@ public class FactoryMenu extends VBox {
         Button button = new Button();
         button.setGraphic(label);
         button.setMaxWidth(Double.MAX_VALUE);
-        button.setBackground(new Background(new BackgroundFill(color, new CornerRadii(6), Insets.EMPTY)));
 
-        // Reuse your cool animations
-        button.setOnMousePressed(e -> { button.setOpacity(0.7); button.setScaleX(0.95); button.setScaleY(0.95); });
-        button.setOnMouseReleased(e -> { button.setOpacity(1.0); button.setScaleX(1.0); button.setScaleY(1.0); });
+        if (canAfford) {
+            // Normal state
+            button.setBackground(new Background(new BackgroundFill(color, new CornerRadii(6), Insets.EMPTY)));
 
-        button.setOnAction(e -> {
-            controller.handleSpawnRequest(name, pos, price);
-            onClose.run();
-        });
+            button.setOnMousePressed(e -> { button.setOpacity(0.7); button.setScaleX(0.95); button.setScaleY(0.95); });
+            button.setOnMouseReleased(e -> { button.setOpacity(1.0); button.setScaleX(1.0); button.setScaleY(1.0); });
+
+            button.setOnAction(e -> {
+                controller.handleSpawnRequest(name, pos, price);
+                onClose.run();
+            });
+        }
+        // grayed out button => can't afford
+        else {
+            Color darkenedColor = color.deriveColor(0, 1, 0.3, 1.0);
+            button.setBackground(new Background(new BackgroundFill(darkenedColor, new CornerRadii(6), Insets.EMPTY)));
+
+            label.setTextFill(Color.LIGHTGRAY);
+
+            button.setDisable(true);
+            button.setOpacity(0.6);
+        }
 
         return button;
     }

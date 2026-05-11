@@ -25,8 +25,8 @@ public class Game implements Observable {
 
 
     public Game() {
-        playerMoney.put("Player1", 10000);
-        playerMoney.put("Player2", 10000);
+        playerMoney.put("Player1", 3000);
+        playerMoney.put("Player2", 3000);
     }
 
     public Position getSize() { return mapSize; }
@@ -54,6 +54,8 @@ public class Game implements Observable {
         for (Unit u : unitsMap.values()) {
             notifyObservers(new UnitSpawnedEvent(u, u.getPosition()));
         }
+        notifyObservers(new MoneyChangedEvent("Player1", getPlayerMoney("Player1")));
+        notifyObservers(new MoneyChangedEvent("Player2", getPlayerMoney("Player2")));
     }
 
     public Building spawnBuilding(TerrainType type, String owner, int row, int col) {
@@ -213,7 +215,7 @@ public class Game implements Observable {
         Building building = getBuildingAt(pos);
         if (building == null) return false;
         String owner = building.getOwner();
-        return building.getType().equals(TerrainType.Factory) && owner.equals("Player1");
+        return building.getType().equals(TerrainType.Factory) && owner.equals(getCurrentPlayer());
     }
 
     public boolean isOwnedBuilding(Position pos) {
@@ -256,6 +258,8 @@ public class Game implements Observable {
     public void hidePositions() {notifyObservers(new PositionsHiddenEvent());}
 
     public void hideMenu() { notifyObservers(new MenuHiddenEvent()); }
+
+    public void openFactoryMenu(Position pos) { notifyObservers(new ShowFactoryMenuEvent(pos)); }
 
     public List<Position> getMovablePositions(Position startPos) {
         Unit unit = getUnitAt(startPos);

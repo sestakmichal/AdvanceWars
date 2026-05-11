@@ -41,7 +41,7 @@ public class UIObserver implements Observer {
 
     public Node getStatusBar() { return this.statusBar; }
 
-    private void showMenu(Position pos, Unit unit) {
+    private void showActionMenu(Position pos, Unit unit) {
         hideMenu();
 
         currentActionMenu = new ActionMenu(controller, this::hideMenu);
@@ -61,16 +61,16 @@ public class UIObserver implements Observer {
     private void showFactoryMenu(Position pos) {
         hideMenu();
 
-        // FactoryMenu would be a new class you create (VBox or Pane)
         currentFactoryMenu = new FactoryMenu(controller, pos, this::hideMenu);
 
         double x = pos.getCol() * 60;
         double y = pos.getRow() * 60;
 
-        currentFactoryMenu.setLayoutX(x + 65);
-        currentFactoryMenu.setLayoutY(y);
+        currentFactoryMenu.setLayoutX(x + 50);
+        currentFactoryMenu.setLayoutY(y + 10);
 
         uiLayer.getChildren().add(currentFactoryMenu);
+        currentFactoryMenu.toFront();
     }
 
     private void hideMenu() {
@@ -111,7 +111,10 @@ public class UIObserver implements Observer {
     @Override
     public void update(Event event) {
         if (event instanceof UnitPositionShownEvent(Position position, Unit unit)) {
-            showMenu(position, unit);
+            showActionMenu(position, unit);
+        }
+        if (event instanceof ShowFactoryMenuEvent(Position position)) {
+            showFactoryMenu(position);
         }
         if (event instanceof PositionsHiddenEvent) {
             hideMenu();

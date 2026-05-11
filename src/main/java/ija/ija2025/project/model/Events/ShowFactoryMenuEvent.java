@@ -1,4 +1,5 @@
 package ija.ija2025.project.model.Events;
 
-public record ShowFactoryMenuEvent() {
-}
+import ija.ija2025.project.model.Map.Position;
+
+public record ShowFactoryMenuEvent(Position position) implements Event {}
