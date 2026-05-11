@@ -29,7 +29,7 @@ public class ActionMenu extends VBox {
     private static final Background BUTTON_BG = new Background(new BackgroundFill(Color.DARKGRAY, new CornerRadii(6), Insets.EMPTY));
     private static final DropShadow SHADOW = new DropShadow(10, Color.rgb(0, 0, 0, 0.6));
 
-    public ActionMenu(Controller controller, Runnable onClose) {
+    public ActionMenu(Controller controller, Runnable onClose, boolean shouldSkipCapture) {
         setSpacing(8);
         setPadding(new Insets(10));
         setBackground(MENU_BG);
@@ -37,6 +37,7 @@ public class ActionMenu extends VBox {
         setEffect(SHADOW);
 
         for (GameAction action : GameAction.values()) {
+            if (shouldSkipCapture && action == GameAction.CAPTURE) { continue; }
             Button button = createButton(action, controller, onClose);
             buttons.put(action, button);
             getChildren().add(button);
@@ -74,9 +75,13 @@ public class ActionMenu extends VBox {
     }
 
     public void updateButtons(Unit unit) {
-        buttons.get(GameAction.MOVE).setDisable(!unit.canMove());
-        buttons.get(GameAction.ATTACK).setDisable(!unit.canAct());
-        buttons.get(GameAction.CAPTURE).setDisable(!unit.canAct());
-        buttons.get(GameAction.WAIT).setDisable(!unit.canAct());
+        Button move = buttons.get(GameAction.MOVE);
+        if (move != null) move.setDisable(!unit.canMove());
+        Button attack = buttons.get(GameAction.ATTACK);
+        if (attack != null) attack.setDisable(!unit.canAct());
+        Button capture = buttons.get(GameAction.CAPTURE);
+        if (capture != null) capture.setDisable(!unit.canAct());
+        Button wait = buttons.get(GameAction.WAIT);
+        if (wait != null) wait.setDisable(!unit.canAct());
     }
 }

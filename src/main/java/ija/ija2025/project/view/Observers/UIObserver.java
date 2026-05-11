@@ -4,6 +4,7 @@ import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Events.*;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Observation.Observer;
+import ija.ija2025.project.model.Units.Infantry;
 import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.view.Menu.ActionMenu;
 import ija.ija2025.project.view.Menu.FactoryMenu;
@@ -44,7 +45,8 @@ public class UIObserver implements Observer {
     private void showActionMenu(Position pos, Unit unit) {
         hideMenu();
 
-        currentActionMenu = new ActionMenu(controller, this::hideMenu);
+        boolean skipCapture = !(unit instanceof Infantry);
+        currentActionMenu = new ActionMenu(controller, this::hideMenu, skipCapture);
         currentActionMenu.updateButtons(unit);
 
         double x = pos.getCol() * 60;
