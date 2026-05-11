@@ -29,7 +29,6 @@ public class Controller {
                 return;
             }
             if (game.isOwnedFactory(position)) {
-                System.out.println("Factory menu open");
                 game.openFactoryMenu(position);
                 return;
             }
@@ -133,11 +132,11 @@ public class Controller {
         int currentMoney = game.getPlayerMoney(currentPlayer);
 
         if (currentMoney >= cost) {
-            game.setPlayerMoney(currentPlayer, currentMoney - cost);
+            game.spendMoney(currentPlayer, currentMoney - cost);
             game.spawnUnit(type, currentPlayer, pos.getRow(), pos.getCol());
-        } else {
+        }
+        else {
             System.out.println("Not enough money!");
-            // Notify "NotEnoughMoneyEvent"
         }
     }
 

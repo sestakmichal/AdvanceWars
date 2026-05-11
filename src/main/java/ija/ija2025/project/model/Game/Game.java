@@ -41,7 +41,11 @@ public class Game implements Observable {
     public Building getBuildingAt(Position pos) {return buildingsMap.get(pos);}
     public String getTileOwner(Position pos) {return buildingsMap.get(pos).getOwner();}
     public int getPlayerMoney(String player) {return playerMoney.getOrDefault(player, 0);}
-    public void setPlayerMoney(String player, int amount) {playerMoney.put(player, amount);}
+    public void setPlayerMoney(String player, int amount) { playerMoney.put(player, amount); }
+    public void spendMoney(String player, int amount) {
+        setPlayerMoney(player, amount);
+        notifyObservers(new MoneyChangedEvent(player, amount));
+    }
 
     public Map<Position, Building> getBuildingsMap() { return buildingsMap; }
 
@@ -56,6 +60,7 @@ public class Game implements Observable {
         }
         notifyObservers(new MoneyChangedEvent("Player1", getPlayerMoney("Player1")));
         notifyObservers(new MoneyChangedEvent("Player2", getPlayerMoney("Player2")));
+        notifyObservers(new TurnChangedEvent(currentPlayer));
     }
 
     public Building spawnBuilding(TerrainType type, String owner, int row, int col) {
@@ -145,8 +150,9 @@ public class Game implements Observable {
         unit.setActed();
 
         notifyObservers(new BuildingAttackedEvent(unit, captureDamage));
-        System.out.println("Successfully capturing");
+        System.out.println("Successfully attacked building (" + captureDamage + " dmg)");
         if (building.getOwner().equals(currentPlayer)) {
+            System.out.println("Successfully captured");
             notifyObservers(new BuildingCapturedEvent(unit));
         }
 
