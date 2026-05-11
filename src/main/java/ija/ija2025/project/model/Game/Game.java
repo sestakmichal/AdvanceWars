@@ -23,12 +23,6 @@ public class Game implements Observable {
 
     private Map<Position, Building> buildingsMap = new HashMap<>();
 
-
-    public Game() {
-        playerMoney.put("Player1", 3000);
-        playerMoney.put("Player2", 3000);
-    }
-
     public Position getSize() { return mapSize; }
     public TerrainType[][] getMap() {return map;}
 
@@ -88,7 +82,7 @@ public class Game implements Observable {
 
     public void removeUnit(Unit unit) {
         unitsMap.remove(unit.getPosition());
-        /// Notify unit removal here
+        notifyObservers(new UnitDestroyedEvent(unit));
     }
 
     /// UNIT ACTIONS
@@ -198,9 +192,8 @@ public class Game implements Observable {
 
     private void applyRecoveryPhase() {
         RecoveryService.applyMoneyRecovery(this);
-        notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));
-
         RecoveryService.applyHealthRecovery(this);
+        notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));
 
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
@@ -215,7 +208,7 @@ public class Game implements Observable {
         Building building = getBuildingAt(pos);
         if (building == null) return false;
         String owner = building.getOwner();
-        return building.getType().equals(TerrainType.Factory) && owner.equals(getCurrentPlayer());
+        return building.getType().equals(TerrainType.Factory) && owner.equals(currentPlayer);
     }
 
     public boolean isOwnedBuilding(Position pos) {
