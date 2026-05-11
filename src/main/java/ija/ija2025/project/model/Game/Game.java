@@ -13,7 +13,6 @@ import java.util.*;
 
 public class Game implements Observable {
     private List<Observer> gameObservers = new ArrayList<>();
-
     private Position mapSize;
     private TerrainType[][] map;
     private HashMap<Position, Unit> unitsMap = new HashMap<>();
@@ -152,7 +151,7 @@ public class Game implements Observable {
     }
 
 
-    ///  UNIT POSSIBILITIES
+    ///  UNIT ACTIONS
     public boolean canUnitMoveTo(Position startPos, Position endPos) {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return false;
@@ -177,6 +176,7 @@ public class Game implements Observable {
         return !building.getOwner().equals(currentPlayer);
     }
 
+
     public void nextTurn() {
         currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
         notifyObservers(new TurnChangedEvent(currentPlayer));
@@ -188,7 +188,6 @@ public class Game implements Observable {
         }
         applyRecoveryPhase();
     }
-
 
     private void applyRecoveryPhase() {
         RecoveryService.applyMoneyRecovery(this);
@@ -202,7 +201,13 @@ public class Game implements Observable {
         }
     }
 
+    ///  MENU displays
 
+    public void hideMenu() { notifyObservers(new MenuHiddenEvent()); }
+    public void openFactoryMenu(Position pos) { notifyObservers(new FactoryMenuShownEvent(pos)); }
+
+
+    ///  OWNERSHIP
 
     public boolean isOwnedFactory(Position pos) {
         Building building = getBuildingAt(pos);
@@ -235,6 +240,7 @@ public class Game implements Observable {
         return false;
     }
 
+
     /// POSITION displays
     public void showMovablePositions(Position pos) {
         List<Position> reachable = getMovablePositions(pos);
@@ -250,9 +256,6 @@ public class Game implements Observable {
 
     public void hidePositions() {notifyObservers(new PositionsHiddenEvent());}
 
-    public void hideMenu() { notifyObservers(new MenuHiddenEvent()); }
-
-    public void openFactoryMenu(Position pos) { notifyObservers(new ShowFactoryMenuEvent(pos)); }
 
     public List<Position> getMovablePositions(Position startPos) {
         Unit unit = getUnitAt(startPos);

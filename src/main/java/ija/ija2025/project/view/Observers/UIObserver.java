@@ -113,7 +113,7 @@ public class UIObserver implements Observer {
         if (event instanceof UnitPositionShownEvent(Position position, Unit unit)) {
             showActionMenu(position, unit);
         }
-        if (event instanceof ShowFactoryMenuEvent(Position position)) {
+        if (event instanceof FactoryMenuShownEvent(Position position)) {
             showFactoryMenu(position);
         }
         if (event instanceof PositionsHiddenEvent) {
