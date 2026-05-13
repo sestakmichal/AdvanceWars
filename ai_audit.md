@@ -84,6 +84,15 @@
 * **Úprava studentem:** Centrování objektu, po ubrání hp se půl kruh rozhodil.
 * **Míra generování:** 80%.
 
+## 6. Map generation
+* **Nástroj:** Gemini 3
+* **Datum:** 13. 5. 2025
+* **Prompt:**
+  > "How to create a map generation that would spawn 2 HQ some cities and factories where there would be atleast 1 factory nearby to the HQ"
+* **Použití:** generace mapy s náhodným terénem a budovami
+* **Úprava studentem:** Přidání objektu Game a vytváření budov jako objektů ne jen terénu. Základní gamestate.
+* **Míra generování:** 70%.
+
 
 
 *(Sekce kopírujte dle potřeby pro každou významnou část kódu, kde byla použita AI)*
