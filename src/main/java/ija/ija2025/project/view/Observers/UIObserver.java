@@ -11,10 +11,12 @@ import ija.ija2025.project.view.Menu.FactoryMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class UIObserver implements Observer {
     private final Pane uiLayer;
@@ -95,8 +97,9 @@ public class UIObserver implements Observer {
                 Insets.EMPTY
         )));
         statusBar.setPrefWidth(800);
+        statusBar.setPadding(new Insets(0, 10, 0, 10));
 
-
+        // game status
         p1MoneyLabel = new Label("P1 Money: 10000");
         p1MoneyLabel.setTextFill(Color.GOLD);
 
@@ -107,7 +110,17 @@ public class UIObserver implements Observer {
         p2MoneyLabel = new Label("P2 Money: 10000");
         p2MoneyLabel.setTextFill(Color.GOLD);
 
-        statusBar.getChildren().addAll(p1MoneyLabel, turnLabel, p2MoneyLabel);
+        // save btn
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button saveButton = new Button("Save Game");
+        saveButton.setOnAction(e -> {
+            Stage stage = (Stage) statusBar.getScene().getWindow();
+            controller.handleSaveGame(stage);
+        });
+
+        statusBar.getChildren().addAll(p1MoneyLabel, turnLabel, p2MoneyLabel, spacer, saveButton);
     }
 
     @Override

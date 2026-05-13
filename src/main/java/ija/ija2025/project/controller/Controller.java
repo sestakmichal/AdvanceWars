@@ -1,8 +1,15 @@
 package ija.ija2025.project.controller;
 import ija.ija2025.project.model.Commands.*;
 import ija.ija2025.project.model.Game.*;
+import static ija.ija2025.project.model.Game.GameFactory.saveGameToJson;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;
+
+import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 
 public class Controller {
     Game game;
@@ -143,5 +150,45 @@ public class Controller {
     public boolean canAffordUnit(int unitValue) {
         int playerMoney = game.getPlayerMoney(game.getCurrentPlayer());
         return playerMoney >= unitValue;
+    }
+
+    public void handleSaveGame(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Game State");
+
+        // pick directory, Data/Maps else project directory
+        File defaultDirectory = new File("data/Maps");
+        if (defaultDirectory.exists() && defaultDirectory.isDirectory()) {
+            fileChooser.setInitialDirectory(defaultDirectory);
+        }
+        else {
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+        }
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json")
+        );
+
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file != null) {
+            try {
+                saveGameToJson(game, file.getAbsolutePath());
+
+                showNotification("Success", "Game saved successfully to:\n" + file.getName(), Alert.AlertType.INFORMATION);
+
+            } catch (Exception e) {
+                showNotification("Save Error", "Failed to save game: " + e.getMessage(), Alert.AlertType.ERROR);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void showNotification(String title, String content, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

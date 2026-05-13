@@ -1,15 +1,21 @@
 package ija.ija2025.project.model.Game;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import ija.ija2025.project.model.Buildings.Building;
 import ija.ija2025.project.model.Map.TerrainType;
+import ija.ija2025.project.model.Units.Unit;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ija.ija2025.project.model.Units.Unit;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
+import java.util.List;
+import java.util.Random;
 
 public class GameFactory {
+    // ------------------------- load -------------------------
     public static Game createGameFromJson(String filePath) {
         Game game = new Game();
 
@@ -21,7 +27,6 @@ public class GameFactory {
             loadMap(game, root.get("map"));
             loadBuildings(game, root.get("buildings"));
             loadUnits(game, root.get("units"));
-
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to load game JSON", e);
@@ -107,4 +112,163 @@ public class GameFactory {
         return owner;
     }
 
+    // ------------------------- save -------------------------
+    public static void saveGameToJson(Game game, String filePath) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+            ObjectNode root = mapper.createObjectNode();
+
+            saveGameState(game, root);
+            saveMap(game, root);
+            saveBuildings(game, root);
+            saveUnits(game, root);
+
+            mapper.writeValue(new File(filePath), root);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save game JSON", e);
+        }
+    }
+
+    private static void saveGameState(Game game, ObjectNode root) {
+        root.put("currentPlayer", game.getCurrentPlayer());
+
+        ObjectNode moneyNode = root.putObject("playerMoney");
+        List<String> players = List.of("Player1", "Player2");
+        for (String p : players) {
+            moneyNode.put(p, game.getPlayerMoney(p));
+        }
+    }
+
+    private static void saveMap(Game game, ObjectNode root) {
+        ArrayNode mapNode = root.putArray("map");
+        TerrainType[][] terrainMap = game.getMap();
+        for (TerrainType[] row : terrainMap) {
+            ArrayNode rowNode = mapNode.addArray();
+            for (TerrainType cell : row) {
+                rowNode.add(cell.toString());
+            }
+        }
+    }
+
+    private static void saveBuildings(Game game, ObjectNode root) {
+        ArrayNode buildingsNode = root.putArray("buildings");
+        for (Building b : game.getBuildingsMap().values()) {
+            ObjectNode bNode = buildingsNode.addObject();
+            bNode.put("type", b.getType().toString());
+            bNode.put("row", b.getPosition().getRow());
+            bNode.put("col", b.getPosition().getCol());
+            bNode.put("owner", b.getOwner());
+            bNode.put("hp", b.getHealth());
+        }
+    }
+
+    private static void saveUnits(Game game, ObjectNode root) {
+        ArrayNode unitsNode = root.putArray("units");
+        for (Unit u : game.getUnits()) {
+            ObjectNode uNode = unitsNode.addObject();
+            uNode.put("type", u.getType());
+            uNode.put("owner", u.getOwner());
+            uNode.put("row", u.getPosition().getRow());
+            uNode.put("col", u.getPosition().getCol());
+            uNode.put("hp", u.getHealth());
+        }
+    }
+
+    // ------------------------- generate -------------------------
+    public static Game generateNewGame(int rows, int cols) {
+        Game game = new Game();
+        TerrainType[][] map = new TerrainType[rows][cols];
+
+        // fill with Plain
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) map[r][c] = TerrainType.Plain;
+        }
+
+        // generate Nature
+        generateBlobs(map, TerrainType.Water, 2, 8);
+        generateBlobs(map, TerrainType.Mountain, 3, 5);
+        generateBlobs(map, TerrainType.Forest, 5, 6);
+
+        // basic game state
+        game.setCurrentPlayer("Player1");
+        game.setPlayerMoney("Player1", 3000);
+        game.setPlayerMoney("Player2", 3000);
+
+        // HQs
+        int hq1R = 1, hq1C = 1;
+        int hq2R = rows - 2, hq2C = cols - 2;
+
+        map[hq1R][hq1C] = TerrainType.HQ;
+        game.spawnBuilding(TerrainType.HQ, "Player1", hq1R, hq1C);
+
+        map[hq2R][hq2C] = TerrainType.HQ;
+        game.spawnBuilding(TerrainType.HQ, "Player2", hq2R, hq2C);
+
+        // factory and city near HQs
+        spawnNearbyWithBuilding(game, map, hq1R, hq1C, TerrainType.Factory, "Player1");
+        spawnNearbyWithBuilding(game, map, hq1R, hq1C, TerrainType.City, "Player1");
+        spawnNearbyWithBuilding(game, map, hq2R, hq2C, TerrainType.Factory, "Player2");
+        spawnNearbyWithBuilding(game, map, hq2R, hq2C, TerrainType.City, "Player2");
+
+        // scatter extra Cities
+        scatterBuildings(game, map, TerrainType.City, "Neutral", 4);
+
+        game.updateMap(map);
+        return game;
+    }
+
+    private static void generateBlobs(TerrainType[][] map, TerrainType type, int numBlobs, int maxSize) {
+        Random rand = new Random();
+        for (int i = 0; i < numBlobs; i++) {
+            // Pick a random starting point
+            int r = rand.nextInt(map.length);
+            int c = rand.nextInt(map[0].length);
+
+            int size = rand.nextInt(maxSize) + 2;
+            for (int s = 0; s < size; s++) {
+                if (isInBounds(map, r, c) && map[r][c] == TerrainType.Plain) {
+                    map[r][c] = type;
+                }
+                // Move to an adjacent tile for the next part of the blob
+                r += rand.nextInt(3) - 1; // -1, 0, or 1
+                c += rand.nextInt(3) - 1;
+            }
+        }
+    }
+
+    private static void spawnNearbyWithBuilding(Game game, TerrainType[][] map, int r, int c, TerrainType type, String owner) {
+        Random rand = new Random();
+        for (int i = 0; i < 20; i++) {
+            int dr = rand.nextInt(3) - 1; // Direct neighbors
+            int dc = rand.nextInt(3) - 1;
+            int nr = r + dr, nc = c + dc;
+
+            if (isInBounds(map, nr, nc) && map[nr][nc] == TerrainType.Plain) {
+                map[nr][nc] = type;
+                game.spawnBuilding(type, owner, nr, nc);
+                return;
+            }
+        }
+    }
+
+    private static void scatterBuildings(Game game, TerrainType[][] map, TerrainType type, String owner, int count) {
+        Random rand = new Random();
+        int placed = 0;
+        while (placed < count) {
+            int r = rand.nextInt(map.length);
+            int c = rand.nextInt(map[0].length);
+            if (map[r][c] == TerrainType.Plain) {
+                map[r][c] = type;
+                game.spawnBuilding(type, owner, r, c);
+                placed++;
+            }
+        }
+    }
+
+    private static boolean isInBounds(TerrainType[][] map, int r, int c) {
+        return r >= 0 && r < map.length && c >= 0 && c < map[0].length;
+    }
 }

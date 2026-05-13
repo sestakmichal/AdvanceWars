@@ -123,7 +123,6 @@ public class Game implements Observable {
 
             if (target.isDestroyed()) {
                 removeUnit(target);
-                notifyObservers(new UnitDestroyedEvent(target));
             }
         }
     }

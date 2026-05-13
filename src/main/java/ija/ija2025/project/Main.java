@@ -9,8 +9,17 @@ import ija.ija2025.project.view.Observers.MapObserver;
 import ija.ija2025.project.view.Observers.UIObserver;
 import ija.ija2025.project.view.SceneFactory;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class Main extends Application {
 
@@ -19,9 +28,59 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        showMenu(stage);
+    }
 
-        game = GameFactory.createGameFromJson("data/Maps/map1.json");
-        controller = new Controller(game);
+    public static void main(String[] args) {
+        launch();
+    }
+
+    private void showMenu(Stage stage) {
+        VBox menuLayout = new VBox(20);
+        menuLayout.setAlignment(Pos.CENTER);
+        menuLayout.setStyle("-fx-background-color: #2c3e50;");
+
+        Label title = new Label("IJA 2025 - ADVANCE WARS");
+        title.setTextFill(Color.WHITE);
+        title.setFont(new Font("Arial Bold", 32));
+
+        // load preset map
+        Button btnLoadMap = new Button("Load Preset Map1");
+        btnLoadMap.setOnAction(e -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map1.json")));
+
+        // load save file
+        Button btnLoadSave = new Button("Load Save File");
+        btnLoadSave.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(new File("data/Maps"));
+            File file = fileChooser.showOpenDialog(stage);
+            if (file != null) {
+                launchGame(stage, GameFactory.createGameFromJson(file.getAbsolutePath()));
+            }
+        });
+
+        // random map
+        Button btnGenerate = new Button("Generate Random Map");
+        btnGenerate.setOnAction(e -> {
+            Game generatedGame = GameFactory.generateNewGame(10, 15);
+            launchGame(stage, generatedGame);
+        });
+
+        String btnStyle = "-fx-min-width: 200; -fx-font-size: 14;";
+        btnLoadMap.setStyle(btnStyle);
+        btnLoadSave.setStyle(btnStyle);
+        btnGenerate.setStyle(btnStyle);
+
+        menuLayout.getChildren().addAll(title, btnLoadMap, btnLoadSave, btnGenerate);
+
+        Scene menuScene = new Scene(menuLayout, 800, 600);
+        stage.setTitle("IJA 2025 - Main Menu");
+        stage.setScene(menuScene);
+        stage.show();
+    }
+
+    private void launchGame(Stage stage, Game game) {
+        Controller controller = new Controller(game);
 
         MapObserver mapView = new MapObserver(game.getSize());
         UIObserver UIView = new UIObserver(controller);
@@ -37,10 +96,5 @@ public class Main extends Application {
         stage.setTitle("IJA 2025");
         stage.setScene(scene);
         stage.show();
-
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }

@@ -22,6 +22,19 @@ public enum TerrainType {
         };
     }
 
+    @Override
+    public String toString() {
+        return switch (this) {
+            case Plain -> "P";
+            case Forest -> "F";
+            case Mountain -> "M";
+            case Water -> "W";
+            case City -> "C";
+            case Factory -> "FCT";
+            case HQ -> "HQ";
+        };
+    }
+
     public int defenseBonus() {
         return switch (this) {
             case Plain -> 1;
