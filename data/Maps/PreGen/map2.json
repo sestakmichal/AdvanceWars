@@ -1,0 +1,24 @@
+{
+  "currentPlayer": "Player1",
+
+  "playerMoney": {
+    "Player1": 3000,
+    "Player2": 3000
+  },
+
+  "map": [
+    ["P","P","P"],
+    ["P","HQ","F"],
+    ["P","P","HQ"]
+  ],
+
+  "buildings": [
+    { "type": "HQ", "row": 1, "col": 1, "owner": "Player1", "hp": 10 },
+    { "type": "HQ", "row": 2, "col": 2, "owner": "Player2", "hp": 10 }
+  ],
+
+  "units": [
+    { "type": "Infantry", "owner": "Player1", "row": 2, "col": 2, "hp": 100 },
+    { "type": "Infantry", "owner": "Player2", "row": 1, "col": 1, "hp": 100 }
+  ]
+}

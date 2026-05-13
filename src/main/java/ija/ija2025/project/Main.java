@@ -45,8 +45,10 @@ public class Main extends Application {
         title.setFont(new Font("Arial Bold", 32));
 
         // load preset map
-        Button btnLoadMap = new Button("Load Preset Map1");
-        btnLoadMap.setOnAction(e -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map1.json")));
+        Button btnLoadMap1 = new Button("Load Preset Map1");
+        btnLoadMap1.setOnAction(e -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map1.json")));
+        Button btnLoadMap2 = new Button("Load Preset Map2 - win Showcase");
+        btnLoadMap2.setOnAction(e -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map2.json")));
 
         // load save file
         Button btnLoadSave = new Button("Load Save File");
@@ -67,11 +69,12 @@ public class Main extends Application {
         });
 
         String btnStyle = "-fx-min-width: 200; -fx-font-size: 14;";
-        btnLoadMap.setStyle(btnStyle);
+        btnLoadMap1.setStyle(btnStyle);
+        btnLoadMap2.setStyle(btnStyle);
         btnLoadSave.setStyle(btnStyle);
         btnGenerate.setStyle(btnStyle);
 
-        menuLayout.getChildren().addAll(title, btnLoadMap, btnLoadSave, btnGenerate);
+        menuLayout.getChildren().addAll(title, btnLoadMap1, btnLoadMap2, btnLoadSave, btnGenerate);
 
         Scene menuScene = new Scene(menuLayout, 800, 600);
         stage.setTitle("IJA 2025 - Main Menu");
@@ -81,6 +84,7 @@ public class Main extends Application {
 
     private void launchGame(Stage stage, Game game) {
         Controller controller = new Controller(game);
+        controller.setOnReturnToMenu(() -> showMenu(stage)); // add callback to return to the menu
 
         MapObserver mapView = new MapObserver(game.getSize());
         UIObserver UIView = new UIObserver(controller);

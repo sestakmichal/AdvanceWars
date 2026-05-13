@@ -140,8 +140,16 @@ public class Game implements Observable {
         notifyObservers(new BuildingAttackedEvent(unit, captureDamage));
         System.out.println("Successfully attacked building (" + captureDamage + " dmg)");
         if (building.getOwner().equals(currentPlayer)) {
-            System.out.println("Successfully captured");
-            notifyObservers(new BuildingCapturedEvent(unit));
+            // HQ -> End of game
+            if (building.getType() == TerrainType.HQ) {
+                System.out.println("Successfully captured a HQ");
+                notifyObservers(new HqCapturedEvent(building.getOwner()));
+            }
+            else {
+                System.out.println("Successfully captured a building");
+                notifyObservers(new BuildingCapturedEvent(unit));
+            }
+
         }
     }
 

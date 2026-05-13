@@ -77,7 +77,7 @@ public class Tile extends StackPane {
             case Forest -> Color.FORESTGREEN;
             case Mountain -> Color.SADDLEBROWN;
             case Water -> Color.AQUA;
-            case HQ -> Color.PURPLE;
+            case HQ -> (pos.equals(new Position(1, 1))) ? Color.RED : Color.BLUE;
             case Factory -> Color.ORANGE;
             case City -> Color.DARKGRAY;
         };

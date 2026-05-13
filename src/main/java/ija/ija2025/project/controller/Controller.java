@@ -13,11 +13,13 @@ import java.io.File;
 
 public class Controller {
     Game game;
+    private Runnable onReturnToMenu;
     CommandManager commandManager = new CommandManager();
     TurnPhase currentPhase = TurnPhase.ACTION;
     TurnState currentState = TurnState.IDLE;
 
     Position selectedPos = null;
+
 
     public Controller(Game game) {
         this.game = game;
@@ -190,5 +192,15 @@ public class Controller {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public void setOnReturnToMenu(Runnable callback) {
+        this.onReturnToMenu = callback;
+    }
+
+    public void handleReturnToMenu() {
+        if (onReturnToMenu != null) {
+            onReturnToMenu.run();
+        }
     }
 }

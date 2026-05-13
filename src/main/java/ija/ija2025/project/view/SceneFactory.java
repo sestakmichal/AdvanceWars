@@ -31,7 +31,9 @@ public class SceneFactory {
 
         VBox.setVgrow(gameScrollPane, Priority.ALWAYS);
 
-        Scene scene = new Scene(root, 850, 700);
+        StackPane screenStack = new StackPane(root);
+
+        Scene scene = new Scene(screenStack, 850, 700);
 
         contentStack.scaleXProperty().bind(Bindings.min(
                 scene.widthProperty().divide(850),
