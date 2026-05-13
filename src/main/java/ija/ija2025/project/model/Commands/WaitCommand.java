@@ -16,8 +16,5 @@ public class WaitCommand implements Command {
     public void execute() {game.waitUnit(unit);}
 
     @Override
-    public void undo() {
-        // heal target
-        // respawn unit if it was destroyed
-    }
+    public void undo() {game.reverseWait(unit);}
 }

@@ -20,5 +20,5 @@ public class MoveCommand implements Command {
     public void execute() {game.moveUnit(from, to);}
 
     @Override
-    public void undo() {game.moveUnit(to, from);}
+    public void undo() {game.reverseMoveUnit(to, from);}
 }

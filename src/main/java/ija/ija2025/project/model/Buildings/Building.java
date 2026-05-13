@@ -38,9 +38,7 @@ public class Building {
 
     public void takeCaptureDamage(int amount, String capturingPlayer) {
         if (isOwnedBy(capturingPlayer)) return;
-
         health -= amount;
-
         if (health <= 0) {
             changeOwner(capturingPlayer);
         }

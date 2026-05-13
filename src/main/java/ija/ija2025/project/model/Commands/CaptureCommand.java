@@ -6,6 +6,9 @@ import ija.ija2025.project.model.Units.Unit;
 public class CaptureCommand implements Command {
     private Game game;
     private Unit unit;
+    private String previousOwner;
+    private int previousHP;
+    private boolean wasCaptured;
 
     public CaptureCommand(Game game, Unit unit) {
         this.game = game;
@@ -13,11 +16,13 @@ public class CaptureCommand implements Command {
     }
 
     @Override
-    public void execute() {game.captureBuilding(unit);}
+    public void execute() {
+        CaptureResult result = game.captureBuilding(unit);
+        previousOwner = result.previousOwner();
+        previousHP = result.previousHP();
+        wasCaptured = result.wasCaptured();
+    }
 
     @Override
-    public void undo() {
-        // heal target
-        // respawn unit if it was destroyed
-    }
+    public void undo() { game.reverseCaptureBuilding(unit, previousOwner, previousHP, wasCaptured); }
 }

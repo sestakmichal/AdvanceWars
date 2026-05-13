@@ -10,14 +10,16 @@ public abstract class Unit {
     private Position position;
     private int health;
     boolean destroyed;
-    UnitActionState actionState;
+    boolean moved;
+    boolean acted;
 
     public Unit(String owner, int row, int col) {
         this.owner = owner;
         position = new Position(row, col);
         health = 100;
         destroyed = false;
-        actionState = UnitActionState.READY;
+        moved = false;
+        acted = false;
     }
 
     public String getOwner() { return owner; }
@@ -27,11 +29,13 @@ public abstract class Unit {
     public void setHealth(int hpAmount) { this.health = Math.max(0, Math.min(100, hpAmount)); } // cap in range <0, 100>
     public boolean isDestroyed() { return destroyed; }
 
-    public boolean canMove() { return actionState == UnitActionState.READY; }
-    public boolean canAct() { return actionState != UnitActionState.DONE; }
-    public void setMoved() { actionState = UnitActionState.MOVED; }
-    public void setActed() { actionState = UnitActionState.DONE; }
-    public void restoreState() { actionState = UnitActionState.READY; }
+    public boolean canMove() { return !moved; }
+    public boolean canAct() { return !acted; }
+    public void setMoved() { moved = true; }
+    public void setActed() { acted = true; }
+    public void resetMoved() { moved = false; }
+    public void resetActed() { acted = false; }
+    public void restoreState() { moved = false; acted = false; }
 
 
     public int getDefenseBonus(TerrainType type) {

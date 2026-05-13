@@ -1,5 +1,7 @@
 package ija.ija2025.project.model.Game;
 import ija.ija2025.project.model.Buildings.Building;
+import ija.ija2025.project.model.Commands.AttackResult;
+import ija.ija2025.project.model.Commands.CaptureResult;
 import ija.ija2025.project.model.Events.Event;
 
 import ija.ija2025.project.model.Events.*;
@@ -35,11 +37,6 @@ public class Game implements Observable {
     public String getTileOwner(Position pos) {return buildingsMap.get(pos).getOwner();}
     public int getPlayerMoney(String player) {return playerMoney.getOrDefault(player, 0);}
     public void setPlayerMoney(String player, int amount) { playerMoney.put(player, amount); }
-    public void spendMoney(String player, int amount) {
-        setPlayerMoney(player, amount);
-        notifyObservers(new MoneyChangedEvent(player, amount));
-    }
-
     public Map<Position, Building> getBuildingsMap() { return buildingsMap; }
 
     public void updateMap(TerrainType[][] newMap) {
@@ -89,68 +86,72 @@ public class Game implements Observable {
         notifyObservers(new UnitDestroyedEvent(unit));
     }
 
+    /// INRERNAL ACTIONS
+    private void moveUnitInternal(Position start, Position end) {
+        Unit unit = getUnitAt(start);
+        unitsMap.remove(start);
+        unit.setPosition(end);
+        unitsMap.put(end, unit);
+    }
+
+    private void applyAttackInternal(Unit attacker, Unit target) {
+        TerrainType terrain = getTerrainAt(target.getPosition());
+        target.takeDamage(attacker, terrain);
+        if (target.isDestroyed()) {
+            removeUnit(target);
+        }
+    }
+
     /// UNIT ACTIONS
-    public void moveUnit(Position startPos, Position endPos) {
-        Unit unit = getUnitAt(startPos);
+    public void moveUnit(Position start, Position end) {
+        Unit unit = getUnitAt(start);
         if (unit == null) return;
+        if (!getMovablePositions(start).contains(end)) return;
 
-        List<Position> movable = getMovablePositions(startPos);
-
-        if (movable.contains(endPos)) {
-            unitsMap.remove(unit.getPosition());
-            unit.setPosition(endPos);
-            unitsMap.put(endPos, unit);
-            unit.setMoved();
-            notifyObservers(new UnitMovedEvent(unit, startPos, endPos));
-        }
+        moveUnitInternal(start, end);
+        unit.setMoved();
+        notifyObservers(new UnitMovedEvent(unit, start, end));
     }
 
-    public void attackUnit(Unit attacker, Unit target) {
-        if (attacker == null || target == null) return;
+    public AttackResult attackUnit(Unit attacker, Unit target) {
+        if (attacker == null || target == null) return null;
+        if (!getAttackablePositions(attacker.getPosition()).contains(target.getPosition())) return null;
 
-        System.out.println("Tried atttack");
-        Position attackerPos = attacker.getPosition();
-        Position targetPos = target.getPosition();
-        List<Position> attackable = getAttackablePositions(attackerPos);
-
-        if (attackable.contains(targetPos)) {
-            TerrainType targetTerrain = getTerrainAt(targetPos);
-            int damage = target.getFinalDamage(attacker, targetTerrain);
-            target.takeDamage(attacker,targetTerrain);
-            System.out.println("Successfully atttacked");
-            attacker.setActed();
-            notifyObservers(new UnitAttackedEvent(attacker, target, damage));
-
-            if (target.isDestroyed()) {
-                removeUnit(target);
-            }
-        }
+        int hpBefore = target.getHealth();
+        applyAttackInternal(attacker, target);
+        boolean destroyed = target.isDestroyed();
+        attacker.setActed();
+        notifyObservers(new UnitAttackedEvent(attacker, target, hpBefore - target.getHealth()));
+        return new AttackResult(hpBefore, destroyed);
     }
 
-    public void captureBuilding(Unit unit) {
-        if (!(unit instanceof Infantry)) return;
+    public CaptureResult captureBuilding(Unit unit) {
+        if (!(unit instanceof Infantry)) return null;
 
         Building building = getBuildingAt(unit.getPosition());
-        if (building == null) return;
+        if (building == null) return null;
 
+        String previousOwner = building.getOwner();
+        int previousHP = building.getHealth();
+        boolean wasCaptured = false;
         int captureDamage = (int) Math.floor(unit.getHealth()*0.1);
         building.takeCaptureDamage(captureDamage, currentPlayer);
         unit.setActed();
 
         notifyObservers(new BuildingAttackedEvent(unit, captureDamage));
-        System.out.println("Successfully attacked building (" + captureDamage + " dmg)");
         if (building.getOwner().equals(currentPlayer)) {
+            wasCaptured = true;
             // HQ -> End of game
             if (building.getType() == TerrainType.HQ) {
-                System.out.println("Successfully captured a HQ");
+                System.out.println("Successfully captured HQ");
                 notifyObservers(new HqCapturedEvent(building.getOwner()));
             }
             else {
                 System.out.println("Successfully captured a building");
                 notifyObservers(new BuildingCapturedEvent(unit));
             }
-
         }
+        return new CaptureResult(previousOwner, previousHP, wasCaptured);
     }
 
     public void waitUnit(Unit unit) {
@@ -158,8 +159,41 @@ public class Game implements Observable {
         unit.setActed();
     }
 
+    /// REVERSE
+    public void reverseMoveUnit(Position start, Position end) {
+        Unit unit = getUnitAt(end);
+        if (unit == null) return;
+        moveUnitInternal(end, start);
+        unit.resetMoved();
+    }
 
-    /// UNIT ACTIONS
+    public void reverseAttackUnit(Unit attacker, Unit target, int previousHP, boolean destroyed) {
+        if (attacker == null || target == null) return;
+        if (destroyed) {
+            spawnUnit(target.getType(), target.getOwner(), target.getPosition().getRow(), target.getPosition().getCol());
+        }
+        target.setHealth(previousHP);
+        attacker.resetActed();
+    }
+
+    public void reverseCaptureBuilding(Unit unit, String previousOwner, int previousCaptureHP, boolean wasCaptured) {
+        if (unit == null) return;
+        Building building = getBuildingAt(unit.getPosition());
+        if (building == null) return;
+        building.setHealth(previousCaptureHP);
+        if (wasCaptured) {
+            building.changeOwner(previousOwner);
+        }
+        unit.resetActed();
+        notifyObservers(new BuildingCapturedEvent(unit));
+    }
+
+    public void reverseWait(Unit unit) {
+        if (unit == null) return;
+        unit.resetActed();
+    }
+
+    /// UNIT POSSIBILITIES
     public boolean canUnitMoveTo(Position startPos, Position endPos) {
         Unit movingUnit = getUnitAt(startPos);
         if (movingUnit == null) return false;
@@ -177,14 +211,13 @@ public class Game implements Observable {
     public boolean canUnitCaptureAt(Position pos) {
         Unit capturingUnit = getUnitAt(pos);
         if (capturingUnit == null) return false;
-
         Building building = getBuildingAt(pos);
         if (building == null) return false;
-
         return !building.getOwner().equals(currentPlayer);
     }
 
 
+    /// PLAYER MANAGMENT
     public void nextTurn() {
         currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
         notifyObservers(new TurnChangedEvent(currentPlayer));
@@ -207,6 +240,11 @@ public class Game implements Observable {
                 notifyObservers(new HealthRecoveredEvent(unit, unit.getHealth()));
             }
         }
+    }
+
+    public void spendMoney(String player, int amount) {
+        setPlayerMoney(player, amount);
+        notifyObservers(new MoneyChangedEvent(player, amount));
     }
 
     ///  MENU displays

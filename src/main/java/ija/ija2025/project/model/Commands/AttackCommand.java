@@ -7,7 +7,7 @@ import ija.ija2025.project.model.Game.Game;
 public class AttackCommand implements Command {
     private Game game;
     private Unit attacker, target;
-    private int damageDealt;
+    private int previousHP;
     private boolean wasDestroyed;
 
     public AttackCommand(Game game, Unit attacker, Unit target) {
@@ -17,11 +17,14 @@ public class AttackCommand implements Command {
     }
 
     @Override
-    public void execute() {game.attackUnit(attacker, target);}
+    public void execute() {
+        AttackResult result = game.attackUnit(attacker, target);
+        previousHP = result.previousHP();
+        wasDestroyed = result.destroyed();
+    }
 
     @Override
     public void undo() {
-        // heal target
-        // respawn unit if it was destroyed
-    }
+        game.reverseAttackUnit(attacker, target, previousHP, wasDestroyed);
+    };
 }
