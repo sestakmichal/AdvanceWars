@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták, Matej Čapek
+ * Description: Class descriving specific type of unit.
+ */
+
 package ija.ija2025.project.model.Units;
 
 import ija.ija2025.project.model.Map.Position;

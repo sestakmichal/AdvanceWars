@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class describing the status bar for displaying infomration about the game.
+ */
+
 package ija.ija2025.project.view.Elements;
 
 import javafx.geometry.Insets;

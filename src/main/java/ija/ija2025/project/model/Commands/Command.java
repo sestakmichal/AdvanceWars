@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class describing the Command type for units.
+ */
+
 package ija.ija2025.project.model.Commands;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;

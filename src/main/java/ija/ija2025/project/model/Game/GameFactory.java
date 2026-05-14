@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class for creating and loading the game state.
+ */
+
 package ija.ija2025.project.model.Game;
 
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták, Matej Čapek
+ * Description: Class for creating the initial visual scene.
+ */
+
 package ija.ija2025.project.view;
 
 import javafx.beans.binding.Bindings;

@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Enum describing the type of terrain for a tile.
+ */
+
 package ija.ija2025.project.model.Map;
 
 public enum TerrainType {

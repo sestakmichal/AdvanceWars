@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták, Matej Čapek
+ * Description: Class for observing the UI state of the game.
+ */
+
 package ija.ija2025.project.view.Observers;
 
 import ija.ija2025.project.controller.Controller;

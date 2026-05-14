@@ -1,3 +1,8 @@
+/**
+ * Authors: Matej Čapek, Michal Šesták
+ * Description: Class for executing main game logic and retianing the games state.
+ */
+
 package ija.ija2025.project.model.Game;
 import ija.ija2025.project.model.Buildings.Building;
 import ija.ija2025.project.model.Commands.Results.AttackResult;

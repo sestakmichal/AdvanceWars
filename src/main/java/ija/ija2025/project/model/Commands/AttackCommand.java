@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Command action .
+ */
+
 package ija.ija2025.project.model.Commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

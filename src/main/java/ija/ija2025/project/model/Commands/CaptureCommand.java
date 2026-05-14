@@ -1,3 +1,8 @@
+/**
+ * Authors: Matej Čapek
+ * Description: Class describing the command for capturing a building.
+ */
+
 package ija.ija2025.project.model.Commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

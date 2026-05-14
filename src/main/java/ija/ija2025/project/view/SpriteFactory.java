@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class for creating and updating sprites on the map.
+ */
+
 package ija.ija2025.project.view;
 
 import ija.ija2025.project.model.Units.Unit;

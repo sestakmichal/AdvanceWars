@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták, Matej Čapek
+ * Description: Class describing the main menu screen as introduction space to the game.
+ */
+
 package ija.ija2025.project.view.Elements;
 
 import javafx.collections.FXCollections;
@@ -55,10 +60,7 @@ public class MainMenuScreen {
         ComboBox<String> p2 = new ComboBox<>(FXCollections.observableArrayList("Player", "Bot"));
         p2.setValue("Bot");
 
-        players.getChildren().addAll(
-                whiteLabel("P1:"), p1,
-                whiteLabel("P2:"), p2
-        );
+        players.getChildren().addAll(whiteLabel("P1:"), p1, whiteLabel("P2:"), p2);
 
         /// Settings
         VBox settings = new VBox(10);

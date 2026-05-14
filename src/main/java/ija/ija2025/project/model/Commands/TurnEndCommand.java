@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class describing command for ending the game's turn.
+ */
+
 package ija.ija2025.project.model.Commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

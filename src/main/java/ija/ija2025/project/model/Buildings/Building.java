@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class describing a building item on a map.
+ */
+
 package ija.ija2025.project.model.Buildings;
 
 import ija.ija2025.project.model.Map.Position;

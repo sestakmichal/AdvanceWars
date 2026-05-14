@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class describing tile as part of the map space.
+ */
+
 package ija.ija2025.project.view;
 
 import ija.ija2025.project.model.Map.Position;

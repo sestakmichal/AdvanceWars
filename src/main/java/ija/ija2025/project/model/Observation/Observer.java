@@ -1,5 +1,9 @@
-package ija.ija2025.project.model.Observation;
+/**
+ * Authors: Matej Čapek
+ * Description: Interface used for observer classes.
+ */
 
+package ija.ija2025.project.model.Observation;
 import ija.ija2025.project.model.Events.Event;
 
 public interface Observer {

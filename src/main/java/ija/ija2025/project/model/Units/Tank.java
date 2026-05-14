@@ -1,7 +1,10 @@
+/**
+ * Authors: Michal Šesták, Matej Čapek
+ * Description: Class descriving specific type of unit.
+ */
+
 package ija.ija2025.project.model.Units;
-
 import java.util.Set;
-
 public class Tank extends Vehicle {
 
     public Tank(String unitOwner, int row, int col) {

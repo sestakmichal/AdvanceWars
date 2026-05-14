@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class for the auto bot functionality as the opponent.
+ */
+
 package ija.ija2025.project.model.Bots;
 
 import ija.ija2025.project.controller.CommandManager;

@@ -1,3 +1,8 @@
+/**
+ * Authors: Matej Čapek
+ * Description: Class for color static values.
+ */
+
 package ija.ija2025.project.view;
 
 import javafx.scene.paint.Color;

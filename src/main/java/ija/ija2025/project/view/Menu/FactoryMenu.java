@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class for creating the unit factory menu.
+ */
+
 package ija.ija2025.project.view.Menu;
 
 import ija.ija2025.project.controller.Controller;

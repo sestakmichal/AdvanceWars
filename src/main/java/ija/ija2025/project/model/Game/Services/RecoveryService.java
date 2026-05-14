@@ -1,3 +1,8 @@
+/**
+ * Authors: Matej Čapek
+ * Description: Class service forrecovering health and money.
+ */
+
 package ija.ija2025.project.model.Game.Services;
 
 import ija.ija2025.project.model.Buildings.Building;

@@ -1,3 +1,8 @@
+/**
+ * Authors: Matej Čapek
+ * Description: Class describing command for unit waiting.
+ */
+
 package ija.ija2025.project.model.Commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

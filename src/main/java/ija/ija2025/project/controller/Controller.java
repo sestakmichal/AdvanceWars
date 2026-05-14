@@ -1,3 +1,8 @@
+/**
+ * Authors: Matej Čapek, Michal Šesták
+ * Description: Class serving as controller for the game, connecting the model and the view.
+ */
+
 package ija.ija2025.project.controller;
 import ija.ija2025.project.model.Bots.RandomBot;
 import ija.ija2025.project.model.Commands.*;
@@ -7,7 +12,6 @@ import ija.ija2025.project.model.Units.Unit;
 
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class Controller {
     private Game game;
@@ -78,7 +82,6 @@ public class Controller {
             }
             deselect();
         }
-
     }
 
     public void handleActionClicked(GameAction action) { // Position position

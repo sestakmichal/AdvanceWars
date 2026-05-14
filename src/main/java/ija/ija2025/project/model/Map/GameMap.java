@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class for storing the game map in early stages.
+ */
+
 package ija.ija2025.project.model.Map;
 
 @Deprecated

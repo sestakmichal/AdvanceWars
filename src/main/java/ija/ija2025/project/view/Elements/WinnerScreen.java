@@ -1,3 +1,8 @@
+/**
+ * Authors: Michal Šesták
+ * Description: Class describing the winner screen after finishing the game.
+ */
+
 package ija.ija2025.project.view.Elements;
 
 import ija.ija2025.project.controller.Controller;

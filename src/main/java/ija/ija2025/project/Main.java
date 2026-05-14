@@ -1,3 +1,7 @@
+/**
+ * Authors: Michal Šesták, Matej Čapek
+ * Description: Class serving as the main entry point to the game.
+ */
 package ija.ija2025.project;
 
 import ija.ija2025.project.controller.Controller;
@@ -11,7 +15,6 @@ import ija.ija2025.project.view.Observers.UIObserver;
 import ija.ija2025.project.view.SceneFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -59,7 +62,7 @@ public class Main extends Application {
 
         if (history != null) {
             for (Command cmd : history) {
-                cmd.setGame(game); // Propojíme příkaz s aktuální instancí hry
+                cmd.setGame(game);
                 controller.getCommandManager().executeFromLoad(cmd);
             }
             controller.getCommandManager().printLen();

@@ -1,5 +1,9 @@
-package ija.ija2025.project.model.Map;
+/**
+ * Authors: Michal Šesták
+ * Description: Class for storing the row and column position.
+ */
 
+package ija.ija2025.project.model.Map;
 import java.util.Objects;
 
 public class Position {

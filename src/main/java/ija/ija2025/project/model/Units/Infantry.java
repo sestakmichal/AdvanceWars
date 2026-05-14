@@ -1,7 +1,10 @@
+/**
+ * Authors: Michal Šesták, Matej Čapek
+ * Description: Class describing specific type of unit.
+ */
+
 package ija.ija2025.project.model.Units;
-
 import ija.ija2025.project.model.Map.TerrainType;
-
 import java.util.Set;
 
 public class Infantry extends Unit {

@@ -1,9 +1,12 @@
-package ija.ija2025.project.model.Game.Services;
+/**
+ * Authors: Michal Šesták, Matej Čapek
+ * Description: Class service for finding the reachable and attackable positions.
+ */
 
+package ija.ija2025.project.model.Game.Services;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Map.TerrainType;
 import ija.ija2025.project.model.Units.Unit;
-
 import java.util.*;
 
 public class PathFindingService {
