@@ -1,7 +1,7 @@
 # IJA Projekt 2025/2026 - Advance Wars
 
 * **Autoři:**
-    * Michal Šesták, xsestaméé
+    * Michal Šesták, xsestam00
     * Matej Čapek xcapek19
 
 ## Technické požadavky
