@@ -178,7 +178,7 @@ public class GameFactory {
     }
 
     // ------------------------- generate -------------------------
-    public static Game generateNewGame(int rows, int cols) {
+    public static Game generateNewGame(int rows, int cols, int cities, int facotries) {
         Game game = new Game();
         TerrainType[][] map = new TerrainType[rows][cols];
 
@@ -213,8 +213,9 @@ public class GameFactory {
         spawnNearbyWithBuilding(game, map, hq2R, hq2C, TerrainType.Factory, "Player2");
         spawnNearbyWithBuilding(game, map, hq2R, hq2C, TerrainType.City, "Player2");
 
-        // scatter extra Cities
-        scatterBuildings(game, map, TerrainType.City, "Neutral", 4);
+        // scatter extra Cities / Facotries
+        scatterBuildings(game, map, TerrainType.City, "Neutral", cities);
+        scatterBuildings(game, map, TerrainType.Factory, "Neutral", facotries);
 
         game.updateMap(map);
         return game;

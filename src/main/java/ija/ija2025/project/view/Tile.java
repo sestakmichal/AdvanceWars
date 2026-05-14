@@ -3,14 +3,18 @@ package ija.ija2025.project.view;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Map.TerrainType;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class Tile extends StackPane {
     private final Position pos;
     private final Rectangle background = new Rectangle(50, 50);
     private final Rectangle highlight = new Rectangle(46, 46);
+    private Label ownerLabel = new Label("");
     private Node currentUnitNode = null;
 
     public Tile(int row, int col, TerrainType type, int size) {
@@ -31,7 +35,16 @@ public class Tile extends StackPane {
         highlight.setStrokeWidth(3);
         highlight.setVisible(false);
 
-        this.getChildren().addAll(background, highlight);
+        // ownership label
+        if (type.isBuilding()) {
+            ownerLabel = new Label("N");
+            ownerLabel.setFont(Font.font("Arial", FontWeight.BOLD, size * 0.4));
+            ownerLabel.setTextFill(Color.rgb(255, 255, 255, 0.3));
+            StackPane.setAlignment(ownerLabel, javafx.geometry.Pos.BOTTOM_RIGHT);
+            ownerLabel.setPadding(new javafx.geometry.Insets(0, 5, 2, 0));
+        }
+
+        this.getChildren().addAll(background, ownerLabel, highlight);
     }
 
     public void setUnitVisual(Node visualNode) {
@@ -39,7 +52,8 @@ public class Tile extends StackPane {
 
         if (visualNode != null) {
             this.currentUnitNode = visualNode;
-            this.getChildren().add(visualNode);
+            int index = this.getChildren().indexOf(highlight);
+            this.getChildren().add(index, visualNode);
         }
     }
 
@@ -47,6 +61,21 @@ public class Tile extends StackPane {
         if (currentUnitNode != null) {
             this.getChildren().remove(currentUnitNode);
             currentUnitNode = null;
+        }
+    }
+
+    public void updateOwner(String owner) {
+        if ("Player1".equals(owner)) {
+            ownerLabel.setText("R");
+            ownerLabel.setTextFill(Color.rgb(255, 0, 0, 0.4));
+        }
+        else if ("Player2".equals(owner)) {
+            ownerLabel.setText("B");
+            ownerLabel.setTextFill(Color.rgb(0, 0, 255, 0.4));
+        }
+        else {
+            ownerLabel.setText("N");
+            ownerLabel.setTextFill(Color.rgb(255, 255, 255, 0.3));
         }
     }
 
@@ -68,8 +97,6 @@ public class Tile extends StackPane {
     public void removeHighlight() {
         highlight.setVisible(false);
     }
-
-    public boolean isHighlighted() { return highlight.isVisible(); }
 
     private Color getTerrainColor(TerrainType type) {
         return switch (type) {

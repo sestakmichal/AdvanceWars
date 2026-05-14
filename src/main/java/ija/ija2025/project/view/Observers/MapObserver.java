@@ -1,6 +1,7 @@
 package ija.ija2025.project.view.Observers;
 
 import ija.ija2025.project.controller.Controller;
+import ija.ija2025.project.model.Buildings.Building;
 import ija.ija2025.project.model.Events.Event;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Events.*;
@@ -14,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.*;
 
 import java.util.List;
+import java.util.Map;
 
 public class MapObserver implements Observer {
     private final GridPane grid;
@@ -34,7 +36,7 @@ public class MapObserver implements Observer {
         return grid;
     }
 
-    public void initializeMap(Controller controller, TerrainType[][] map) {
+    public void initializeMap(Controller controller, TerrainType[][] map, Map<Position, Building> buildings) {
         Position size = new Position(map.length, map[0].length);
 
         for (int r = 0; r < size.getRow(); r++) {
@@ -42,8 +44,11 @@ public class MapObserver implements Observer {
 
                 Tile tile = new Tile(r, c, map[r][c], 60);
 
-                int finalR = r, finalC = c;
                 tile.setOnMouseClicked(e -> controller.handleTileClick(tile.getPos()));
+
+                if (map[r][c].isBuilding()) {
+                    tile.updateOwner(buildings.get(new Position(r, c)).getOwner());
+                }
 
                 tiles[r][c] = tile;
                 grid.add(tile, c, r);
@@ -89,9 +94,9 @@ public class MapObserver implements Observer {
             getTile(target.getPosition()).removeUnitVisual();
         }
 
-            if (event instanceof UnitPositionShownEvent(Position pos, Unit unit)) {
-                getTile(pos).setHighlight();
-            }
+        if (event instanceof UnitPositionShownEvent(Position pos, Unit unit)) {
+            getTile(pos).setHighlight();
+        }
 
         if (event instanceof MovablePositionsShownEvent(List<Position> positions)) {
             for (Position position : positions) {
@@ -112,6 +117,11 @@ public class MapObserver implements Observer {
         if (event instanceof HealthRecoveredEvent(Unit unit, int health)) {
             Position pos = unit.getPosition();
             SpriteFactory.updateUnitHealth(getTile(pos).getUnitVisual(), unit.getHealth());
+        }
+
+        if (event instanceof BuildingCapturedEvent(Unit unit)) {
+            Tile tile = getTile(unit.getPosition());
+            tile.updateOwner(unit.getOwner());
         }
     }
 }

@@ -37,20 +37,6 @@ public abstract class Unit {
     public void resetActed() { acted = false; }
     public void resetMovedActed() { moved = false; acted = false; }
 
-
-    public int getDefenseBonus(TerrainType type) {
-        return switch (type) {
-            case Plain -> 1;
-            case Forest -> 2;
-            case Mountain -> 4;
-            case City -> 3;
-            case Factory -> 3;
-            case HQ -> 4;
-            default -> 0;
-        };
-    }
-
-
     public int getFinalDamage(Unit attacker, TerrainType terrainType) {
         double damage = getDamageValue(attacker) * (attacker.getHealth()/100.0) * (1-terrainType.defenseBonus() *0.1);
         int damageRound = (int) Math.round(damage);
