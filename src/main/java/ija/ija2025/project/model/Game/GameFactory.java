@@ -1,7 +1,10 @@
 package ija.ija2025.project.model.Game;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import ija.ija2025.project.controller.CommandManager;
 import ija.ija2025.project.model.Buildings.Building;
+import ija.ija2025.project.model.Commands.Command;
 import ija.ija2025.project.model.Map.TerrainType;
 import ija.ija2025.project.model.Units.Unit;
 
@@ -15,6 +18,33 @@ import java.util.List;
 import java.util.Random;
 
 public class GameFactory {
+    public static GameSave loadGameSave(File file) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(file);
+
+            Game game = new Game();
+            loadGameState(game, root);
+            loadMap(game, root.get("map"));
+            loadBuildings(game, root.get("buildings"));
+            loadUnits(game, root.get("units"));
+
+            List<Command> history = null;
+            if (root.has("history") && !root.get("history").isNull() && root.get("history").isArray()) {
+                history = mapper.readValue(
+                    root.get("history").traverse(),
+                    new TypeReference<List<Command>>() {}
+                );
+            }
+
+            return new GameSave(game, history);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to load save file", e);
+        }
+    }
+
     public static Game createGameFromJson(String filePath) {
         Game game = new Game();
 
@@ -111,7 +141,7 @@ public class GameFactory {
         return owner;
     }
 
-    public static void saveGameToJson(Game game, String filePath) {
+    public static void saveGameToJson(Game game, String filePath, CommandManager commandManager) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -122,6 +152,7 @@ public class GameFactory {
             saveMap(game, root);
             saveBuildings(game, root);
             saveUnits(game, root);
+            root.set("history", mapper.valueToTree(commandManager.getCommandHistory()));
 
             mapper.writeValue(new File(filePath), root);
 

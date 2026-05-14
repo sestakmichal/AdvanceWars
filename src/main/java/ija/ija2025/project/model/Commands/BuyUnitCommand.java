@@ -1,24 +1,41 @@
 package ija.ija2025.project.model.Commands;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Map.Position;
 
 public class BuyUnitCommand implements Command {
-    private Game game;
-    private String type;
+    private String unitType;
     private Position position;
     private int price;
 
-    public BuyUnitCommand(Game game, String type, Position position, int price) {
+    @JsonIgnore
+    private Game game;
+
+    public BuyUnitCommand() {}
+
+    public BuyUnitCommand(Game game, String unitType, Position position, int price) {
         this.game = game;
-        this.type = type;
+        this.unitType = unitType;
         this.position = position;
         this.price = price;
     }
 
     @Override
-    public void execute() {game.buyUnit(type, position, price);}
+    public void execute() { if (game != null) game.buyUnit(unitType, position, price);}
 
     @Override
-    public void undo() {game.reverseBuyUnit(type, position, price);}
+    public void undo() { if (game != null) game.reverseBuyUnit(unitType, position, price);}
+
+    public String getUnitType() { return unitType; }
+    public Position getPosition() { return position; }
+    public int getPrice() { return price; }
+
+    @Override
+    public void setGame(Game game) { this.game = game; }
+
+    @Override
+    public String getType() {
+        return "buy";
+    }
 }

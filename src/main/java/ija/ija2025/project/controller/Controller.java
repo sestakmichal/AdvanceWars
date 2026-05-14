@@ -22,6 +22,8 @@ public class Controller {
         this.game = game;
     }
 
+    public CommandManager getCommandManager() { return commandManager; }
+
     public void setPlayerType(String playerId, String type) {
         playerTypes.put(playerId, type);
     }
@@ -162,7 +164,7 @@ public class Controller {
 
     public void handleSaveGame(String filePath) {
         try {
-            GameFactory.saveGameToJson(game, filePath);
+            GameFactory.saveGameToJson(game, filePath, commandManager);
         } catch (Exception e) {
             throw new RuntimeException("Failed to save: " + e.getMessage(), e);
         }
