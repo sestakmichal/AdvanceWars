@@ -5,9 +5,9 @@ import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.model.Game.Game;
 
 public class MoveCommand implements Command {
+    private Game game;
     private Position from, to;
     private Unit unit;
-    private Game game;
 
     public MoveCommand(Game game, Position from, Position to) {
         this.game = game;

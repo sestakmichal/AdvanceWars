@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Random;
 
 public class GameFactory {
-    // ------------------------- load -------------------------
     public static Game createGameFromJson(String filePath) {
         Game game = new Game();
 
@@ -112,7 +111,6 @@ public class GameFactory {
         return owner;
     }
 
-    // ------------------------- save -------------------------
     public static void saveGameToJson(Game game, String filePath) {
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -177,7 +175,6 @@ public class GameFactory {
         }
     }
 
-    // ------------------------- generate -------------------------
     public static Game generateNewGame(int rows, int cols, int cities, int facotries) {
         Game game = new Game();
         TerrainType[][] map = new TerrainType[rows][cols];
@@ -207,13 +204,13 @@ public class GameFactory {
         map[hq2R][hq2C] = TerrainType.HQ;
         game.spawnBuilding(TerrainType.HQ, "Player2", hq2R, hq2C);
 
-        // factory and city near HQs
+        // Factory and city near HQs
         spawnNearbyWithBuilding(game, map, hq1R, hq1C, TerrainType.Factory, "Player1");
         spawnNearbyWithBuilding(game, map, hq1R, hq1C, TerrainType.City, "Player1");
         spawnNearbyWithBuilding(game, map, hq2R, hq2C, TerrainType.Factory, "Player2");
         spawnNearbyWithBuilding(game, map, hq2R, hq2C, TerrainType.City, "Player2");
 
-        // scatter extra Cities / Facotries
+        // Scatter extra Cities / Facotries
         scatterBuildings(game, map, TerrainType.City, "Neutral", cities);
         scatterBuildings(game, map, TerrainType.Factory, "Neutral", facotries);
 

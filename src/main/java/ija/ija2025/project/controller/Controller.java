@@ -10,15 +10,13 @@ import java.util.Map;
 
 
 public class Controller {
-    Game game;
+    private Game game;
     private Runnable onReturnToMenu;
-    CommandManager commandManager = new CommandManager();
+    private CommandManager commandManager = new CommandManager();
     private final Map<String, String> playerTypes = new HashMap<>();
 
-    TurnPhase currentPhase = TurnPhase.ACTION;
-    TurnState currentState = TurnState.IDLE;
-    Position selectedPos = null;
-
+    private TurnState currentState = TurnState.IDLE;
+    private Position selectedPos = null;
 
     public Controller(Game game) {
         this.game = game;
@@ -46,11 +44,8 @@ public class Controller {
     }
 
     /// When Unit clicked, first display menu with move/attack/capture/wait options
-    ///
     public void handleTileClick(Position position) {
-        if (currentPhase != TurnPhase.ACTION) { return; }
 
-        // select unit
         if (currentState == TurnState.IDLE) {
             if (game.canUnitAct(position)) {
                 selectedPos = position;
@@ -101,7 +96,6 @@ public class Controller {
 
     }
 
-    /// needs to be connected to the unit's action buttons
     public void handleActionClicked(GameAction action) { // Position position
         switch (action) {
             case MOVE -> {
@@ -127,7 +121,9 @@ public class Controller {
 
     }
 
-    /// maybe divide into specific actions, disable action ability here
+    public void handleBuyRequest(String type, Position pos, int cost) {
+        commandManager.execute(new BuyUnitCommand(game, type, pos, cost));
+    }
 
     private void deselect() {
         currentState = TurnState.IDLE;
@@ -154,21 +150,8 @@ public class Controller {
 
     private void checkTurn() {
         if (!game.unitsAreAvailableForCurrentPlayer()) {
-            game.nextTurn();
+            commandManager.execute(new TurnEndCommand(game, game.getCurrentPlayer()));
             checkAndExecuteBotTurn();
-        }
-    }
-
-    public void handleSpawnRequest(String type, Position pos, int cost) {
-        String currentPlayer = game.getCurrentPlayer();
-        int currentMoney = game.getPlayerMoney(currentPlayer);
-
-        if (currentMoney >= cost) {
-            game.spendMoney(currentPlayer, currentMoney - cost);
-            game.spawnUnit(type, currentPlayer, pos.getRow(), pos.getCol());
-        }
-        else {
-            System.out.println("Not enough money!");
         }
     }
 

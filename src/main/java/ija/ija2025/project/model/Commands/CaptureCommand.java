@@ -1,5 +1,6 @@
 package ija.ija2025.project.model.Commands;
 
+import ija.ija2025.project.model.Commands.Results.CaptureResult;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Units.Unit;
 
@@ -24,5 +25,5 @@ public class CaptureCommand implements Command {
     }
 
     @Override
-    public void undo() { game.reverseCaptureBuilding(unit, previousOwner, previousHP, wasCaptured); }
+    public void undo() {game.reverseCaptureBuilding(unit, previousOwner, previousHP, wasCaptured);}
 }

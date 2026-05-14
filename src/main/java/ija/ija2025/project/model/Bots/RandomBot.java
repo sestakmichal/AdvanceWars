@@ -84,8 +84,7 @@ public class RandomBot implements GameBot {
                     String selectedUnit = affordableUnits.get(random.nextInt(affordableUnits.size()));
                     int cost = prices.get(selectedUnit);
 
-                    game.spawnUnit(selectedUnit, botPlayer, pos.getRow(), pos.getCol());
-                    game.spendMoney(botPlayer, money - cost);
+                    game.buyUnit(selectedUnit, pos, cost);
 
                     System.out.println("AI bought " + selectedUnit + " for " + cost);
                 }
