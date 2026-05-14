@@ -79,12 +79,7 @@ public class MainMenuScreen {
         factories.valueProperty().addListener((o, a, b) ->
                 factoryLabel.setText("Extra Factories: " + b.intValue()));
 
-        settings.getChildren().addAll(
-                settingsTitle,
-                sizeLabel, size,
-                cityLabel, cities,
-                factoryLabel, factories
-        );
+        settings.getChildren().addAll(settingsTitle, sizeLabel, size, cityLabel, cities, factoryLabel, factories);
 
         ///  Buttons
         Button generate = button("Generate & Launch", e ->

@@ -5,7 +5,10 @@ import ija.ija2025.project.model.Commands.CaptureResult;
 import ija.ija2025.project.model.Events.Event;
 
 import ija.ija2025.project.model.Events.*;
-import ija.ija2025.project.model.Units.*;
+import ija.ija2025.project.model.Units.Artillery;
+import ija.ija2025.project.model.Units.Infantry;
+import ija.ija2025.project.model.Units.Tank;
+import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.model.Map.*;
 import ija.ija2025.project.model.Game.Services.*;
 import ija.ija2025.project.model.Observation.Observer;

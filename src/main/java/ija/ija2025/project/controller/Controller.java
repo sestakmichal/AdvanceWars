@@ -5,10 +5,6 @@ import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;
 
 import javafx.scene.control.Alert;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
-import java.io.File;
 
 public class Controller {
     Game game;
@@ -160,14 +156,6 @@ public class Controller {
         } catch (Exception e) {
             throw new RuntimeException("Failed to save: " + e.getMessage(), e);
         }
-    }
-
-    private void showNotification(String title, String content, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     public void setOnReturnToMenu(Runnable callback) {

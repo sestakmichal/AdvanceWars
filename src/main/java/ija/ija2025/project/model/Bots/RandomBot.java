@@ -1,9 +1,7 @@
 package ija.ija2025.project.model.Bots;
 
-import ija.ija2025.project.model.Buildings.Building;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Map.Position;
-import ija.ija2025.project.model.Map.TerrainType;
 import ija.ija2025.project.model.Units.Unit;
 
 import java.util.List;

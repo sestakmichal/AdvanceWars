@@ -1,6 +1,5 @@
 package ija.ija2025.project.model.Units;
 import ija.ija2025.project.model.Map.TerrainType;
-import java.util.Set;
 
 public abstract class Vehicle extends Unit {
 
