@@ -1,7 +1,7 @@
 package ija.ija2025.project.view;
 
-import ija.ija2025.project.model.Units.Unit;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -35,11 +35,20 @@ public class SceneFactory {
 
         Scene scene = new Scene(screenStack, 850, 700);
 
-        contentStack.scaleXProperty().bind(Bindings.min(
-                scene.widthProperty().divide(850),
-                scene.heightProperty().divide(650)
-        ));
-        contentStack.scaleYProperty().bind(contentStack.scaleXProperty());
+        DoubleBinding scale = Bindings.createDoubleBinding(() -> {
+            double viewportWidth = gameScrollPane.getViewportBounds().getWidth();
+            double viewportHeight = gameScrollPane.getViewportBounds().getHeight();
+            double contentWidth = contentStack.getBoundsInLocal().getWidth();
+            double contentHeight = contentStack.getBoundsInLocal().getHeight();
+
+            if (contentWidth == 0 || contentHeight == 0) return 1.0;
+
+            return Math.min(viewportWidth / contentWidth, viewportHeight / contentHeight);
+            }, gameScrollPane.viewportBoundsProperty(), contentStack.boundsInLocalProperty()
+        );
+
+        contentStack.scaleXProperty().bind(scale);
+        contentStack.scaleYProperty().bind(scale);
 
         return scene;
     }

@@ -67,15 +67,15 @@ public class Tile extends StackPane {
     public void updateOwner(String owner) {
         if ("Player1".equals(owner)) {
             ownerLabel.setText("R");
-            ownerLabel.setTextFill(Color.rgb(255, 0, 0, 0.4));
+            ownerLabel.setTextFill(Color.rgb(255, 0, 0, 0.5));
         }
         else if ("Player2".equals(owner)) {
             ownerLabel.setText("B");
-            ownerLabel.setTextFill(Color.rgb(0, 0, 255, 0.4));
+            ownerLabel.setTextFill(Color.rgb(0, 0, 255, 0.5));
         }
         else {
             ownerLabel.setText("N");
-            ownerLabel.setTextFill(Color.rgb(255, 255, 255, 0.3));
+            ownerLabel.setTextFill(Color.rgb(255, 255, 255, 0.4));
         }
     }
 
