@@ -7,18 +7,34 @@
   },
 
   "map": [
-    ["P","P","P"],
-    ["P","HQ","F"],
-    ["P","P","HQ"]
+    ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
+    ["P","HQ","P","P","F","F","F","P","P","P","P","P","M","M","P"],
+    ["P","P","P","P","F","F","F","P","P","P","P","M","M","M","P"],
+    ["P","P","C","F","F","P","P","P","P","P","P","P","M","M","P"],
+    ["P","F","F","P","P","P","W","W","W","P","P","P","P","P","P"],
+    ["F","FCT","P","P","P","W","W","W","W","W","P","P","P","P","P"],
+    ["F","F","P","P","P","W","W","W","W","W","P","P","P","C","P"],
+    ["P","P","P","P","P","P","P","C","P","P","P","P","P","P","P"],
+    ["P","C","P","P","P","W","W","W","W","W","P","P","P","F","F"],
+    ["P","P","P","P","P","W","W","W","W","W","P","P","P","FCT","F"],
+    ["P","P","P","P","P","P","W","W","W","P","P","P","F","F","P"],
+    ["P","M","M","P","P","P","P","P","P","P","F","F","C","P","P"],
+    ["P","M","M","M","P","P","P","P","F","F","F","P","P","P","P"],
+    ["P","M","M","P","P","P","P","P","F","F","F","P","P","HQ","P"],
+    ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"]
   ],
 
   "buildings": [
-    { "type": "HQ", "row": 1, "col": 1, "owner": "Player1", "hp": 10 },
-    { "type": "HQ", "row": 2, "col": 2, "owner": "Player2", "hp": 10 }
-  ],
+    { "type": "HQ", "row": 1, "col": 1, "owner": "Player1", "hp": 20 },
+    { "type": "FCT", "row": 5, "col": 1, "owner": "Player1", "hp": 20 },
+    { "type": "C", "row": 3, "col": 2, "owner": "Player1", "hp": 20 },
 
-  "units": [
-    { "type": "Infantry", "owner": "Player1", "row": 2, "col": 2, "hp": 100 },
-    { "type": "Infantry", "owner": "Player2", "row": 1, "col": 1, "hp": 100 }
+    { "type": "C", "row": 8, "col": 1, "owner": "Neutral", "hp": 20 },
+    { "type": "C", "row": 6, "col": 13, "owner": "Neutral", "hp": 20 },
+    { "type": "C", "row": 7, "col": 7, "owner": "Neutral", "hp": 20 },
+
+    { "type": "C", "row": 11, "col": 12, "owner": "Player2", "hp": 20 },
+    { "type": "FCT", "row": 9, "col": 13, "owner": "Player2", "hp": 20 },
+    { "type": "HQ", "row": 13, "col": 13, "owner": "Player2", "hp": 20 }
   ]
 }

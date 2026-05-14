@@ -8,40 +8,24 @@
 
   "map": [
     ["P","P","P","F","F","F","F","P","P","P","P","P"],
-    ["P","P","F","F","F","F","F","F","P","P","P","P"],
-    ["P","HQ","F","FCT","M","C","F","F","F","P","P","P"],
+    ["P","HQ","F","F","F","F","F","F","P","P","P","P"],
+    ["P","P","F","FCT","M","C","F","F","F","P","P","P"],
     ["P","F","F","M","M","M","M","F","F","F","P","P"],
-    ["W","W","W","W","W","W","W","W","P","P","P","P"],
+    ["P","C","W","W","W","W","W","W","P","P","P","P"],
     ["P","P","P","P","P","P","W","W","W","P","P","P"],
-    ["P","P","P","C","P","P","P","W","W","W","P","P"],
+    ["P","P","P","P","P","P","P","W","W","W","P","P"],
     ["P","P","P","P","P","P","P","P","W","W","W","P"],
     ["M","M","P","P","FCT","P","P","HQ","P","W","W","W"],
-    ["M","M","M","P","P","P","P","P","P","P","W","W"]
+    ["M","M","M","P","P","P","P","C","P","P","W","W"]
   ],
 
   "buildings": [
-    { "type": "HQ", "row": 2, "col": 1, "owner": "Player1", "hp": 20 },
+    { "type": "HQ", "row": 1, "col": 1, "owner": "Player1", "hp": 20 },
     { "type": "FCT", "row": 2, "col": 3, "owner": "Player1", "hp": 20 },
     { "type": "C", "row": 2, "col": 5, "owner": "Player1", "hp": 20 },
-    { "type": "C", "row": 6, "col": 3, "owner": "Neutral", "hp": 20 },
+    { "type": "C", "row": 4, "col": 1, "owner": "Neutral", "hp": 20 },
+    { "type": "C", "row": 9, "col": 7, "owner": "Player2", "hp": 20 },
     { "type": "FCT", "row": 8, "col": 4, "owner": "Player2", "hp": 20 },
     { "type": "HQ", "row": 8, "col": 7, "owner": "Player2", "hp": 20 }
-  ],
-
-  "units": [
-    { "type": "Tank", "owner": "Player1", "row": 0, "col": 0, "hp": 100 },
-    { "type": "Infantry", "owner": "Player1", "row": 0, "col": 1, "hp": 100 },
-    { "type": "Artillery", "owner": "Player1", "row": 0, "col": 2, "hp": 100 },
-
-    { "type": "Infantry", "owner": "Player1", "row": 6, "col": 3, "hp": 100 },
-
-    { "type": "Tank", "owner": "Player2", "row": 1, "col": 9, "hp": 100 },
-    { "type": "Infantry", "owner": "Player2", "row": 1, "col": 10, "hp": 100 },
-    { "type": "Artillery", "owner": "Player2", "row": 1, "col": 11, "hp": 100 },
-
-    { "type": "Infantry", "owner": "Player2", "row": 1, "col": 0, "hp": 100 },
-    { "type": "Infantry", "owner": "Player2", "row": 1, "col": 1, "hp": 100 },
-    { "type": "Infantry", "owner": "Player2", "row": 2, "col": 2, "hp": 100 },
-    { "type": "Infantry", "owner": "Player2", "row": 3, "col": 2, "hp": 100 }
   ]
 }
