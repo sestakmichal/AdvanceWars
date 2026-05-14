@@ -1,3 +1,89 @@
+2026-05-14 Michal Šesták: able to save and load commandHistory
+2026-05-14 Michal Šesták: Merge remote-tracking branch 'origin/main'
+2026-05-14 Michal Šesták: ability to select bot into game
+2026-05-14 themattjayx: Buy Command and Turn End command
+2026-05-14 themattjayx: Imports
+2026-05-14 themattjayx: Merge remote-tracking branch 'origin/main'
+2026-05-14 themattjayx: Main Restructured (hopefully not broken), Scaling fixed
+2026-05-14 Michal Šesták: Screen drag
+2026-05-14 themattjayx: Relocated MainMenuScreen
+2026-05-14 Michal Šesták: Building ownership label
+2026-05-14 themattjayx: Relocated Status and Winner...
+2026-05-14 themattjayx: Save game relocated
+2026-05-14 themattjayx: Merge remote-tracking branch 'origin/main'
+2026-05-14 themattjayx: Unit state fix
+2026-05-14 Michal Šesták: RandomBot
+2026-05-14 themattjayx: Counter-attack
+2026-05-13 themattjayx: Reverse actions
+2026-05-13 Michal Šesták: Vicotry screen!
+2026-05-13 Michal Šesták: merge, forgot to pull and MapGenAi
+2026-05-13 Michal Šesták: Merge branch 'main' of https://github.com/sestakmichal/IJA
+2026-05-13 Michal Šesták: Save game, random map generation and main menu
+2026-05-11 themattjayx: Remove unit
+2026-05-11 themattjayx: Removed capture
+2026-05-11 themattjayx: Merge remote-tracking branch 'origin/main'
+2026-05-11 themattjayx: Fixed capture
+2026-05-11 Michal Šesták: Merge branch 'main' of https://github.com/sestakmichal/IJA
+2026-05-11 Michal Šesták: spend money function that notify alongside changing money
+2026-05-11 themattjayx: Ordered
+2026-05-11 themattjayx: Fix order of recovery
+2026-05-11 Michal Šesták: factory button is grayed out when player can't afford it. Fixed check that factory is owned by the current player so it can be accessed
+2026-05-11 Michal Šesták: factory menu added, problem with money updates
+2026-05-11 Michal Šesták: Unit can't move through enemy units, only around them
+2026-05-10 themattjayx: Fix turn
+2026-05-10 themattjayx: Connected recovery and turn
+2026-05-09 themattjayx: Merge remote-tracking branch 'origin/main'
+2026-05-09 themattjayx: Recovering phase additions
+2026-05-09 Michal Šesták: import of factorymenu
+2026-05-09 Michal Šesták: Factory menu UI
+2026-05-09 Michal Šesták: bad intelliJ
+2026-05-09 Michal Šesták: game status bar, only UI with event handling no logic yet
+2026-05-09 themattjayx: Added change turns
+2026-05-06 themattjayx: Changed visual
+2026-05-06 Michal Šesták: minor ui tweaks
+2026-05-05 Michal Šesták: fixed json building rows and cols
+2026-05-05 Michal Šesták: fixed Mapobserver ocnflict with event rename
+2026-05-05 Michal Šesták: Unit healthbar
+2026-05-05 themattjayx: Artillery specific move
+2026-05-05 themattjayx: Capturing fix
+2026-05-05 themattjayx: Capturing
+2026-05-05 themattjayx: Refactored game factory
+2026-04-30 themattjayx: Refactored game factory
+2026-04-29 Michal Šesták: merged main and new functions
+2026-04-29 Michal Šesták: New game loading from JSON
+2026-04-29 themattjayx: Added attack functionality
+2026-04-19 themattjayx: Changed buttons
+2026-04-18 themattjayx: Used Actions for Action Menu
+2026-04-18 themattjayx: Adjusted reachable into movable method
+2026-04-18 Michal Šesták: Implemented Move button in the menu
+2026-04-18 Michal Šesták: basic action menu, move | attack | skip
+2026-04-18 themattjayx: Renamed
+2026-04-18 themattjayx: gitignore
+2026-04-18 themattjayx: Backtracked to previous approach with Controller, fixed functionality
+2026-04-18 themattjayx: MVC restructure
+2026-04-17 themattjayx: Highlighting and logic changes
+2026-04-17 themattjayx: Changes and fixes to highlighting, added some turn logic
+2026-04-16 themattjayx: Added GameMap
+2026-04-16 themattjayx: Refactored the MVC for Map
+2026-04-16 Michal Šesták: Changed UI move logic to follow MVC logic
+2026-04-15 Michal Šesták: unified row, col to pos
+2026-04-15 themattjayx: Changed Event
+2026-04-15 themattjayx: Fixing MVC
+2026-04-15 themattjayx: Added controller
+2026-04-15 Michal Šesták: event redo, MapController is now an observer
+2026-04-15 themattjayx: Event changes
+2026-04-15 Michal Šesták: Merge branch 'main' of https://github.com/sestakmichal/IJA # Please enter a commit message to explain why this merge is necessary, # especially if it merges an updated upstream into a topic branch. # # Lines starting with '#' will be ignored, and an empty message aborts # the commit.
+2026-04-15 Michal Šesták: Basic UI with unit movement
+2026-04-09 themattjayx: Added event parameter
+2026-04-09 Michal Šesták: Merge branch 'main' of https://github.com/sestakmichal/IJA
+2026-04-09 Michal Šesták: attack and move commands
+2026-04-09 themattjayx: Observation added interface
+2026-03-24 Michal Šesták: CHAOS I hate IntelliJ and Maven!!!
+2026-03-24 Michal Šesták: fixed maven setup renamed imports to work with intelliJ?
+2026-03-24 themattjayx: added destroyed
+2026-03-24 Michal Šesták: oops
+2026-03-24 Michal Šesták: added Maven
+2026-03-24 themattjayx: added table value functions and takeDamage
 2026-03-14 themattjayx: Fixed observers
 2026-03-14 Michal Šesták: gameObserver exception during moveUnit
 2026-03-14 themattjayx: Added observation
