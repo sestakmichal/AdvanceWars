@@ -110,6 +110,15 @@
 * **Použití:** reštrukturalizácia funkcií
 * **Úprava studentem:** Prezoradenie niektorých prvkov.
 * **Míra generování:** 80%.
+* 
+## 10. Screen Drag Feature
+* **Nástroj:** Gemini 3
+* **Datum:** 14. 5. 2025
+* **Prompt:**
+  > "Add scroll feature to the game StackPane"
+* **Použití:** lze táhnout po hrací ploše
+* **Úprava studentem:** Přidaná rychlost tahu "drag_sensitivity".
+* **Míra generování:** 99%.
 
 
 

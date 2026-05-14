@@ -7,11 +7,11 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 
 public class SceneFactory {
     public static Scene initializeScene(Stage stage, Node mapGrid, Node uiPane, Node statusBar) {
@@ -25,6 +25,36 @@ public class SceneFactory {
         ScrollPane gameScrollPane = new ScrollPane(centeredWrapper);
         gameScrollPane.setFitToWidth(true);
         gameScrollPane.setFitToHeight(true);
+
+        // drag to move
+        double[] lastMouse = new double[2];
+        double dragSensitivity = 2.0;
+        gameScrollPane.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            if (e.isPrimaryButtonDown()) {
+                lastMouse[0] = e.getSceneX();
+                lastMouse[1] = e.getSceneY();
+            }
+        });
+        gameScrollPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            if (e.isPrimaryButtonDown()) {
+                double deltaX = e.getSceneX() - lastMouse[0];
+                double deltaY = e.getSceneY() - lastMouse[1];
+
+                double contentWidth = gameScrollPane.getContent().getBoundsInLocal().getWidth();
+                double contentHeight = gameScrollPane.getContent().getBoundsInLocal().getHeight();
+
+                double curH = gameScrollPane.getHvalue();
+                double curV = gameScrollPane.getVvalue();
+
+                gameScrollPane.setHvalue(curH - (deltaX * dragSensitivity) / contentWidth);
+                gameScrollPane.setVvalue(curV - (deltaY * dragSensitivity) / contentHeight);
+
+                lastMouse[0] = e.getSceneX();
+                lastMouse[1] = e.getSceneY();
+
+                e.consume();
+            }
+        });
 
         VBox root = new VBox();
         root.getChildren().addAll(statusBar, gameScrollPane);
