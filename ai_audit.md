@@ -102,11 +102,11 @@
 * **Úprava studentem:** Přidání objektu Game a vytváření budov jako objektů ne jen terénu. Základní gamestate.
 * **Míra generování:** 70%.
 
-## 9. Action functions simplification
+## 9. Functions simplifications
 * **Nástroj:** Claude Sonnet 4.6
 * **Datum:** 13. 5. 2025
 * **Prompt:**
-  > "How to handle the reverse attacks for these existing ones"
+  > "How to handle the reverse attacks for these existing functions"
 * **Použití:** reštrukturalizácia funkcií
 * **Úprava studentem:** Prezoradenie niektorých prvkov.
 * **Míra generování:** 80%.
@@ -118,8 +118,7 @@
   > "Add scroll feature to the game StackPane"
 * **Použití:** lze táhnout po hrací ploše
 * **Úprava studentem:** Přidaná rychlost tahu "drag_sensitivity".
-* **Míra generování:** 99%.
-
+* **Míra generování:** 95%.
 
 
 *(Sekce kopírujte dle potřeby pro každou významnou část kódu, kde byla použita AI)*
