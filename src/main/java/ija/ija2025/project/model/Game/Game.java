@@ -1,7 +1,7 @@
 package ija.ija2025.project.model.Game;
 import ija.ija2025.project.model.Buildings.Building;
-import ija.ija2025.project.model.Commands.AttackResult;
-import ija.ija2025.project.model.Commands.CaptureResult;
+import ija.ija2025.project.model.Commands.Results.AttackResult;
+import ija.ija2025.project.model.Commands.Results.CaptureResult;
 import ija.ija2025.project.model.Events.Event;
 
 import ija.ija2025.project.model.Events.*;
@@ -57,7 +57,6 @@ public class Game implements Observable {
     }
 
     public Building spawnBuilding(TerrainType type, String owner, int row, int col) {
-
         Building building = switch (type) {
             case HQ -> new Building(TerrainType.HQ, owner, row, col);
             case City -> new Building(TerrainType.City, owner, row, col);
@@ -67,7 +66,6 @@ public class Game implements Observable {
 
         Position pos = new Position(row, col);
         buildingsMap.put(pos, building);
-        // notify building spawned? can it happen even?
         return building;
     }
 
@@ -84,12 +82,12 @@ public class Game implements Observable {
         return unit;
     }
 
-    public void removeUnit(Unit unit) {
+    public void destroyUnit(Unit unit) {
         unitsMap.remove(unit.getPosition());
         notifyObservers(new UnitDestroyedEvent(unit));
     }
 
-    /// INRERNAL ACTIONS
+    /// INTERNAL ACTIONS
     private void applyMoveInternal(Position start, Position end) {
         Unit unit = getUnitAt(start);
         unitsMap.remove(start);
@@ -101,7 +99,7 @@ public class Game implements Observable {
         TerrainType terrain = getTerrainAt(target.getPosition());
         target.takeDamage(attacker, terrain);
         if (target.isDestroyed()) {
-            removeUnit(target);
+            destroyUnit(target);
         }
     }
 
@@ -173,6 +171,14 @@ public class Game implements Observable {
         unit.setActed();
     }
 
+    public void buyUnit(String type, Position pos, int cost) {
+        String player = getCurrentPlayer();
+        int newMoney = getPlayerMoney(player) - cost;
+        spawnUnit(type, player, pos.getRow(), pos.getCol());
+        setPlayerMoney(player, newMoney);
+        notifyObservers(new MoneyChangedEvent(player, newMoney));
+    }
+
     /// REVERSE
     public void reverseMoveUnit(Position start, Position end) {
         Unit unit = getUnitAt(end);
@@ -209,6 +215,17 @@ public class Game implements Observable {
     public void reverseWait(Unit unit) {
         if (unit == null) return;
         unit.resetActed();
+    }
+
+    public void reverseBuyUnit(String type, Position pos, int cost) {
+        String player = getCurrentPlayer();
+        int newMoney = getPlayerMoney(player) + cost;
+        Unit unit = getUnitAt(pos);
+        if (unit == null) return;
+
+        destroyUnit(unit);
+        setPlayerMoney(player, newMoney);
+        notifyObservers(new MoneyChangedEvent(player, newMoney));
     }
 
     /// UNIT POSSIBILITIES
@@ -259,11 +276,6 @@ public class Game implements Observable {
                 notifyObservers(new HealthRecoveredEvent(unit, unit.getHealth()));
             }
         }
-    }
-
-    public void spendMoney(String player, int amount) {
-        setPlayerMoney(player, amount);
-        notifyObservers(new MoneyChangedEvent(player, amount));
     }
 
     ///  MENU displays

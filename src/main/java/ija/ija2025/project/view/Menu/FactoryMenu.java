@@ -14,8 +14,6 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import static javax.swing.text.StyleConstants.setBackground;
-
 public class FactoryMenu extends VBox {
     private static final Background MENU_BG = new Background(new BackgroundFill(Color.DARKSLATEGRAY, new CornerRadii(6), Insets.EMPTY));
     private static final Border MENU_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(6), new BorderWidths(1)));
@@ -61,7 +59,7 @@ public class FactoryMenu extends VBox {
             button.setOnMouseReleased(e -> { button.setOpacity(1.0); button.setScaleX(1.0); button.setScaleY(1.0); });
 
             button.setOnAction(e -> {
-                controller.handleSpawnRequest(name, pos, price);
+                controller.handleBuyRequest(name, pos, price);
                 onClose.run();
             });
         }

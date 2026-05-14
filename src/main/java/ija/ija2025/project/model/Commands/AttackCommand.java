@@ -1,4 +1,5 @@
 package ija.ija2025.project.model.Commands;
+import ija.ija2025.project.model.Commands.Results.AttackResult;
 import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.model.Game.Game;
 
