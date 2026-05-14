@@ -1,7 +1,6 @@
 package ija.ija2025.project.controller;
 import ija.ija2025.project.model.Commands.*;
 import ija.ija2025.project.model.Game.*;
-import static ija.ija2025.project.model.Game.GameFactory.saveGameToJson;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;
 
@@ -155,35 +154,11 @@ public class Controller {
         return playerMoney >= unitValue;
     }
 
-    public void handleSaveGame(Stage stage) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Game State");
-
-        // pick directory, Data/Maps else project directory
-        File defaultDirectory = new File("data/Maps");
-        if (defaultDirectory.exists() && defaultDirectory.isDirectory()) {
-            fileChooser.setInitialDirectory(defaultDirectory);
-        }
-        else {
-            fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-        }
-
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json")
-        );
-
-        File file = fileChooser.showSaveDialog(stage);
-
-        if (file != null) {
-            try {
-                saveGameToJson(game, file.getAbsolutePath());
-
-                showNotification("Success", "Game saved successfully to:\n" + file.getName(), Alert.AlertType.INFORMATION);
-
-            } catch (Exception e) {
-                showNotification("Save Error", "Failed to save game: " + e.getMessage(), Alert.AlertType.ERROR);
-                e.printStackTrace();
-            }
+    public void handleSaveGame(String filePath) {
+        try {
+            GameFactory.saveGameToJson(game, filePath);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save: " + e.getMessage(), e);
         }
     }
 

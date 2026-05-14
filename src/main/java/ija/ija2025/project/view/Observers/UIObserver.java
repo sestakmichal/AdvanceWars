@@ -13,12 +13,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class UIObserver implements Observer {
     private final Pane uiLayer;
@@ -119,7 +123,7 @@ public class UIObserver implements Observer {
         Button saveButton = new Button("Save Game");
         saveButton.setOnAction(e -> {
             Stage stage = (Stage) statusBar.getScene().getWindow();
-            controller.handleSaveGame(stage);
+            openSaveDialog(stage);
         });
 
         statusBar.getChildren().addAll(p1MoneyLabel, turnLabel, p2MoneyLabel, spacer, saveButton);
@@ -160,7 +164,7 @@ public class UIObserver implements Observer {
         saveBtn.setStyle("-fx-font-size: 16px; -fx-base: #2d5a27;");
         saveBtn.setOnAction(e -> {
             Stage stage = (Stage) uiLayer.getScene().getWindow();
-            controller.handleSaveGame(stage);
+            openSaveDialog(stage);
         });
 
         Button menuBtn = new Button("Return to Menu");
@@ -175,6 +179,29 @@ public class UIObserver implements Observer {
             winnerOverlay.toFront();
         }
     }
+
+    private void openSaveDialog(Stage stage) {
+        FileChooser fileChooser = new FileChooser();
+        // ... setup ...
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            try {
+                controller.handleSaveGame(file.getAbsolutePath());
+                showNotification("Success", "Game saved to: " + file.getName(), false);
+            } catch (Exception e) {
+                showNotification("Save Error", e.getMessage(), true);
+            }
+        }
+    }
+
+    private void showNotification(String title, String message, boolean isError) {
+        Alert alert = new Alert(isError ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 
     @Override
     public void update(Event event) {
