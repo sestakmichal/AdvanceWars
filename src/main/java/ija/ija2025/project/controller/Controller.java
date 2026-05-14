@@ -1,18 +1,22 @@
 package ija.ija2025.project.controller;
+import ija.ija2025.project.model.Bots.RandomBot;
 import ija.ija2025.project.model.Commands.*;
 import ija.ija2025.project.model.Game.*;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;
 
-import javafx.scene.control.Alert;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Controller {
     Game game;
     private Runnable onReturnToMenu;
     CommandManager commandManager = new CommandManager();
+    private final Map<String, String> playerTypes = new HashMap<>();
+
     TurnPhase currentPhase = TurnPhase.ACTION;
     TurnState currentState = TurnState.IDLE;
-
     Position selectedPos = null;
 
 
@@ -20,12 +24,33 @@ public class Controller {
         this.game = game;
     }
 
+    public void setPlayerType(String playerId, String type) {
+        playerTypes.put(playerId, type);
+    }
+
+    public void checkAndExecuteBotTurn() {
+        String currentPlayer = game.getCurrentPlayer();
+
+        if ("Bot".equals(playerTypes.get(currentPlayer))) {
+            new Thread(() -> {
+                try { Thread.sleep(500); } catch (InterruptedException e) {}
+
+                javafx.application.Platform.runLater(() -> {
+                    RandomBot bot = new RandomBot(currentPlayer);
+                    bot.executeTurn(game);
+
+                    checkAndExecuteBotTurn(); // check if next player is bot
+                });
+            }).start();
+        }
+    }
+
     /// When Unit clicked, first display menu with move/attack/capture/wait options
     ///
     public void handleTileClick(Position position) {
         if (currentPhase != TurnPhase.ACTION) { return; }
-        // select unit
 
+        // select unit
         if (currentState == TurnState.IDLE) {
             if (game.canUnitAct(position)) {
                 selectedPos = position;
@@ -33,6 +58,7 @@ public class Controller {
                 return;
             }
             if (game.isOwnedFactory(position) && game.getUnitAt(position) == null) {
+                deselect();
                 game.openFactoryMenu(position);
                 return;
             }
@@ -129,6 +155,7 @@ public class Controller {
     private void checkTurn() {
         if (!game.unitsAreAvailableForCurrentPlayer()) {
             game.nextTurn();
+            checkAndExecuteBotTurn();
         }
     }
 

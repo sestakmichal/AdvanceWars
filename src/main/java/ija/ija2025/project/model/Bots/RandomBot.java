@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class RandomBot implements GameBot {
-    private String botPlayer; // např. "Player2"
+    private String botPlayer;
     private Random random = new Random();
 
     public RandomBot(String botPlayer) {
@@ -18,19 +18,17 @@ public class RandomBot implements GameBot {
 
     @Override
     public void executeTurn(Game game) {
-        // 1. Získání všech jednotek bota
         List<Unit> myUnits = game.getUnits().stream()
                 .filter(u -> u.isOwnedBy(botPlayer))
                 .toList();
+
+        processBuying(game);
 
         for (Unit unit : myUnits) {
             processUnitAction(game, unit);
         }
 
-        // 2. Náhodný nákup v továrnách
-        processBuying(game);
-
-        // 3. Ukončení tahu
+        game.hidePositions();
         game.nextTurn();
     }
 
@@ -76,7 +74,6 @@ public class RandomBot implements GameBot {
 
         for (Position pos : game.getBuildingsMap().keySet()) {
             if (game.isOwnedFactory(pos) && game.getUnitAt(pos) == null) {
-                // Najdeme všechny typy jednotek, na které má bot peníze
                 int money = game.getPlayerMoney(botPlayer);
                 List<String> affordableUnits = prices.entrySet().stream()
                         .filter(e -> e.getValue() <= money)

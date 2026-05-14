@@ -28,12 +28,12 @@ public class Main extends Application {
     private void showMenu(Stage stage) {
         Scene scene = mainMenuScreen.createScene(
                 stage,
-                () -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map1.json")),
-                () -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map2.json")),
-                file -> launchGame(stage, GameFactory.createGameFromJson(file.getAbsolutePath())),
+                (p1, p2) -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map1.json"), p1, p2),
+                (p1, p2) -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map2.json"), p1, p2),
+                (file, p1, p2) -> launchGame(stage, GameFactory.createGameFromJson(file.getAbsolutePath()), p1, p2),
                 (size, cities, factories, p1, p2) -> {
                     Game game = GameFactory.generateNewGame(size, size, cities, factories);
-                    launchGame(stage, game);
+                    launchGame(stage, game, p1, p2);
                 }
         );
 
@@ -41,9 +41,11 @@ public class Main extends Application {
         stage.show();
     }
 
-    private void launchGame(Stage stage, Game game) {
+    private void launchGame(Stage stage, Game game, String p1Type, String p2Type) {
         Controller controller = new Controller(game);
         controller.setOnReturnToMenu(() -> showMenu(stage));
+        controller.setPlayerType("Player1", p1Type);
+        controller.setPlayerType("Player2", p2Type);
 
         MapObserver mapView = new MapObserver(game.getSize());
         UIObserver uiView = new UIObserver(controller);
@@ -59,5 +61,7 @@ public class Main extends Application {
         stage.setTitle("IJA 2025");
         stage.setScene(scene);
         stage.show();
+
+        controller.checkAndExecuteBotTurn(); // initial bot check
     }
 }

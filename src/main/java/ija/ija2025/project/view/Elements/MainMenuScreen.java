@@ -15,15 +15,23 @@ import java.util.function.Consumer;
 
 public class MainMenuScreen {
 
+    public interface FileLoadHandler {
+        void load(File file, String p1, String p2);
+    }
+
+    public interface MapHandler {
+        void handle(String p1, String p2);
+    }
+
     public interface GenerateHandler {
         void generate(int size, int cities, int factories, String p1, String p2);
     }
 
     public Scene createScene(
             Stage stage,
-            Runnable onLoadMap1,
-            Runnable onLoadMap2,
-            Consumer<File> onLoadSaveFile,
+            MapHandler onLoadMap1,
+            MapHandler onLoadMap2,
+            FileLoadHandler onLoadSaveFile,
             GenerateHandler onGenerate
     ) {
         VBox root = new VBox(15);
@@ -92,10 +100,9 @@ public class MainMenuScreen {
                 )
         );
 
-        Button map1 = button("Load Preset Map 1", e -> onLoadMap1.run());
-        Button map2 = button("Load Preset Map 2", e -> onLoadMap2.run());
-        Button load = button("Load Save File", e -> openFile(stage, onLoadSaveFile));
-
+        Button map1 = button("Load Preset Map 1", e -> onLoadMap1.handle(p1.getValue(), p2.getValue()));
+        Button map2 = button("Load Preset Map 2", e -> onLoadMap2.handle(p1.getValue(), p2.getValue()));
+        Button load = button("Load Save File", e -> openFile(stage, (file) -> onLoadSaveFile.load(file, p1.getValue(), p2.getValue())));
         root.getChildren().addAll(title, players, settings, generate, map1, map2, load);
 
         return new Scene(root, 800, 600);
