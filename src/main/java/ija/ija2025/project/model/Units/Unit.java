@@ -29,13 +29,13 @@ public abstract class Unit {
     public void setHealth(int hpAmount) { this.health = Math.max(0, Math.min(100, hpAmount)); } // cap in range <0, 100>
     public boolean isDestroyed() { return destroyed; }
 
-    public boolean canMove() { return !moved; }
+    public boolean canMove() { return !moved && !acted; }
     public boolean canAct() { return !acted; }
     public void setMoved() { moved = true; }
     public void setActed() { acted = true; }
     public void resetMoved() { moved = false; }
     public void resetActed() { acted = false; }
-    public void restoreState() { moved = false; acted = false; }
+    public void resetMovedActed() { moved = false; acted = false; }
 
 
     public int getDefenseBonus(TerrainType type) {

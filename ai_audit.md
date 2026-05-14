@@ -84,7 +84,16 @@
 * **Úprava studentem:** Centrování objektu, po ubrání hp se půl kruh rozhodil.
 * **Míra generování:** 80%.
 
-## 6. Map generation
+## 7. Action functions simplification
+* **Nástroj:** Claude Sonnet 4.6
+* **Datum:** 13. 5. 2025
+* **Prompt:**
+  > "How to simplify these functions and reduce the repetitive parts"
+* **Použití:** reštrukturalizácia funkcií
+* **Úprava studentem:** Prezoradenie niektorých prvkov.
+* **Míra generování:** 20%.
+
+## 8. Map generation
 * **Nástroj:** Gemini 3
 * **Datum:** 13. 5. 2025
 * **Prompt:**
@@ -92,6 +101,15 @@
 * **Použití:** generace mapy s náhodným terénem a budovami
 * **Úprava studentem:** Přidání objektu Game a vytváření budov jako objektů ne jen terénu. Základní gamestate.
 * **Míra generování:** 70%.
+
+## 9. Action functions simplification
+* **Nástroj:** Claude Sonnet 4.6
+* **Datum:** 13. 5. 2025
+* **Prompt:**
+  > "How to handle the reverse attacks for these existing ones"
+* **Použití:** reštrukturalizácia funkcií
+* **Úprava studentem:** Prezoradenie niektorých prvkov.
+* **Míra generování:** 80%.
 
 
 

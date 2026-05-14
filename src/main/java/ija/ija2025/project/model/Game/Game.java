@@ -239,7 +239,7 @@ public class Game implements Observable {
 
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
-                unit.restoreState();
+                unit.resetMovedActed();
             }
         }
         applyRecoveryPhase();
