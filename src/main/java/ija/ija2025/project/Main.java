@@ -9,7 +9,6 @@ import ija.ija2025.project.view.Observers.UIObserver;
 import ija.ija2025.project.view.SceneFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -27,16 +26,15 @@ public class Main extends Application {
 
     private void showMenu(Stage stage) {
         Scene scene = mainMenuScreen.createScene(
-                stage,
-                (p1, p2) -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map1.json"), p1, p2),
-                (p1, p2) -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map2.json"), p1, p2),
-                (file, p1, p2) -> launchGame(stage, GameFactory.createGameFromJson(file.getAbsolutePath()), p1, p2),
-                (size, cities, factories, p1, p2) -> {
-                    Game game = GameFactory.generateNewGame(size, size, cities, factories);
-                    launchGame(stage, game, p1, p2);
-                }
+            stage,
+            (p1, p2) -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map1.json"), p1, p2),
+            (p1, p2) -> launchGame(stage, GameFactory.createGameFromJson("data/Maps/PreGen/map2.json"), p1, p2),
+            (file, p1, p2) -> launchGame(stage, GameFactory.createGameFromJson(file.getAbsolutePath()), p1, p2),
+            (size, cities, factories, p1, p2) -> {
+                Game game = GameFactory.generateNewGame(size, size, cities, factories);
+                launchGame(stage, game, p1, p2);
+            }
         );
-
         stage.setScene(scene);
         stage.show();
     }

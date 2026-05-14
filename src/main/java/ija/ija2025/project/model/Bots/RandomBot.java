@@ -1,20 +1,36 @@
 package ija.ija2025.project.model.Bots;
 
+import ija.ija2025.project.controller.CommandManager;
+import ija.ija2025.project.model.Commands.*;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;
+import javafx.application.Platform;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class RandomBot implements GameBot {
+    private CommandManager commandManager;
     private String botPlayer;
     private Random random = new Random();
 
-    public RandomBot(String botPlayer) {
+    public RandomBot(String botPlayer,  CommandManager commandManager) {
         this.botPlayer = botPlayer;
+        this.commandManager =  commandManager;
     }
+
+    public void initiateTurn(Game game, Runnable onTurnEnd) {
+        new Thread(() -> {
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+            Platform.runLater(() -> {
+                executeTurn(game);
+                onTurnEnd.run(); // controller decides what happens next
+            });
+        }).start();
+    }
+
 
     @Override
     public void executeTurn(Game game) {
@@ -39,14 +55,14 @@ public class RandomBot implements GameBot {
         List<Position> movable = game.getMovablePositions(currentPos);
         if (!movable.isEmpty()) {
             Position targetMove = movable.get(random.nextInt(movable.size()));
-            game.moveUnit(currentPos, targetMove);
+            commandManager.execute(new MoveCommand(game, currentPos, targetMove));
             currentPos = targetMove;
             System.out.println("AI moved to " + currentPos);
         }
 
         // capture
         if (game.canUnitCaptureAt(currentPos)) {
-            game.captureBuilding(unit);
+            commandManager.execute(new CaptureCommand(game, unit));
             System.out.println("AI caputed at " + currentPos);
         }
         // attack
@@ -55,22 +71,18 @@ public class RandomBot implements GameBot {
             if (!attackable.isEmpty()) {
                 Position targetAttackPos = attackable.get(random.nextInt(attackable.size()));
                 Unit targetUnit = game.getUnitAt(targetAttackPos);
-                game.attackUnit(unit, targetUnit);
+                commandManager.execute(new AttackCommand(game, unit, targetUnit));
                 System.out.println("AI attacked target at " + targetAttackPos);
             }
             // wait
             else {
-                game.waitUnit(unit);
+                commandManager.execute(new WaitCommand(game, unit));
             }
         }
     }
 
     private void processBuying(Game game) {
-        Map<String, Integer> prices = Map.of(
-                "Infantry", 1000,
-                "Artillery", 6000,
-                "Tank", 7000
-        );
+        Map<String, Integer> prices = Map.of("Infantry", 1000, "Artillery", 6000, "Tank", 7000);
 
         for (Position pos : game.getBuildingsMap().keySet()) {
             if (game.isOwnedFactory(pos) && game.getUnitAt(pos) == null) {
@@ -84,7 +96,7 @@ public class RandomBot implements GameBot {
                     String selectedUnit = affordableUnits.get(random.nextInt(affordableUnits.size()));
                     int cost = prices.get(selectedUnit);
 
-                    game.buyUnit(selectedUnit, pos, cost);
+                    commandManager.execute(new BuyUnitCommand(game, selectedUnit, pos, cost));
 
                     System.out.println("AI bought " + selectedUnit + " for " + cost);
                 }

@@ -26,23 +26,6 @@ public class Controller {
         playerTypes.put(playerId, type);
     }
 
-    public void checkAndExecuteBotTurn() {
-        String currentPlayer = game.getCurrentPlayer();
-
-        if ("Bot".equals(playerTypes.get(currentPlayer))) {
-            new Thread(() -> {
-                try { Thread.sleep(500); } catch (InterruptedException e) {}
-
-                javafx.application.Platform.runLater(() -> {
-                    RandomBot bot = new RandomBot(currentPlayer);
-                    bot.executeTurn(game);
-
-                    checkAndExecuteBotTurn(); // check if next player is bot
-                });
-            }).start();
-        }
-    }
-
     /// When Unit clicked, first display menu with move/attack/capture/wait options
     public void handleTileClick(Position position) {
 
@@ -118,7 +101,6 @@ public class Controller {
                 finalizeAction();
             }
         }
-
     }
 
     public void handleBuyRequest(String type, Position pos, int cost) {
@@ -152,6 +134,13 @@ public class Controller {
         if (!game.unitsAreAvailableForCurrentPlayer()) {
             commandManager.execute(new TurnEndCommand(game, game.getCurrentPlayer()));
             checkAndExecuteBotTurn();
+        }
+    }
+
+    public void checkAndExecuteBotTurn() {
+        if ("Bot".equals(playerTypes.get(game.getCurrentPlayer()))) {
+            RandomBot bot = new RandomBot(game.getCurrentPlayer(), commandManager);
+            bot.initiateTurn(game, this::checkTurn);
         }
     }
 
