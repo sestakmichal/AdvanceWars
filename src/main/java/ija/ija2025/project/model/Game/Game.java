@@ -226,6 +226,7 @@ public class Game implements Observable {
     public boolean canUnitCaptureAt(Position pos) {
         Unit capturingUnit = getUnitAt(pos);
         if (capturingUnit == null) return false;
+        if (!(capturingUnit instanceof Infantry)) return false;
         Building building = getBuildingAt(pos);
         if (building == null) return false;
         return !building.getOwner().equals(currentPlayer);

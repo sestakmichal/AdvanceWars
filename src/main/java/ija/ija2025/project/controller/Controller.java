@@ -37,7 +37,7 @@ public class Controller {
                 finalizeAction();
                 return;
             }
-            if (game.isOwnedFactory(position)) {
+            if (game.isOwnedFactory(position) && game.getUnitAt(position) == null) {
                 game.openFactoryMenu(position);
                 return;
             }
@@ -94,6 +94,7 @@ public class Controller {
             case CAPTURE -> {
                 currentState = TurnState.CAPTURING;
                 game.hideMenu();
+                handleTileClick(null);
             }
             case WAIT -> {
                 currentState = TurnState.IDLE;
