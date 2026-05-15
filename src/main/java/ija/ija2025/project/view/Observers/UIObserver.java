@@ -7,12 +7,8 @@ package ija.ija2025.project.view.Observers;
 
 import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Events.*;
-import ija.ija2025.project.model.Events.Positions.PositionsHiddenEvent;
-import ija.ija2025.project.model.Events.Positions.UnitPositionShownEvent;
-import ija.ija2025.project.model.Events.State.FactoryMenuShownEvent;
-import ija.ija2025.project.model.Events.State.MenuHiddenEvent;
-import ija.ija2025.project.model.Events.State.MoneyChangedEvent;
-import ija.ija2025.project.model.Events.State.TurnChangedEvent;
+import ija.ija2025.project.model.Events.Positions.*;
+import ija.ija2025.project.model.Events.State.*;
 import ija.ija2025.project.model.Events.UnitActions.HqCapturedEvent;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Observation.Observer;
@@ -59,11 +55,9 @@ public class UIObserver implements Observer {
         boolean skipCapture = !(unit instanceof Infantry);
         currentActionMenu = new ActionMenu(controller, this::hideMenu, skipCapture);
         currentActionMenu.updateButtons(unit);
-
         double x = pos.getCol() * 60;
         double y = pos.getRow() * 60;
 
-        // offset the menu
         currentActionMenu.setLayoutX(x + 50);
         currentActionMenu.setLayoutY(y + 10);
 
@@ -118,7 +112,6 @@ public class UIObserver implements Observer {
 
     private void openSaveDialog(Stage stage) {
         FileChooser fileChooser = new FileChooser();
-        // ... setup ...
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
             try {
