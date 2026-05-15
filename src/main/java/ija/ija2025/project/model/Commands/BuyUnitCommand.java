@@ -30,7 +30,7 @@ public class BuyUnitCommand implements Command {
     public void execute() { if (game != null) game.buyUnit(unitType, position, price);}
 
     @Override
-    public void undo() { if (game != null) game.reverseBuyUnit(unitType, position, price);}
+    public void undo() { if (game != null) game.reverseBuyUnit(position, price);}
 
     public String getUnitType() { return unitType; }
     public Position getPosition() { return position; }

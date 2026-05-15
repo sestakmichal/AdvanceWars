@@ -1,5 +1,5 @@
 /**
- * Authors: Michal Šesták
+ * Authors: Matej Čapek
  * Description: Class describing command for ending the game's turn.
  */
 
