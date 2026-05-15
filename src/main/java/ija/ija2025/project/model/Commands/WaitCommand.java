@@ -27,9 +27,7 @@ public class WaitCommand implements Command {
     public void execute() {
         if (game != null) {
             Unit unit = game.getUnitAt(unitPosition);
-            if (unit != null) {
                 game.waitUnit(unit);
-            }
         }
     }
 
@@ -37,9 +35,7 @@ public class WaitCommand implements Command {
     public void undo() {
         if (game != null) {
             Unit unit = game.getUnitAt(unitPosition);
-            if (unit != null) {
-                game.reverseWait(unit);
-            }
+            game.reverseWaitUnit(unit);
         }
     }
 

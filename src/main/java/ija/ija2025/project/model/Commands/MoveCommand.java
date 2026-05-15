@@ -29,7 +29,7 @@ public class MoveCommand implements Command {
     public void execute() { if (game != null) game.moveUnit(from, to); }
 
     @Override
-    public void undo() { if (game != null) game.reverseMoveUnit(to, from); }
+    public void undo() { if (game != null) game.reverseMoveUnit(from, to); }
 
     public Position getFrom() { return from; }
     public Position getTo() { return to; }

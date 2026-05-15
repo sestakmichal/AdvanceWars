@@ -2,6 +2,7 @@
  * Authors: Michal Šesták, Matej Čapek
  * Description: Class serving as the main entry point to the game.
  */
+
 package ija.ija2025.project;
 
 import ija.ija2025.project.controller.Controller;

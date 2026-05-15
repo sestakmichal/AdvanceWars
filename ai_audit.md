@@ -46,8 +46,6 @@
 * **Úprava studentem:** Aplikovanie na konkrétne príklady
 * **Míra generování:** 20%.
 
----
-
 ## 3. Recovery phase
 * **Nástroj:** Gemini 3
 * **Datum:** 16. 4. 2025
@@ -110,7 +108,7 @@
 * **Použití:** reštrukturalizácia funkcií
 * **Úprava studentem:** Prezoradenie niektorých prvkov.
 * **Míra generování:** 80%.
-* 
+
 ## 10. Screen Drag Feature
 * **Nástroj:** Gemini 3
 * **Datum:** 14. 5. 2025
@@ -119,6 +117,15 @@
 * **Použití:** lze táhnout po hrací ploše
 * **Úprava studentem:** Přidaná rychlost tahu "drag_sensitivity".
 * **Míra generování:** 95%.
+
+## 11. Changing the transactional bot to sequential
+* **Nástroj:** ChatGPT
+* **Datum:** 14. 5. 2025
+* **Prompt:**
+  > "Make the task sleep in the function after each action unit takes."
+* **Použití:** lze táhnout po hrací ploše
+* **Úprava studentem:** Prvotný kód".
+* **Míra generování:** 50%.
 
 
 *(Sekce kopírujte dle potřeby pro každou významnou část kódu, kde byla použita AI)*

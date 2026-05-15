@@ -23,6 +23,7 @@ public class CommandManager {
         if (commandHistory.isEmpty()) {return;};
         Command command = commandHistory.pop();
         command.undo();
+        System.out.println(command.toString());
     }
 
     public Stack<Command> getCommandHistory() {

@@ -7,14 +7,18 @@ package ija.ija2025.project.view.Observers;
 
 import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Events.*;
+import ija.ija2025.project.model.Events.Positions.PositionsHiddenEvent;
+import ija.ija2025.project.model.Events.Positions.UnitPositionShownEvent;
+import ija.ija2025.project.model.Events.State.FactoryMenuShownEvent;
+import ija.ija2025.project.model.Events.State.MenuHiddenEvent;
+import ija.ija2025.project.model.Events.State.MoneyChangedEvent;
+import ija.ija2025.project.model.Events.State.TurnChangedEvent;
+import ija.ija2025.project.model.Events.UnitActions.HqCapturedEvent;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Observation.Observer;
-import ija.ija2025.project.model.Units.Infantry;
-import ija.ija2025.project.model.Units.Unit;
-import ija.ija2025.project.view.Elements.StatusBar;
-import ija.ija2025.project.view.Elements.WinnerScreen;
-import ija.ija2025.project.view.Menu.ActionMenu;
-import ija.ija2025.project.view.Menu.FactoryMenu;
+import ija.ija2025.project.model.Units.*;
+import ija.ija2025.project.view.Elements.*;
+import ija.ija2025.project.view.Menu.*;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -41,7 +45,8 @@ public class UIObserver implements Observer {
         this.statusBar = new StatusBar(() -> {
             Stage stage = (Stage) statusBar.getScene().getWindow();
             openSaveDialog(stage);
-        });
+            },controller::handleUndoGame
+        );
     }
 
     public Pane getPane() { return uiLayer; }
@@ -139,12 +144,15 @@ public class UIObserver implements Observer {
         if (event instanceof UnitPositionShownEvent(Position position, Unit unit)) {
             showActionMenu(position, unit);
         }
+
         if (event instanceof FactoryMenuShownEvent(Position position)) {
             showFactoryMenu(position);
         }
+
         if (event instanceof PositionsHiddenEvent) {
             hideMenu();
         }
+
         if (event instanceof MenuHiddenEvent) {
             hideMenu();
         }

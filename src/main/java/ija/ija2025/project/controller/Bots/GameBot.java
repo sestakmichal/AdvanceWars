@@ -3,7 +3,7 @@
  * Description: Interface for the game bot.
  */
 
-package ija.ija2025.project.model.Bots;
+package ija.ija2025.project.controller.Bots;
 
 import ija.ija2025.project.model.Game.Game;
 

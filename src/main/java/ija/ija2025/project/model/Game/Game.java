@@ -1,19 +1,16 @@
 /**
  * Authors: Matej Čapek, Michal Šesták
- * Description: Class for executing main game logic and retianing the games state.
+ * Description: Class for executing main game logic and retrieving the games state.
  */
 
 package ija.ija2025.project.model.Game;
 import ija.ija2025.project.model.Buildings.Building;
-import ija.ija2025.project.model.Commands.Results.AttackResult;
-import ija.ija2025.project.model.Commands.Results.CaptureResult;
+import ija.ija2025.project.model.Commands.Results.*;
 import ija.ija2025.project.model.Events.Event;
-
-import ija.ija2025.project.model.Events.*;
-import ija.ija2025.project.model.Units.Artillery;
-import ija.ija2025.project.model.Units.Infantry;
-import ija.ija2025.project.model.Units.Tank;
-import ija.ija2025.project.model.Units.Unit;
+import ija.ija2025.project.model.Events.Positions.*;
+import ija.ija2025.project.model.Events.State.*;
+import ija.ija2025.project.model.Events.UnitActions.*;
+import ija.ija2025.project.model.Units.*;
 import ija.ija2025.project.model.Map.*;
 import ija.ija2025.project.model.Game.Services.*;
 import ija.ija2025.project.model.Observation.Observer;
@@ -35,7 +32,7 @@ public class Game implements Observable {
     public Position getSize() { return mapSize; }
     public TerrainType[][] getMap() {return map;}
 
-    public String getCurrentPlayer() {return currentPlayer;}
+    public String getCurrentPlayer() {return currentPlayer;};
     public void setCurrentPlayer(String currentPlayer) { this.currentPlayer = currentPlayer; }
     public TerrainType getTerrainAt(Position pos) {return map[pos.getRow()][pos.getCol()];}
     public Collection<Unit> getUnits() {return unitsMap.values();}
@@ -190,6 +187,7 @@ public class Game implements Observable {
         if (unit == null) return;
         applyMoveInternal(end, start);
         unit.resetMoved();
+        notifyObservers(new UnitMovedEvent(unit, end, start));
     }
 
     public void reverseAttackUnit(Unit attacker, Unit target, int previousTargetHP, int previousAttackerHP, boolean destroyed, boolean attackerDestroyed) {
@@ -217,7 +215,7 @@ public class Game implements Observable {
         notifyObservers(new BuildingCapturedEvent(unit));
     }
 
-    public void reverseWait(Unit unit) {
+    public void reverseWaitUnit(Unit unit) {
         if (unit == null) return;
         unit.resetActed();
     }
@@ -254,31 +252,46 @@ public class Game implements Observable {
         if (!(capturingUnit instanceof Infantry)) return false;
         Building building = getBuildingAt(pos);
         if (building == null) return false;
-        return !building.getOwner().equals(currentPlayer);
+        return !building.getOwner().equals(getCurrentPlayer());
     }
 
 
     /// PLAYER MANAGMENT
-    public void nextTurn() {
-        currentPlayer = currentPlayer.equals("Player1") ? "Player2" : "Player1";
-        notifyObservers(new TurnChangedEvent(currentPlayer));
+    public void nextTurn(String newPlayer) {
+        currentPlayer = newPlayer;
+        notifyObservers(new TurnChangedEvent(getCurrentPlayer()));
 
         for (Unit unit : unitsMap.values()) {
-            if (unit.isOwnedBy(currentPlayer)) {
+            if (unit.isOwnedBy(getCurrentPlayer())) {
                 unit.resetMovedActed();
             }
         }
         applyRecoveryPhase();
     }
 
+    public void reverseTurn(String previousPlayer, int previousMoney, Map<Unit, Integer> previousUnitHP) {
+        setPlayerMoney(getCurrentPlayer(), previousMoney);
+
+        for (Unit unit : unitsMap.values()) {
+            if (unit.isOwnedBy(getCurrentPlayer())) {
+                unit.setHealth(previousUnitHP.get(unit));
+                notifyObservers(new HealthChangedEvent(unit, previousUnitHP.get(unit)));
+            }
+        }
+        notifyObservers(new MoneyChangedEvent(getCurrentPlayer(), getPlayerMoney(getCurrentPlayer())));
+
+        currentPlayer = previousPlayer;
+        notifyObservers(new TurnChangedEvent(getCurrentPlayer()));
+    }
+
     private void applyRecoveryPhase() {
         RecoveryService.applyMoneyRecovery(this);
         RecoveryService.applyHealthRecovery(this);
-        notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));
+        notifyObservers(new MoneyChangedEvent(getCurrentPlayer(), getPlayerMoney(getCurrentPlayer())));
 
         for (Unit unit : unitsMap.values()) {
-            if (unit.isOwnedBy(currentPlayer)) {
-                notifyObservers(new HealthRecoveredEvent(unit, unit.getHealth()));
+            if (unit.isOwnedBy(getCurrentPlayer())) {
+                notifyObservers(new HealthChangedEvent(unit, unit.getHealth()));
             }
         }
     }
@@ -293,29 +306,29 @@ public class Game implements Observable {
         Building building = getBuildingAt(pos);
         if (building == null) return false;
         String owner = building.getOwner();
-        return building.getType().equals(TerrainType.Factory) && owner.equals(currentPlayer);
+        return building.getType().equals(TerrainType.Factory) && owner.equals(getCurrentPlayer());
     }
 
     public boolean isOwnedBuilding(Position pos) {
         TerrainType type = getTerrainAt(pos);
-        return type.isBuilding() && getTileOwner(pos).equals(currentPlayer);
+        return type.isBuilding() && getTileOwner(pos).equals(getCurrentPlayer());
     }
 
 
     /// UNIT states
     public boolean canUnitMove(Position pos) {
         Unit unit = getUnitAt(pos);
-        return unit != null && unit.isOwnedBy(currentPlayer) && unit.canMove();
+        return unit != null && unit.isOwnedBy(getCurrentPlayer()) && unit.canMove();
     }
 
     public boolean canUnitAct(Position pos) {
         Unit unit = getUnitAt(pos);
-        return unit != null && unit.isOwnedBy(currentPlayer) && unit.canAct();
+        return unit != null && unit.isOwnedBy(getCurrentPlayer()) && unit.canAct();
     }
 
     public boolean unitsAreAvailableForCurrentPlayer() {
         for (Unit unit : getUnits()) {
-            if (unit.isOwnedBy(currentPlayer) && unit.canAct()) return true;
+            if (unit.isOwnedBy(getCurrentPlayer()) && unit.canAct()) return true;
         }
         return false;
     }
@@ -365,7 +378,7 @@ public class Game implements Observable {
         for (Position pos : attackablePositions) {
             Unit occupant = getUnitAt(pos);
 
-            if (occupant != null && !occupant.isOwnedBy(currentPlayer)) {
+            if (occupant != null && !occupant.isOwnedBy(getCurrentPlayer())) {
                 result.add(pos);
             }
         }

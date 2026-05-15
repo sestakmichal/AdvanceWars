@@ -8,8 +8,13 @@ package ija.ija2025.project.view.Observers;
 import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Buildings.Building;
 import ija.ija2025.project.model.Events.Event;
+import ija.ija2025.project.model.Events.Positions.AttackablePositionsShownEvent;
+import ija.ija2025.project.model.Events.Positions.MovablePositionsShownEvent;
+import ija.ija2025.project.model.Events.Positions.PositionsHiddenEvent;
+import ija.ija2025.project.model.Events.Positions.UnitPositionShownEvent;
+import ija.ija2025.project.model.Events.State.HealthChangedEvent;
+import ija.ija2025.project.model.Events.UnitActions.*;
 import ija.ija2025.project.model.Observation.Observer;
-import ija.ija2025.project.model.Events.*;
 import ija.ija2025.project.model.Map.*;
 import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.view.SpriteFactory;
@@ -81,9 +86,6 @@ public class MapObserver implements Observer {
 
             getTile(from).removeUnitVisual();
             toTile.setUnitVisual(sprite);
-
-            toTile.setHighlight();
-            /// should display options after moving
         }
 
         if (event instanceof UnitSpawnedEvent(Unit unit, Position pos)) {
@@ -119,7 +121,7 @@ public class MapObserver implements Observer {
             clearAllHighlights();
         }
 
-        if (event instanceof HealthRecoveredEvent(Unit unit, int health)) {
+        if (event instanceof HealthChangedEvent(Unit unit, int health)) {
             Position pos = unit.getPosition();
             SpriteFactory.updateUnitHealth(getTile(pos).getUnitVisual(), unit.getHealth());
         }

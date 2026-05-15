@@ -4,7 +4,7 @@
  */
 
 package ija.ija2025.project.controller;
-import ija.ija2025.project.model.Bots.RandomBot;
+import ija.ija2025.project.controller.Bots.RandomBot;
 import ija.ija2025.project.model.Commands.*;
 import ija.ija2025.project.model.Game.*;
 import ija.ija2025.project.model.Map.Position;
@@ -27,10 +27,10 @@ public class Controller {
     }
 
     public CommandManager getCommandManager() { return commandManager; }
-
     public void setPlayerType(String playerId, String type) {
         playerTypes.put(playerId, type);
     }
+
 
     /// When Unit clicked, first display menu with move/attack/capture/wait options
     public void handleTileClick(Position position) {
@@ -112,6 +112,50 @@ public class Controller {
         commandManager.execute(new BuyUnitCommand(game, type, pos, cost));
     }
 
+    public void handleSaveGame(String filePath) {
+        try {
+            GameFactory.saveGameToJson(game, filePath, commandManager);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save: " + e.getMessage(), e);
+        }
+    }
+
+    public void handleUndoGame() {
+        commandManager.undoLastCommand();
+        deselect();
+    }
+
+    public void handleReturnToMenu() {
+        if (onReturnToMenu != null) {
+            onReturnToMenu.run();
+        }
+    }
+
+    public void checkAndExecuteBotTurn() {
+        if ("Bot".equals(playerTypes.get(game.getCurrentPlayer()))) {
+            RandomBot bot = new RandomBot(game.getCurrentPlayer(), commandManager);
+            bot.initiateTurn(game, this::checkTurn);
+        }
+    }
+
+    public boolean canAffordUnit(int unitValue) {
+        int playerMoney = game.getPlayerMoney(game.getCurrentPlayer());
+        return playerMoney >= unitValue;
+    }
+
+
+
+    public void setOnReturnToMenu(Runnable callback) {
+        this.onReturnToMenu = callback;
+    }
+
+    private void checkTurn() {
+        if (!game.unitsAreAvailableForCurrentPlayer()) {
+            commandManager.execute(new TurnChangeCommand(game));
+            checkAndExecuteBotTurn();
+        }
+    }
+
     private void deselect() {
         currentState = TurnState.IDLE;
         selectedPos = null;
@@ -132,43 +176,6 @@ public class Controller {
         if (game.canUnitAct(pos)) {
             game.showAttackablePositions(pos);
             game.showUnitPosition(pos);
-        }
-    }
-
-    private void checkTurn() {
-        if (!game.unitsAreAvailableForCurrentPlayer()) {
-            commandManager.execute(new TurnEndCommand(game, game.getCurrentPlayer()));
-            checkAndExecuteBotTurn();
-        }
-    }
-
-    public void checkAndExecuteBotTurn() {
-        if ("Bot".equals(playerTypes.get(game.getCurrentPlayer()))) {
-            RandomBot bot = new RandomBot(game.getCurrentPlayer(), commandManager);
-            bot.initiateTurn(game, this::checkTurn);
-        }
-    }
-
-    public boolean canAffordUnit(int unitValue) {
-        int playerMoney = game.getPlayerMoney(game.getCurrentPlayer());
-        return playerMoney >= unitValue;
-    }
-
-    public void handleSaveGame(String filePath) {
-        try {
-            GameFactory.saveGameToJson(game, filePath, commandManager);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to save: " + e.getMessage(), e);
-        }
-    }
-
-    public void setOnReturnToMenu(Runnable callback) {
-        this.onReturnToMenu = callback;
-    }
-
-    public void handleReturnToMenu() {
-        if (onReturnToMenu != null) {
-            onReturnToMenu.run();
         }
     }
 }

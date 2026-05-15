@@ -19,7 +19,7 @@ import ija.ija2025.project.model.Game.Game;
         @JsonSubTypes.Type(value = BuyUnitCommand.class, name = "buy"),
         @JsonSubTypes.Type(value = CaptureCommand.class, name = "capture"),
         @JsonSubTypes.Type(value = MoveCommand.class, name = "move"),
-        @JsonSubTypes.Type(value = TurnEndCommand.class, name = "turnEnd"),
+        @JsonSubTypes.Type(value = TurnChangeCommand.class, name = "turnEnd"),
         @JsonSubTypes.Type(value = WaitCommand.class, name = "wait")
 })
 public interface Command {

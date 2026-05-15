@@ -3,7 +3,7 @@
  * Description: Class for the auto bot functionality as the opponent.
  */
 
-package ija.ija2025.project.model.Bots;
+package ija.ija2025.project.controller.Bots;
 
 import ija.ija2025.project.controller.CommandManager;
 import ija.ija2025.project.model.Commands.*;
@@ -50,7 +50,7 @@ public class RandomBot implements GameBot {
         }
 
         game.hidePositions();
-        game.nextTurn();
+        commandManager.execute(new TurnChangeCommand(game));
     }
 
     private void processUnitAction(Game game, Unit unit) {
