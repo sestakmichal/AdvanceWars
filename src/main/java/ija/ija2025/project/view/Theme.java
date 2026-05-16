@@ -27,4 +27,15 @@ public class Theme {
         public static Color TANK = Color.DARKRED;
         public static Color ARTILLERY = Color.CADETBLUE;
     }
+
+    public static final class Terrain {
+        public static final Color PLAIN = Color.LIGHTGREEN;
+        public static final Color FOREST = Color.DARKGREEN;
+        public static final Color MOUNTAIN = Color.BROWN;
+        public static final Color WATER = Color.CYAN;
+        public static final Color CITY = Color.GRAY;
+        public static final Color FACTORY = Color.ORANGE;
+        public static final Color HQP1 = Color.RED;
+        public static final Color HQP2 = Color.BLUE;
+    }
 }

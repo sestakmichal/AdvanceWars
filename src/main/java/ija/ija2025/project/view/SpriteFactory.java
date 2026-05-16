@@ -40,7 +40,7 @@ public class SpriteFactory {
     }
 
     private static Node createCircleMock(Unit u) {
-        Color ownerColor = u.getOwner().equalsIgnoreCase("Player1") ? Color.RED : Color.BLUE;
+        Color ownerColor = u.getOwner().equalsIgnoreCase("Player1") ? Theme.Terrain.HQP1 : Theme.Terrain.HQP2;
 
         Circle base = new Circle(16);
         base.setFill(ownerColor);
