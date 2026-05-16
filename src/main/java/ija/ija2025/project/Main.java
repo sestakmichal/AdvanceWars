@@ -64,9 +64,8 @@ public class Main extends Application {
         if (history != null) {
             for (Command cmd : history) {
                 cmd.setGame(game);
-                controller.getCommandManager().executeFromLoad(cmd);
+                controller.getCommandManager().addFromLoad(cmd);
             }
-            controller.getCommandManager().printLen();
         }
 
         MapObserver mapView = new MapObserver(game.getSize());

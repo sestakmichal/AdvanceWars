@@ -40,7 +40,10 @@ public class RandomBot implements GameBot {
                 .filter(u -> u.isOwnedBy(botPlayer))
                 .toList();
 
-        scheduler.schedule(()-> Platform.runLater(()-> processBuying(game)), DELAY_MS, TimeUnit.MILLISECONDS);
+        // limit units to around 20
+        if (myUnits.size() < 20) {
+            scheduler.schedule(()-> Platform.runLater(()-> processBuying(game)), DELAY_MS, TimeUnit.MILLISECONDS);
+        }
 
         int delay = DELAY_MS * 2;
         for (Unit unit : myUnits) {

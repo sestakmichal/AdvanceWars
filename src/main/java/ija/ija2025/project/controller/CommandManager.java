@@ -17,7 +17,7 @@ public class CommandManager {
         redoHistory.clear();
     }
 
-    public void executeFromLoad(Command command) {
+    public void addFromLoad(Command command) {
         commandHistory.push(command);
     }
 
@@ -42,9 +42,5 @@ public class CommandManager {
     }
     public void setCommandHistory(Stack<Command> history) {
         this.commandHistory = history;
-    }
-
-    public void printLen() {
-        System.out.println(commandHistory.toArray().length);
     }
 }
