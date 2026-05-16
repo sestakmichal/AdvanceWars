@@ -125,6 +125,11 @@ public class Controller {
         deselect();
     }
 
+    public void handleRedoGame() {
+        commandManager.redoLastCommand();
+        deselect();
+    }
+
     public void handleReturnToMenu() {
         if (onReturnToMenu != null) {
             onReturnToMenu.run();

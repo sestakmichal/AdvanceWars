@@ -41,7 +41,7 @@ public class UIObserver implements Observer {
         this.statusBar = new StatusBar(() -> {
             Stage stage = (Stage) statusBar.getScene().getWindow();
             openSaveDialog(stage);
-            },controller::handleUndoGame
+            },controller::handleUndoGame, controller::handleRedoGame
         );
     }
 

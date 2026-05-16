@@ -18,7 +18,7 @@ public class StatusBar extends HBox {
     private final Label p1MoneyLabel;
     private final Label p2MoneyLabel;
 
-    public StatusBar(Runnable onSave, Runnable onUndo) {
+    public StatusBar(Runnable onSave, Runnable onUndo, Runnable onRedo) {
         setSpacing(40);
         setAlignment(Pos.CENTER);
         setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 0, 0.7), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -42,10 +42,13 @@ public class StatusBar extends HBox {
         Button undoButton = new Button("Undo");
         undoButton.setOnAction(e -> onUndo.run());
 
+        Button redoButton = new Button("Redo");
+        redoButton.setOnAction(e -> onRedo.run());
+
         Button saveButton = new Button("Save Game");
         saveButton.setOnAction(e -> onSave.run());
 
-        getChildren().addAll(p1MoneyLabel, turnLabel, p2MoneyLabel, spacer, undoButton, saveButton);
+        getChildren().addAll(p1MoneyLabel, turnLabel, p2MoneyLabel, spacer, undoButton, redoButton, saveButton);
     }
 
     public void updateMoney(String player, int amount) {

@@ -9,10 +9,12 @@ import java.util.Stack;
 
 public class CommandManager {
     private Stack<Command> commandHistory = new Stack<>();
+    private Stack<Command> redoHistory = new Stack<>();
 
     public void execute(Command command) {
         command.execute();
         commandHistory.push(command);
+        redoHistory.clear();
     }
 
     public void executeFromLoad(Command command) {
@@ -23,13 +25,21 @@ public class CommandManager {
         if (commandHistory.isEmpty()) {return;};
         Command command = commandHistory.pop();
         command.undo();
+        redoHistory.push(command);
+        System.out.println(command.toString());
+    }
+
+    public void redoLastCommand() {
+        if (redoHistory.isEmpty()) {return;};
+        Command command = redoHistory.pop();
+        command.execute();
+        commandHistory.push(command);
         System.out.println(command.toString());
     }
 
     public Stack<Command> getCommandHistory() {
         return commandHistory;
     }
-
     public void setCommandHistory(Stack<Command> history) {
         this.commandHistory = history;
     }
