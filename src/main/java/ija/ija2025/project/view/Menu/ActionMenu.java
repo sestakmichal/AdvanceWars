@@ -21,14 +21,12 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-
 public class ActionMenu extends VBox {
 
     private final Map<GameAction, Button> buttons = new EnumMap<>(GameAction.class);
 
     private static final Background MENU_BG = new Background(new BackgroundFill(Color.DARKSLATEGRAY, new CornerRadii(6), Insets.EMPTY));
     private static final Border MENU_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(6), new BorderWidths(1)));
-    private static final Background BUTTON_BG = new Background(new BackgroundFill(Color.DARKGRAY, new CornerRadii(6), Insets.EMPTY));
     private static final DropShadow SHADOW = new DropShadow(10, Color.rgb(0, 0, 0, 0.6));
 
     public ActionMenu(Controller controller, Runnable onClose, boolean shouldSkipCapture) {
@@ -53,7 +51,7 @@ public class ActionMenu extends VBox {
         label.setEffect(SHADOW);
 
         Button button = new Button();
-        button.setGraphic(label); // only visual text
+        button.setGraphic(label);
         button.setMaxWidth(Double.MAX_VALUE);
         button.setBackground(new Background(new BackgroundFill(getColor(action), new CornerRadii(6), Insets.EMPTY)));
 

@@ -158,8 +158,8 @@ public class UIObserver implements Observer {
             statusBar.updateTurn(player);
         }
 
-        if (event instanceof HqCapturedEvent(String whichPlayerHQ)) {
-            String winner = whichPlayerHQ.equals("Player1") ? "Red" : "Blue";
+        if (event instanceof HqCapturedEvent(String hqOwner)) {
+            String winner = hqOwner.equals("Player1") ? "Red" : "Blue";
             showWinnerScreen(winner);
         }
     }

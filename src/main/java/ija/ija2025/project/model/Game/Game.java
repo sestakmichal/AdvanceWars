@@ -86,7 +86,7 @@ public class Game implements Observable {
 
     public void destroyUnit(Unit unit) {
         unitsMap.remove(unit.getPosition());
-        notifyObservers(new UnitDestroyedEvent(unit));
+        notifyObservers(new UnitDestroyedEvent(unit.getPosition()));
     }
 
     /// INTERNAL ACTIONS
@@ -122,18 +122,23 @@ public class Game implements Observable {
 
         int attackerHpBefore = attacker.getHealth();
         int targetHpBefore = target.getHealth();
-        applyAttackInternal(attacker, target);
-        boolean destroyed = target.isDestroyed();
-        attacker.setActed();
-        notifyObservers(new UnitAttackedEvent(attacker, target, targetHpBefore - target.getHealth()));
 
+        applyAttackInternal(attacker, target);
+        attacker.setActed();
+
+        boolean destroyed = target.isDestroyed();
+        if (!destroyed) {
+            notifyObservers(new UnitHealthChangedEvent(target.getPosition(), target.getHealth()));
+        }
         boolean attackerDestroyed = false;
         if (!destroyed) {
             List<Position> defenderReach = PathFindingService.getAttackablePositions(map, target, target.getPosition());
             if (defenderReach.contains(attacker.getPosition())) {
                 applyAttackInternal(target, attacker);
                 attackerDestroyed = attacker.isDestroyed();
-                notifyObservers(new UnitAttackedEvent(target, attacker, attackerHpBefore - attacker.getHealth()));
+                if (!attackerDestroyed) {
+                    notifyObservers(new UnitHealthChangedEvent(attacker.getPosition(),  attacker.getHealth()));
+                }
             }
         }
 
@@ -142,7 +147,6 @@ public class Game implements Observable {
 
     public CaptureResult captureBuilding(Unit unit) {
         if (!(unit instanceof Infantry)) return null;
-
         Building building = getBuildingAt(unit.getPosition());
         if (building == null) return null;
 
@@ -153,16 +157,15 @@ public class Game implements Observable {
         building.takeCaptureDamage(captureDamage, currentPlayer);
         unit.setActed();
 
-        notifyObservers(new BuildingAttackedEvent(unit, captureDamage));
+        notifyObservers(new BuildingHealthChangedEvent(building.getPosition(), building.getHealth()));
         if (building.getOwner().equals(currentPlayer)) {
             wasCaptured = true;
-            // HQ -> End of game
             if (building.getType() == TerrainType.HQ) {
                 System.out.println("Successfully captured HQ");
                 notifyObservers(new HqCapturedEvent(building.getOwner()));
             } else {
                 System.out.println("Successfully captured a building");
-                notifyObservers(new BuildingCapturedEvent(unit));
+                notifyObservers(new BuildingCapturedEvent(building.getPosition(), building.getOwner()));
             }
         }
         return new CaptureResult(previousOwner, previousHP, wasCaptured);
@@ -191,15 +194,22 @@ public class Game implements Observable {
 
     public void reverseAttackUnit(Unit attacker, Unit target, int previousTargetHP, int previousAttackerHP, boolean destroyed, boolean attackerDestroyed) {
         if (attacker == null || target == null) return;
+        Position targetPos = target.getPosition();
+        Position attackerPos = attacker.getPosition();
+
         if (destroyed) {
-            spawnUnit(target.getType(), target.getOwner(), target.getPosition().getRow(), target.getPosition().getCol());
+            spawnUnit(target.getType(), target.getOwner(), targetPos.getRow(), targetPos.getCol());
         }
         if (attackerDestroyed) {
-            spawnUnit(attacker.getType(), attacker.getOwner(), attacker.getPosition().getRow(), attacker.getPosition().getCol());
+            spawnUnit(attacker.getType(), attacker.getOwner(), attackerPos.getRow(), attackerPos.getCol());
         }
-        target.setHealth(previousTargetHP);
-        attacker.setHealth(previousAttackerHP);
-        attacker.resetActed();
+
+        getUnitAt(targetPos).setHealth(previousTargetHP);
+        getUnitAt(attackerPos).setHealth(previousAttackerHP);
+        getUnitAt(attackerPos).resetActed();
+
+        notifyObservers(new UnitHealthChangedEvent(targetPos, previousTargetHP));
+        notifyObservers(new UnitHealthChangedEvent(attackerPos, previousAttackerHP));
     }
 
     public void reverseCaptureBuilding(Unit unit, String previousOwner, int previousCaptureHP, boolean wasCaptured) {
@@ -207,11 +217,12 @@ public class Game implements Observable {
         Building building = getBuildingAt(unit.getPosition());
         if (building == null) return;
         building.setHealth(previousCaptureHP);
+        notifyObservers(new BuildingHealthChangedEvent(building.getPosition(), building.getHealth()));
         if (wasCaptured) {
             building.changeOwner(previousOwner);
+            notifyObservers(new BuildingCapturedEvent(building.getPosition(), previousOwner));
         }
         unit.resetActed();
-        notifyObservers(new BuildingCapturedEvent(unit));
     }
 
     public void reverseWaitUnit(Unit unit) {
@@ -274,7 +285,7 @@ public class Game implements Observable {
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
                 unit.setHealth(previousUnitHP.get(unit));
-                notifyObservers(new HealthChangedEvent(unit, previousUnitHP.get(unit)));
+                notifyObservers(new UnitHealthChangedEvent(unit.getPosition(), previousUnitHP.get(unit)));
             }
         }
         notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));
@@ -290,7 +301,7 @@ public class Game implements Observable {
 
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
-                notifyObservers(new HealthChangedEvent(unit, unit.getHealth()));
+                notifyObservers(new UnitHealthChangedEvent(unit.getPosition(), unit.getHealth()));
             }
         }
     }

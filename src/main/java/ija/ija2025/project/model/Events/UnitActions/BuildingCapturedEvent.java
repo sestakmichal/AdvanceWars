@@ -6,6 +6,7 @@
 package ija.ija2025.project.model.Events.UnitActions;
 
 import ija.ija2025.project.model.Events.Event;
+import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;
 
-public record BuildingCapturedEvent(Unit unit) implements Event {}
+public record BuildingCapturedEvent(Position pos, String newOwner) implements Event {}

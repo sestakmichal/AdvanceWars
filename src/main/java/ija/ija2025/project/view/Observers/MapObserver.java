@@ -8,18 +8,12 @@ package ija.ija2025.project.view.Observers;
 import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Buildings.Building;
 import ija.ija2025.project.model.Events.Event;
-import ija.ija2025.project.model.Events.Positions.AttackablePositionsShownEvent;
-import ija.ija2025.project.model.Events.Positions.MovablePositionsShownEvent;
-import ija.ija2025.project.model.Events.Positions.PositionsHiddenEvent;
-import ija.ija2025.project.model.Events.Positions.UnitPositionShownEvent;
-import ija.ija2025.project.model.Events.State.HealthChangedEvent;
+import ija.ija2025.project.model.Events.Positions.*;
 import ija.ija2025.project.model.Events.UnitActions.*;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Map.*;
 import ija.ija2025.project.model.Units.Unit;
-import ija.ija2025.project.view.SpriteFactory;
-import ija.ija2025.project.view.Theme;
-import ija.ija2025.project.view.Tile;
+import ija.ija2025.project.view.*;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
@@ -92,13 +86,12 @@ public class MapObserver implements Observer {
             getTile(pos).setUnitVisual(SpriteFactory.generateSprite(unit));
         }
 
-        if (event instanceof UnitAttackedEvent(Unit attacker, Unit target, int damage)) {
-            Position targetPos = target.getPosition();
-            SpriteFactory.updateUnitHealth(getTile(targetPos).getUnitVisual(), target.getHealth());
+        if (event instanceof UnitHealthChangedEvent(Position pos, int newHealth)) {
+            SpriteFactory.updateUnitHealth(getTile(pos).getUnitVisual(), newHealth);
         }
 
-        if (event instanceof UnitDestroyedEvent(Unit target)) {
-            getTile(target.getPosition()).removeUnitVisual();
+        if (event instanceof UnitDestroyedEvent(Position pos)) {
+            getTile(pos).removeUnitVisual();
         }
 
         if (event instanceof UnitPositionShownEvent(Position pos, Unit unit)) {
@@ -121,14 +114,13 @@ public class MapObserver implements Observer {
             clearAllHighlights();
         }
 
-        if (event instanceof HealthChangedEvent(Unit unit, int health)) {
-            Position pos = unit.getPosition();
-            SpriteFactory.updateUnitHealth(getTile(pos).getUnitVisual(), unit.getHealth());
+        if (event instanceof UnitHealthChangedEvent(Position pos, int health)) {
+            SpriteFactory.updateUnitHealth(getTile(pos).getUnitVisual(), health);
         }
 
-        if (event instanceof BuildingCapturedEvent(Unit unit)) {
-            Tile tile = getTile(unit.getPosition());
-            tile.updateOwner(unit.getOwner());
+        if (event instanceof BuildingCapturedEvent(Position pos, String newOwner)) {
+            Tile tile = getTile(pos);
+            tile.updateOwner(newOwner);
         }
     }
 }
