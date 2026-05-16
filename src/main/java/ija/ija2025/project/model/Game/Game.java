@@ -283,8 +283,11 @@ public class Game implements Observable {
 
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
-                unit.setHealth(previousUnitHP.get(unit));
-                notifyObservers(new UnitHealthChangedEvent(unit.getPosition(), previousUnitHP.get(unit)));
+                Integer hp = previousUnitHP.get(unit.getPosition()); // fix here
+                if (hp != null) {
+                    unit.setHealth(hp);
+                    notifyObservers(new UnitHealthChangedEvent(unit.getPosition(), hp));
+                };
             }
         }
         notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));
