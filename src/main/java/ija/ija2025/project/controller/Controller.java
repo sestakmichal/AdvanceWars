@@ -34,6 +34,7 @@ public class Controller {
 
     /// When Unit clicked, first display menu with move/attack/capture/wait options
     public void handleTileClick(Position position) {
+        if ("Bot".equals(playerTypes.get(game.getCurrentPlayer()))) return;
 
         if (currentState == TurnState.IDLE) {
             if (game.canUnitAct(position)) {

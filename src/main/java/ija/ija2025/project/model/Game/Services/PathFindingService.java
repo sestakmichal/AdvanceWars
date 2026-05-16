@@ -36,7 +36,7 @@ public class PathFindingService {
         int maxUnitRange = unit.getMoveRange();
 
         while (!prQueue.isEmpty()) {
-            int[] current = prQueue.poll(); // same like pq.pop() get lowest value node
+            int[] current = prQueue.poll();
 
             int cost = current[0];
             int row = current[1];
@@ -45,9 +45,9 @@ public class PathFindingService {
             if (cost > maxUnitRange) continue;
 
             Unit unitOnTile = allUnits.get(new Position(row, col));
+            Position currentPos = new Position(row, col);
 
-            // do not allow to move on any kind of unit
-            if (unitOnTile == null) reachable.add(new Position(row, col));
+            if (unitOnTile == null || currentPos.equals(startPos)) reachable.add(currentPos);
 
             for (int[] dir : new int[][]{
                     {1,  0}, // right
@@ -99,7 +99,7 @@ public class PathFindingService {
         int maxRange = unitRange.stream().max(Integer::compareTo).orElse(0);
 
         while (!queue.isEmpty()) {
-            int[] current = queue.poll(); // same like pq.pop() get lowest value node
+            int[] current = queue.poll();
             int cost = current[0];
             int row = current[1];
             int col = current[2];

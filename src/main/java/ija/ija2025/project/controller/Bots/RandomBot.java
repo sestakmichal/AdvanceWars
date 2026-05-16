@@ -16,11 +16,15 @@ import javafx.application.Platform;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RandomBot implements GameBot {
     private CommandManager commandManager;
     private String botPlayer;
     private Random random = new Random();
+    private static final int DELAY_MS = 500;
 
     public RandomBot(String botPlayer,  CommandManager commandManager) {
         this.botPlayer = botPlayer;
@@ -28,14 +32,33 @@ public class RandomBot implements GameBot {
     }
 
     public void initiateTurn(Game game, Runnable onTurnEnd) {
-        new Thread(() -> {
-            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
-            Platform.runLater(() -> {
-                if (game.isFinished()) { return;}
-                executeTurn(game);
-                onTurnEnd.run(); // controller decides what happens next
-            });
-        }).start();
+        if (game.isFinished()) return;
+
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
+        List<Unit> myUnits = game.getUnits().stream()
+                .filter(u -> u.isOwnedBy(botPlayer))
+                .toList();
+
+        scheduler.schedule(()-> Platform.runLater(()-> processBuying(game)), DELAY_MS, TimeUnit.MILLISECONDS);
+
+        int delay = DELAY_MS * 2;
+        for (Unit unit : myUnits) {
+            final int d = delay;
+            scheduler.schedule(() -> Platform.runLater(() -> {
+                if (!game.isFinished() && !unit.isDestroyed() && unit.canAct()) {
+                    processUnitAction(game, unit);
+                }
+            }), d, TimeUnit.MILLISECONDS);
+            delay += DELAY_MS;
+        }
+
+        final int endDelay = delay;
+        scheduler.schedule(() -> Platform.runLater(() -> {
+            game.hidePositions();
+            onTurnEnd.run();
+            scheduler.shutdown();
+        }), endDelay, TimeUnit.MILLISECONDS);
     }
 
 
