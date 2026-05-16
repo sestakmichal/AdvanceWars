@@ -23,26 +23,27 @@ public class Game implements Observable {
     private Position mapSize;
     private TerrainType[][] map;
     private HashMap<Position, Unit> unitsMap = new HashMap<>();
+    private Map<Position, Building> buildingsMap = new HashMap<>();
 
     private String currentPlayer = "Player1";
     private Map<String, Integer> playerMoney = new HashMap<>();
-
-    private Map<Position, Building> buildingsMap = new HashMap<>();
+    private boolean isFinished = false;
 
     public Position getSize() { return mapSize; }
     public TerrainType[][] getMap() {return map;}
+    public Map<Position, Building> getBuildingsMap() { return buildingsMap; }
 
-    public String getCurrentPlayer() {return currentPlayer;}
-    public void setCurrentPlayer(String currentPlayer) { this.currentPlayer = currentPlayer; }
     public TerrainType getTerrainAt(Position pos) {return map[pos.getRow()][pos.getCol()];}
     public Collection<Unit> getUnits() {return unitsMap.values();}
-
     public Unit getUnitAt(Position pos) {return unitsMap.get(pos);}
     public Building getBuildingAt(Position pos) {return buildingsMap.get(pos);}
     public String getTileOwner(Position pos) {return buildingsMap.get(pos).getOwner();}
+
+    public String getCurrentPlayer() {return currentPlayer;}
+    public void setCurrentPlayer(String currentPlayer) { this.currentPlayer = currentPlayer; }
     public int getPlayerMoney(String player) {return playerMoney.getOrDefault(player, 0);}
     public void setPlayerMoney(String player, int amount) { playerMoney.put(player, amount); }
-    public Map<Position, Building> getBuildingsMap() { return buildingsMap; }
+    public boolean isFinished() {return isFinished;}
 
     public void updateMap(TerrainType[][] newMap) {
         map = newMap;
@@ -163,6 +164,7 @@ public class Game implements Observable {
             if (building.getType() == TerrainType.HQ) {
                 System.out.println("Successfully captured HQ");
                 notifyObservers(new HqCapturedEvent(building.getOwner()));
+                isFinished = true;
             } else {
                 System.out.println("Successfully captured a building");
                 notifyObservers(new BuildingCapturedEvent(building.getPosition(), building.getOwner()));
@@ -293,11 +295,11 @@ public class Game implements Observable {
 
         for (Unit unit : unitsMap.values()) {
             if (unit.isOwnedBy(currentPlayer)) {
-                Integer hp = previousUnitHP.get(unit.getPosition()); // fix here
+                Integer hp = previousUnitHP.get(unit.getPosition());
                 if (hp != null) {
                     unit.setHealth(hp);
                     notifyObservers(new UnitHealthChangedEvent(unit.getPosition(), hp));
-                };
+                }
             }
         }
         notifyObservers(new MoneyChangedEvent(currentPlayer, getPlayerMoney(currentPlayer)));

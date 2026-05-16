@@ -132,7 +132,7 @@ public class Controller {
     }
 
     public void checkAndExecuteBotTurn() {
-        if ("Bot".equals(playerTypes.get(game.getCurrentPlayer()))) {
+        if ("Bot".equals(playerTypes.get(game.getCurrentPlayer())) && !game.isFinished()) {
             RandomBot bot = new RandomBot(game.getCurrentPlayer(), commandManager);
             bot.initiateTurn(game, this::checkTurn);
         }
