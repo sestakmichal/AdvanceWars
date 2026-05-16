@@ -7,6 +7,7 @@ package ija.ija2025.project.model.Commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ija.ija2025.project.model.Game.Game;
+import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;
 
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class TurnChangeCommand implements Command {
     private String newPlayer;
     private String previousPlayer;
     private int newPlayerPreviousMoney;
-    private Map<Unit, Integer> newPlayerPreviousUnitHP = new HashMap<>();
+    private Map<Position, Integer> newPlayerPreviousUnitHP = new HashMap<>();
 
     @JsonIgnore
     private Game game;
@@ -32,7 +33,7 @@ public class TurnChangeCommand implements Command {
         newPlayerPreviousMoney = game.getPlayerMoney(newPlayer);
         for (Unit unit : game.getUnits()) {
             if (unit.isOwnedBy(newPlayer)) {
-                newPlayerPreviousUnitHP.put(unit, unit.getHealth());
+                newPlayerPreviousUnitHP.put(unit.getPosition(), unit.getHealth());
             }
         }
         game.nextTurn(newPlayer);

@@ -193,7 +193,6 @@ public class Game implements Observable {
     }
 
     public void reverseAttackUnit(Unit attacker, Unit target, int previousTargetHP, int previousAttackerHP, boolean destroyed, boolean attackerDestroyed) {
-        if (attacker == null || target == null) return;
         Position targetPos = target.getPosition();
         Position attackerPos = attacker.getPosition();
 
@@ -279,7 +278,7 @@ public class Game implements Observable {
         applyRecoveryPhase();
     }
 
-    public void reverseTurn(String previousPlayer, int previousMoney, Map<Unit, Integer> previousUnitHP) {
+    public void reverseTurn(String previousPlayer, int previousMoney, Map<Position, Integer> previousUnitHP) {
         setPlayerMoney(currentPlayer, previousMoney);
 
         for (Unit unit : unitsMap.values()) {
