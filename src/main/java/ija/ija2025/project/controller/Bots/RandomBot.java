@@ -40,16 +40,14 @@ public class RandomBot implements GameBot {
 
     @Override
     public void executeTurn(Game game) {
+        processBuying(game);
         List<Unit> myUnits = game.getUnits().stream()
                 .filter(u -> u.isOwnedBy(botPlayer))
                 .toList();
 
-        processBuying(game);
-
         for (Unit unit : myUnits) {
             processUnitAction(game, unit);
         }
-
         game.hidePositions();
     }
 

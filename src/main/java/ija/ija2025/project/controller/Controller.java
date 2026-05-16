@@ -139,7 +139,7 @@ public class Controller {
     public void checkAndExecuteBotTurn() {
         if ("Bot".equals(playerTypes.get(game.getCurrentPlayer())) && !game.isFinished()) {
             RandomBot bot = new RandomBot(game.getCurrentPlayer(), commandManager);
-            bot.initiateTurn(game, this::checkTurn);
+            bot.initiateTurn(game, this::endTurn); // no more lambda needed
         }
     }
 
@@ -155,10 +155,13 @@ public class Controller {
 
     private void checkTurn() {
         if (!game.unitsAreAvailableForCurrentPlayer()) {
-            System.out.println("Check turn units unavailable for current player");
-            commandManager.execute(new TurnChangeCommand(game));
-            checkAndExecuteBotTurn();
+            endTurn();
         }
+    }
+
+    private void endTurn() {
+        commandManager.execute(new TurnChangeCommand(game));
+        checkAndExecuteBotTurn();
     }
 
     private void deselect() {
