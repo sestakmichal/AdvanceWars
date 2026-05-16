@@ -13,6 +13,7 @@ import ija.ija2025.project.model.Events.UnitActions.*;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Map.*;
 import ija.ija2025.project.model.Units.Unit;
+import ija.ija2025.project.model.Game.UnitAbilities;
 import ija.ija2025.project.view.*;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -94,7 +95,7 @@ public class MapObserver implements Observer {
             getTile(pos).removeUnitVisual();
         }
 
-        if (event instanceof UnitPositionShownEvent(Position pos, Unit unit)) {
+        if (event instanceof UnitPositionShownEvent(Position pos, Unit unit, UnitAbilities abilities)) {
             getTile(pos).setHighlight();
         }
 

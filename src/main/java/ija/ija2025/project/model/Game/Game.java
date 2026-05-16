@@ -195,10 +195,8 @@ public class Game implements Observable {
     }
 
     public void reverseAttackUnit(
-        Position attackerPos, Position targetPos,
-        String attackerType, String attackerOwner,
-        String targetType, String targetOwner,
-        int previousAttackerHP, int previousTargetHP,
+        Position attackerPos, Position targetPos, String attackerType, String attackerOwner,
+        String targetType, String targetOwner, int previousAttackerHP, int previousTargetHP,
         boolean attackerDestroyed, boolean targetDestroyed
     ) {
         if (attackerDestroyed) {
@@ -350,6 +348,24 @@ public class Game implements Observable {
         return unit != null && unit.isOwnedBy(currentPlayer) && unit.canAct();
     }
 
+    public boolean unitAbleToMove(Position pos) {
+        Unit unit = getUnitAt(pos);
+        if (unit == null) return false;
+        return unit.isOwnedBy(currentPlayer) && unit.canMove() && !getMovablePositions(pos).isEmpty();
+    }
+
+    public boolean unitAbleToAttack(Position pos) {
+        Unit unit = getUnitAt(pos);
+        if (unit == null) return false;
+        return unit.isOwnedBy(currentPlayer) && unit.canAct() && !getAttackablePositions(pos).isEmpty();
+    }
+
+    public boolean unitAbleToCapture(Position pos) {
+        Unit unit = getUnitAt(pos);
+        if (unit == null) return false;
+        return unit.isOwnedBy(currentPlayer) && unit.canAct() && canUnitCaptureAt(pos);
+    }
+
     public boolean unitsAreAvailableForCurrentPlayer() {
         for (Unit unit : getUnits()) {
             if (unit.isOwnedBy(currentPlayer) && unit.canAct()) return true;
@@ -357,6 +373,9 @@ public class Game implements Observable {
         return false;
     }
 
+    public UnitAbilities getUnitAbilities(Position pos) {
+        return new UnitAbilities(unitAbleToMove(pos), unitAbleToAttack(pos), unitAbleToCapture(pos));
+    }
 
     /// POSITION displays
     public void showMovablePositions(Position pos) {
@@ -369,7 +388,9 @@ public class Game implements Observable {
         notifyObservers(new AttackablePositionsShownEvent(attackable));
     }
 
-    public void showUnitPosition(Position pos) { notifyObservers(new UnitPositionShownEvent(pos, getUnitAt(pos))); }
+    public void showUnitPosition(Position pos) {
+        notifyObservers(new UnitPositionShownEvent(pos, getUnitAt(pos), getUnitAbilities(pos)));
+    }
 
     public void hidePositions() {notifyObservers(new PositionsHiddenEvent());}
 

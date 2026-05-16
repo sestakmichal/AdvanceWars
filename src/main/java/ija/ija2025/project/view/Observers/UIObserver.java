@@ -10,6 +10,7 @@ import ija.ija2025.project.model.Events.*;
 import ija.ija2025.project.model.Events.Positions.*;
 import ija.ija2025.project.model.Events.State.*;
 import ija.ija2025.project.model.Events.UnitActions.HqCapturedEvent;
+import ija.ija2025.project.model.Game.UnitAbilities;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Observation.Observer;
 import ija.ija2025.project.model.Units.*;
@@ -49,12 +50,12 @@ public class UIObserver implements Observer {
 
     public Node getStatusBar() { return this.statusBar; }
 
-    private void showActionMenu(Position pos, Unit unit) {
+    private void showActionMenu(Position pos, Unit unit, UnitAbilities abilities) {
         hideMenu();
 
         boolean skipCapture = !(unit instanceof Infantry);
         currentActionMenu = new ActionMenu(controller, this::hideMenu, skipCapture);
-        currentActionMenu.updateButtons(unit);
+        currentActionMenu.updateButtons(abilities);
         double x = pos.getCol() * 60;
         double y = pos.getRow() * 60;
 
@@ -149,8 +150,8 @@ public class UIObserver implements Observer {
 
     @Override
     public void update(Event event) {
-        if (event instanceof UnitPositionShownEvent(Position position, Unit unit)) {
-            showActionMenu(position, unit);
+        if (event instanceof UnitPositionShownEvent(Position position, Unit unit, UnitAbilities abilities)) {
+            showActionMenu(position, unit, abilities);
         }
 
         if (event instanceof FactoryMenuShownEvent(Position position)) {

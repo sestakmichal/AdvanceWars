@@ -4,6 +4,7 @@
  */
 
 package ija.ija2025.project.model.Units;
+import ija.ija2025.project.model.Game.UnitPrices;
 import ija.ija2025.project.model.Map.TerrainType;
 import java.util.Set;
 
@@ -44,9 +45,7 @@ public class Infantry extends Unit {
     }
 
     @Override
-    public int getPrice() {
-        return 1000;
-    }
+    public int getPrice() { return UnitPrices.Infantry; }
 
     @Override
     public String getType() {

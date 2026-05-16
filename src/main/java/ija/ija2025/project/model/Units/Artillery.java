@@ -5,6 +5,8 @@
 
 package ija.ija2025.project.model.Units;
 
+import ija.ija2025.project.model.Game.UnitPrices;
+
 import java.util.Set;
 
 public class Artillery extends Vehicle {
@@ -30,9 +32,7 @@ public class Artillery extends Vehicle {
     }
 
     @Override
-    public int getPrice() {
-        return 6000;
-    }
+    public int getPrice() { return UnitPrices.Artillery;}
 
     @Override
     public String getType() {

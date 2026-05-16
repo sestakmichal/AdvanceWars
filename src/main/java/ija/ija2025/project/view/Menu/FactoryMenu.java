@@ -7,6 +7,7 @@ package ija.ija2025.project.view.Menu;
 
 import ija.ija2025.project.controller.Controller;
 
+import ija.ija2025.project.model.Game.UnitPrices;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.view.Theme;
 import javafx.geometry.Insets;
@@ -32,9 +33,9 @@ public class FactoryMenu extends VBox {
         setBorder(MENU_BORDER);
         setEffect(SHADOW);
 
-        getChildren().add(createSpawnButton("Infantry", 1000, Theme.Units.INFANTRY, controller, pos, onClose));
-        getChildren().add(createSpawnButton("Tank", 7000, Theme.Units.TANK, controller, pos, onClose));
-        getChildren().add(createSpawnButton("Artillery", 6000, Theme.Units.ARTILLERY, controller, pos, onClose));
+        getChildren().add(createSpawnButton("Infantry", UnitPrices.Infantry, Theme.Units.INFANTRY, controller, pos, onClose));
+        getChildren().add(createSpawnButton("Tank", UnitPrices.Tank, Theme.Units.TANK, controller, pos, onClose));
+        getChildren().add(createSpawnButton("Artillery", UnitPrices.Artillery, Theme.Units.ARTILLERY, controller, pos, onClose));
 
         getChildren().add(createCancelButton(onClose));
     }

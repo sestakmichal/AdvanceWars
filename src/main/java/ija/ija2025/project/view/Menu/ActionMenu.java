@@ -7,7 +7,7 @@ package ija.ija2025.project.view.Menu;
 
 import ija.ija2025.project.controller.Controller;
 import ija.ija2025.project.model.Game.GameAction;
-import ija.ija2025.project.model.Units.Unit;
+import ija.ija2025.project.model.Game.UnitAbilities;
 import ija.ija2025.project.view.Theme;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -74,14 +74,12 @@ public class ActionMenu extends VBox {
         };
     }
 
-    public void updateButtons(Unit unit) {
+    public void updateButtons(UnitAbilities abilities) {
         Button move = buttons.get(GameAction.MOVE);
-        if (move != null) move.setDisable(!unit.canMove());
+        if (move != null) move.setDisable(!abilities.canMove());
         Button attack = buttons.get(GameAction.ATTACK);
-        if (attack != null) attack.setDisable(!unit.canAct());
+        if (attack != null) attack.setDisable(!abilities.canAttack());
         Button capture = buttons.get(GameAction.CAPTURE);
-        if (capture != null) capture.setDisable(!unit.canAct());
-        Button wait = buttons.get(GameAction.WAIT);
-        if (wait != null) wait.setDisable(!unit.canAct());
+        if (capture != null) capture.setDisable(!abilities.canCapture());
     }
 }

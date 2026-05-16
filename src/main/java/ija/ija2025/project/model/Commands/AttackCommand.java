@@ -12,8 +12,6 @@ import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Map.Position;
 
 public class AttackCommand implements Command {
-    private Unit attacker;
-    private Unit target;
     private String attackerType;
     private String attackerOwner;
     private String targetType;
@@ -34,8 +32,6 @@ public class AttackCommand implements Command {
 
     public AttackCommand(Game game, Unit attacker, Unit target) {
         this.game = game;
-        this.attacker = attacker;
-        this.target = target;
         this.attackerPos = attacker.getPosition();
         this.targetPos = target.getPosition();
 
@@ -47,7 +43,11 @@ public class AttackCommand implements Command {
 
     @Override
     public void execute() {
-        AttackResult result = game.attackUnit(attacker, target);
+        Unit currentAttacker = game.getUnitAt(attackerPos);
+        Unit currentTarget = game.getUnitAt(targetPos);
+
+        AttackResult result = game.attackUnit(currentAttacker, currentTarget);
+
         previousTargetHP = result.hpBefore();
         previousAttackerHP = result.attackerHpBefore();
         targetDestroyed = result.destroyed();

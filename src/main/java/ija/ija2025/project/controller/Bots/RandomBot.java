@@ -8,6 +8,7 @@ package ija.ija2025.project.controller.Bots;
 import ija.ija2025.project.controller.CommandManager;
 import ija.ija2025.project.model.Commands.*;
 import ija.ija2025.project.model.Game.Game;
+import ija.ija2025.project.model.Game.UnitPrices;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;
 import javafx.application.Platform;
@@ -50,7 +51,6 @@ public class RandomBot implements GameBot {
         }
 
         game.hidePositions();
-        commandManager.execute(new TurnChangeCommand(game));
     }
 
     private void processUnitAction(Game game, Unit unit) {
@@ -87,7 +87,11 @@ public class RandomBot implements GameBot {
     }
 
     private void processBuying(Game game) {
-        Map<String, Integer> prices = Map.of("Infantry", 1000, "Artillery", 6000, "Tank", 7000);
+        Map<String, Integer> prices = Map.of(
+                "Infantry", UnitPrices.Infantry,
+                "Artillery", UnitPrices.Artillery,
+                "Tank", UnitPrices.Tank
+        );
 
         for (Position pos : game.getBuildingsMap().keySet()) {
             if (game.isOwnedFactory(pos) && game.getUnitAt(pos) == null) {

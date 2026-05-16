@@ -149,13 +149,13 @@ public class Controller {
     }
 
 
-
     public void setOnReturnToMenu(Runnable callback) {
         this.onReturnToMenu = callback;
     }
 
     private void checkTurn() {
         if (!game.unitsAreAvailableForCurrentPlayer()) {
+            System.out.println("Check turn units unavailable for current player");
             commandManager.execute(new TurnChangeCommand(game));
             checkAndExecuteBotTurn();
         }
