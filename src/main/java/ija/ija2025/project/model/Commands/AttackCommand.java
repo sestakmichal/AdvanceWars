@@ -14,6 +14,11 @@ import ija.ija2025.project.model.Map.Position;
 public class AttackCommand implements Command {
     private Unit attacker;
     private Unit target;
+    private String attackerType;
+    private String attackerOwner;
+    private String targetType;
+    private String targetOwner;
+
     private Position attackerPos;
     private Position targetPos;
 
@@ -33,13 +38,15 @@ public class AttackCommand implements Command {
         this.target = target;
         this.attackerPos = attacker.getPosition();
         this.targetPos = target.getPosition();
+
+        this.attackerType = attacker.getType();
+        this.attackerOwner = attacker.getOwner();
+        this.targetType = target.getType();
+        this.targetOwner = target.getOwner();
     }
 
     @Override
     public void execute() {
-        Unit attacker = game.getUnitAt(attackerPos);
-        Unit target = game.getUnitAt(targetPos);
-
         AttackResult result = game.attackUnit(attacker, target);
         previousTargetHP = result.hpBefore();
         previousAttackerHP = result.attackerHpBefore();
@@ -49,7 +56,13 @@ public class AttackCommand implements Command {
 
     @Override
     public void undo() {
-        game.reverseAttackUnit(attacker, target, previousTargetHP, previousAttackerHP, targetDestroyed, attackerDestroyed);
+        game.reverseAttackUnit(
+            attackerPos, targetPos,
+            attackerType, attackerOwner,
+            targetType, targetOwner,
+            previousAttackerHP, previousTargetHP,
+            attackerDestroyed, targetDestroyed
+        );
     }
 
     public Position getAttackerPos() { return attackerPos; }
@@ -58,6 +71,16 @@ public class AttackCommand implements Command {
     public int getPreviousAttackerHP() { return previousAttackerHP; }
     public boolean isTargetDestroyed() { return targetDestroyed; }
     public boolean isAttackerDestroyed() { return attackerDestroyed; }
+
+    public String getAttackerType() { return attackerType; }
+    public void setAttackerType(String attackerType) { this.attackerType = attackerType; }
+    public String getAttackerOwner() { return attackerOwner; }
+    public void setAttackerOwner(String attackerOwner) { this.attackerOwner = attackerOwner; }
+
+    public String getTargetType() { return targetType; }
+    public void setTargetType(String targetType) { this.targetType = targetType; }
+    public String getTargetOwner() { return targetOwner; }
+    public void setTargetOwner(String targetOwner) { this.targetOwner = targetOwner; }
 
     @Override
     public void setGame(Game game) { this.game = game; }

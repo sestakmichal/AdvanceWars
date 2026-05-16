@@ -192,23 +192,33 @@ public class Game implements Observable {
         notifyObservers(new UnitMovedEvent(unit, end, start));
     }
 
-    public void reverseAttackUnit(Unit attacker, Unit target, int previousTargetHP, int previousAttackerHP, boolean destroyed, boolean attackerDestroyed) {
-        Position targetPos = target.getPosition();
-        Position attackerPos = attacker.getPosition();
-
-        if (destroyed) {
-            spawnUnit(target.getType(), target.getOwner(), targetPos.getRow(), targetPos.getCol());
-        }
+    public void reverseAttackUnit(
+        Position attackerPos, Position targetPos,
+        String attackerType, String attackerOwner,
+        String targetType, String targetOwner,
+        int previousAttackerHP, int previousTargetHP,
+        boolean attackerDestroyed, boolean targetDestroyed
+    ) {
         if (attackerDestroyed) {
-            spawnUnit(attacker.getType(), attacker.getOwner(), attackerPos.getRow(), attackerPos.getCol());
+            spawnUnit(attackerType, attackerOwner, attackerPos.getRow(), attackerPos.getCol());
+        }
+        if (targetDestroyed) {
+            spawnUnit(targetType, targetOwner, targetPos.getRow(), targetPos.getCol());
         }
 
-        getUnitAt(targetPos).setHealth(previousTargetHP);
-        getUnitAt(attackerPos).setHealth(previousAttackerHP);
-        getUnitAt(attackerPos).resetActed();
+        Unit attacker = getUnitAt(attackerPos);
+        Unit target = getUnitAt(targetPos);
 
-        notifyObservers(new UnitHealthChangedEvent(targetPos, previousTargetHP));
-        notifyObservers(new UnitHealthChangedEvent(attackerPos, previousAttackerHP));
+        if (attacker != null) {
+            attacker.setHealth(previousAttackerHP);
+            attacker.resetActed();
+            notifyObservers(new UnitHealthChangedEvent(attackerPos, previousAttackerHP));
+        }
+
+        if (target != null) {
+            target.setHealth(previousTargetHP);
+            notifyObservers(new UnitHealthChangedEvent(targetPos, previousTargetHP));
+        }
     }
 
     public void reverseCaptureBuilding(Unit unit, String previousOwner, int previousCaptureHP, boolean wasCaptured) {
