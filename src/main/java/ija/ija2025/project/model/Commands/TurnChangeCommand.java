@@ -6,6 +6,7 @@
 package ija.ija2025.project.model.Commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ija.ija2025.project.model.Commands.Helpers.UnitHPEntry;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Map.Position;
 import ija.ija2025.project.model.Units.Unit;

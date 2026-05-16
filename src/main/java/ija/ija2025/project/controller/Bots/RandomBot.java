@@ -31,6 +31,7 @@ public class RandomBot implements GameBot {
         new Thread(() -> {
             try { Thread.sleep(500); } catch (InterruptedException ignored) {}
             Platform.runLater(() -> {
+                if (game.isFinished()) { return;}
                 executeTurn(game);
                 onTurnEnd.run(); // controller decides what happens next
             });

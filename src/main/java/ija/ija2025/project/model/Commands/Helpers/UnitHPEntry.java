@@ -1,4 +1,9 @@
-package ija.ija2025.project.model.Commands;
+/**
+ * Authors: Michal Šesták
+ * Description: Class describing entrz for a unit in the replay system.
+ */
+
+package ija.ija2025.project.model.Commands.Helpers;
 
 import ija.ija2025.project.model.Map.Position;
 

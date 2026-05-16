@@ -5,7 +5,7 @@
 
 package ija.ija2025.project.model.Game;
 import ija.ija2025.project.model.Buildings.Building;
-import ija.ija2025.project.model.Commands.Results.*;
+import ija.ija2025.project.model.Commands.Helpers.*;
 import ija.ija2025.project.model.Events.Event;
 import ija.ija2025.project.model.Events.Positions.*;
 import ija.ija2025.project.model.Events.State.*;

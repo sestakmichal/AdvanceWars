@@ -7,7 +7,7 @@ package ija.ija2025.project.model.Commands;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ija.ija2025.project.model.Commands.Results.CaptureResult;
+import ija.ija2025.project.model.Commands.Helpers.CaptureResult;
 import ija.ija2025.project.model.Game.Game;
 import ija.ija2025.project.model.Units.Unit;
 import ija.ija2025.project.model.Map.Position;

@@ -19,11 +19,11 @@ public class StatusBar extends HBox {
     private final Label p2MoneyLabel;
 
     public StatusBar(Runnable onSave, Runnable onUndo, Runnable onRedo) {
-        setSpacing(40);
+        setSpacing(5);
         setAlignment(Pos.CENTER);
         setBackground(new Background(new BackgroundFill(Color.rgb(0, 0, 0, 0.7), CornerRadii.EMPTY, Insets.EMPTY)));
-        setPrefWidth(800);
-        setPadding(new Insets(0, 5, 0, 5));
+        //setPrefWidth(800);
+        setPadding(new Insets(0, 15, 0, 5));
 
         p1MoneyLabel = new Label("Red Money: 10000");
         p1MoneyLabel.setTextFill(Color.GOLD);
@@ -35,9 +35,6 @@ public class StatusBar extends HBox {
         p2MoneyLabel = new Label("Blue Money: 10000");
         p2MoneyLabel.setTextFill(Color.GOLD);
 
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
 
         Button undoButton = new Button("Undo");
         undoButton.setOnAction(e -> onUndo.run());
@@ -47,6 +44,18 @@ public class StatusBar extends HBox {
 
         Button saveButton = new Button("Save Game");
         saveButton.setOnAction(e -> onSave.run());
+
+        p1MoneyLabel.setMinWidth(Region.USE_PREF_SIZE);
+        p2MoneyLabel.setMinWidth(Region.USE_PREF_SIZE);
+        turnLabel.setMinWidth(Region.USE_PREF_SIZE);
+
+        undoButton.setMinWidth(Region.USE_PREF_SIZE);
+        redoButton.setMinWidth(Region.USE_PREF_SIZE);
+        saveButton.setMinWidth(Region.USE_PREF_SIZE);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        spacer.setMinWidth(0);
 
         getChildren().addAll(p1MoneyLabel, turnLabel, p2MoneyLabel, spacer, undoButton, redoButton, saveButton);
     }
