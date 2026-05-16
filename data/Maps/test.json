@@ -1,0 +1,141 @@
+{
+  "currentPlayer" : "Player1",
+  "playerMoney" : {
+    "Player1" : 3000,
+    "Player2" : 3000
+  },
+  "map" : [ [ "P", "P", "C", "P", "P", "P", "W", "W", "C", "P", "P", "P", "P", "F", "F" ], [ "FCT", "HQ", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P" ], [ "P", "P", "P", "P", "C", "P", "P", "P", "F", "P", "P", "P", "P", "P", "P" ], [ "P", "P", "P", "P", "P", "F", "F", "F", "P", "P", "P", "P", "P", "P", "P" ], [ "P", "P", "P", "P", "P", "P", "F", "P", "P", "P", "P", "P", "W", "W", "M" ], [ "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "F", "P", "M", "P" ], [ "P", "P", "P", "P", "C", "P", "P", "P", "FCT", "P", "P", "F", "P", "M", "P" ], [ "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "M", "M", "F", "P", "P" ], [ "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "M", "M", "P", "P" ], [ "C", "P", "P", "P", "P", "P", "P", "P", "FCT", "P", "P", "P", "P", "P", "P" ], [ "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "F" ], [ "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "P", "F" ], [ "P", "P", "P", "P", "P", "P", "F", "F", "P", "P", "P", "P", "P", "C", "P" ], [ "P", "P", "P", "P", "P", "P", "P", "F", "P", "P", "P", "P", "P", "HQ", "FCT" ], [ "P", "P", "P", "P", "P", "P", "C", "P", "P", "P", "P", "P", "P", "P", "P" ] ],
+  "buildings" : [ {
+    "type" : "FCT",
+    "row" : 1,
+    "col" : 0,
+    "owner" : "Player1",
+    "hp" : 20
+  }, {
+    "type" : "FCT",
+    "row" : 9,
+    "col" : 8,
+    "owner" : "Neutral",
+    "hp" : 20
+  }, {
+    "type" : "HQ",
+    "row" : 1,
+    "col" : 1,
+    "owner" : "Player1",
+    "hp" : 20
+  }, {
+    "type" : "HQ",
+    "row" : 13,
+    "col" : 13,
+    "owner" : "Player2",
+    "hp" : 20
+  }, {
+    "type" : "FCT",
+    "row" : 13,
+    "col" : 14,
+    "owner" : "Player2",
+    "hp" : 20
+  }, {
+    "type" : "C",
+    "row" : 12,
+    "col" : 13,
+    "owner" : "Player2",
+    "hp" : 20
+  }, {
+    "type" : "C",
+    "row" : 0,
+    "col" : 2,
+    "owner" : "Player1",
+    "hp" : 20
+  }, {
+    "type" : "C",
+    "row" : 2,
+    "col" : 4,
+    "owner" : "Neutral",
+    "hp" : 20
+  }, {
+    "type" : "FCT",
+    "row" : 6,
+    "col" : 8,
+    "owner" : "Neutral",
+    "hp" : 20
+  }, {
+    "type" : "C",
+    "row" : 0,
+    "col" : 8,
+    "owner" : "Neutral",
+    "hp" : 20
+  }, {
+    "type" : "C",
+    "row" : 9,
+    "col" : 0,
+    "owner" : "Neutral",
+    "hp" : 20
+  }, {
+    "type" : "C",
+    "row" : 14,
+    "col" : 6,
+    "owner" : "Neutral",
+    "hp" : 20
+  }, {
+    "type" : "C",
+    "row" : 6,
+    "col" : 4,
+    "owner" : "Neutral",
+    "hp" : 20
+  } ],
+  "units" : [ {
+    "type" : "Infantry",
+    "owner" : "Player1",
+    "row" : 1,
+    "col" : 0,
+    "hp" : 100
+  }, {
+    "type" : "Infantry",
+    "owner" : "Player2",
+    "row" : 13,
+    "col" : 14,
+    "hp" : 100
+  } ],
+  "history" : [ {
+    "unitType" : "Infantry",
+    "position" : {
+      "row" : 1,
+      "col" : 0
+    },
+    "price" : 1000,
+    "type" : "buy"
+  }, {
+    "unitPosition" : {
+      "row" : 1,
+      "col" : 0
+    },
+    "type" : "wait"
+  }, {
+    "newPlayer" : "Player2",
+    "previousPlayer" : "Player1",
+    "newPlayerPreviousMoney" : 3000,
+    "type" : "turnEnd",
+    "unitHPHistory" : [ ]
+  }, {
+    "unitType" : "Infantry",
+    "position" : {
+      "row" : 13,
+      "col" : 14
+    },
+    "price" : 1000,
+    "type" : "buy"
+  }, {
+    "newPlayer" : "Player1",
+    "previousPlayer" : "Player2",
+    "newPlayerPreviousMoney" : 2000,
+    "type" : "turnEnd",
+    "unitHPHistory" : [ {
+      "position" : {
+        "row" : 1,
+        "col" : 0
+      },
+      "hp" : 100
+    } ]
+  } ]
+}

@@ -1,3 +1,10 @@
+2026-05-14 themattjayx: Readme fixes
+2026-05-14 themattjayx: Audit fixes
+2026-05-14 themattjayx: Added authors
+2026-05-14 themattjayx: Merge remote-tracking branch 'origin/main'
+2026-05-14 Michal Šesták: pregen a readme
+2026-05-14 themattjayx: Merge remote-tracking branch 'origin/main'
+2026-05-14 themattjayx: Added commandManager to Bot
 2026-05-14 Michal Šesták: able to save and load commandHistory
 2026-05-14 Michal Šesták: Merge remote-tracking branch 'origin/main'
 2026-05-14 Michal Šesták: ability to select bot into game

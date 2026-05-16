@@ -112,7 +112,22 @@ public class UIObserver implements Observer {
 
     private void openSaveDialog(Stage stage) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Game");
+
+        FileChooser.ExtensionFilter jsonFilter = new FileChooser.ExtensionFilter("JSON (*.json)", "*.json");
+        fileChooser.getExtensionFilters().add(jsonFilter);
+        fileChooser.setSelectedExtensionFilter(jsonFilter);
+
+        File initialDir = new File("data/Maps");
+        if (initialDir.exists() && initialDir.isDirectory())
+            fileChooser.setInitialDirectory(initialDir);
+        else {
+            String projectPath = System.getProperty("user.dir");
+            fileChooser.setInitialDirectory(new File(projectPath));
+        }
+
         File file = fileChooser.showSaveDialog(stage);
+
         if (file != null) {
             try {
                 controller.handleSaveGame(file.getAbsolutePath());
